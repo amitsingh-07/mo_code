@@ -6,9 +6,9 @@ const config: CapacitorConfig = {
   webDir: 'dist/NTUCDev',
   bundledWebRuntime: false,
   server: {
-    cleartext: true
+    androidScheme: 'https',
   },​
-  plugins: {​
+  plugins: {
     SplashScreen: {​
     launchShowDuration: 3000,​
     launchAutoHide: true,​

@@ -170,8 +170,8 @@ export class PlanWidgetComponent implements DoCheck, OnInit, AfterViewChecked {
       }
       if (this.type === 'occupational disability') {
         this.canShowRanking = true;
-        this.highlights.push({ title: 'Deferred Period:', description: this.data.premium.deferredPeriod });
-        this.highlights.push({ title: 'Escalating Benefit:', description: this.data.premium.escalatingBenefit });
+        this.highlights.push({ title: 'Deferred Period:', description: this.data.premium.deferredPeriod + this.translate.instant('SUFFIX.MONTHS')});
+        this.highlights.push({ title: 'Escalating Benefit:', description: this.data.premium.escalatingBenefit + this.translate.instant('SUFFIX.PERCENTAGE')});
       }
       if (this.type.indexOf('retirement') > -1) {
         this.highlights.push({ title: 'Payout Period:', description: this.data.premium.retirementPayPeriodDisplay });

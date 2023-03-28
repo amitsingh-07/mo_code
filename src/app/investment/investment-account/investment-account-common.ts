@@ -39,7 +39,11 @@ export class InvestmentAccountCommon {
   setThumbnail(thumbElem, file) {
     // Set Thumbnail
     const defaultThumb = INVESTMENT_ACCOUNT_CONSTANTS.upload_documents.default_thumb;
-    const reader: FileReader = new FileReader();
+    let reader: FileReader = new FileReader();
+    const realFileReader = (reader as any)._realReader;
+    if (realFileReader) {
+      reader = realFileReader;
+    }
     reader.onloadend = () => {
       thumbElem.src = reader.result;
     };
@@ -61,9 +65,12 @@ export class InvestmentAccountCommon {
   fileSelected(formData, control, controlname, fileElem, thumbElem?) {
     const selectedFile: File = fileElem.target.files[0];
     const fileSize: number = selectedFile.size / 1024 / 1024; // in MB
-    const fileType = selectedFile.name
-      .split('.')
-    [selectedFile.name.split('.').length - 1].toUpperCase();
+    let fileType;
+    if (selectedFile["localURL"]) {
+      fileType = selectedFile["localURL"].split('.')[selectedFile["localURL"].split('.').length - 1].toUpperCase();
+    } else {
+      fileType = selectedFile.name.split('.')[selectedFile.name.split('.').length - 1].toUpperCase();
+    }
     const isValidFileSize =
       fileSize <= INVESTMENT_ACCOUNT_CONSTANTS.upload_documents.max_file_size;
     const isValidFileType = INVESTMENT_ACCOUNT_CONSTANTS.upload_documents.file_types.indexOf(

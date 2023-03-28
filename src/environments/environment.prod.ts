@@ -3,7 +3,7 @@ import { IEnvironment } from './environment.interface';
 export const environment: IEnvironment = {
   production: true,
   isDebugMode: false,
-  apiBaseUrl: 'https://moneyowl.com.sg',
+  apiBaseUrl: 'https://www.moneyowl.com.sg',
   myInfoClientId: {
     invest:'PROD-201820691C-MONEYOWL-CPACCT',
     signup: 'PROD-201820691C-MONEYOWL-BFA',

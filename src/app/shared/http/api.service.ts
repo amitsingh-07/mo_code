@@ -518,7 +518,7 @@ export class ApiService {
   }
 
   downloadWill(): Observable<any> {
-    return this.http.postForBlob(apiConstants.endpoint.willWriting.downloadWill, false, false)
+    return this.http.getBase64String(apiConstants.endpoint.willWriting.downloadWill)
       .pipe(
         catchError((error: HttpErrorResponse) => this.handleError(error))
       );

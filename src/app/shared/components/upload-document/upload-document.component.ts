@@ -60,7 +60,11 @@ export class UploadDocComponent implements OnInit {
   getBlob(streamResponse) {
     this.uploadDocService.blobToThumbNail(streamResponse, this.uploadForm.controls.document, this.documentInfo, this.documentThumb);
     let file = this.uploadDocService.blobToFile(streamResponse);
-    this.fileName = file.name;
+    if (file["localURL"]) {
+      this.fileName = file["localURL"];
+    } else {
+      this.fileName = file.name;
+    }
     this.fileType = this.getFileType(file);
   }
 
@@ -75,7 +79,11 @@ export class UploadDocComponent implements OnInit {
   }
 
   getFileType(fileElem: any): String {
-    return fileElem && fileElem.name ? fileElem.name.split('.')[1].toLowerCase() : '';
+    if (fileElem["localURL"]) {
+      return fileElem && fileElem["localURL"] ? fileElem["localURL"].split('.')[1].toLowerCase() : '';
+    } else {
+      return fileElem && fileElem.name ? fileElem.name.split('.')[1].toLowerCase() : '';
+    }
   }
 
   fileSelect(control, controlname, fileElem, thumbElem?) {

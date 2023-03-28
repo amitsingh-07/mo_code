@@ -138,7 +138,7 @@ export class ComprehensiveApiService {
     * @memberof ApiService
     */
     downloadComprehensiveReport(payload): Observable<any> {
-        return this.http.postForBlobParam(apiConstants.endpoint.comprehensive.downloadComprehensiveReport, payload, false)
+        return this.http.post(apiConstants.endpoint.comprehensive.downloadComprehensiveReport, payload, false)
             .pipe(catchError((error: HttpErrorResponse) => this.helperService.handleError(error)));
     }
     saveStepIndicator(payload) {

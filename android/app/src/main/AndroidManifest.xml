@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <queries>
-      <package android:name="sg.ndi.sp" />
+        <package android:name="sg.ndi.sp" />
+        <intent>
+          <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
     </queries>
     <application
         android:allowBackup="true"
@@ -42,14 +45,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" />
-                <data android:host="bfa-fb-newdev.ntucbfa.cloud" />
-                <data android:pathPrefix="/myinfo" />
-            </intent-filter>
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" />
                 <data android:host="newmouat1.ntucbfa.com" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
@@ -78,7 +73,7 @@
     </application>
 
     <!-- Permissions -->
-
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

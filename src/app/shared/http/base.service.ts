@@ -60,45 +60,12 @@ export class BaseService {
       );
   }
 
-  // statements
-  getBlob(url) {
-    this.helperService.showLoader();
-    return this.httpClient
-      .get(`${this.apiBaseUrl}/${url}`, { responseType: 'blob'}).pipe(
-      finalize(() => {
-        this.helperService.hideLoader();
-      }))
-      .pipe(
-        catchError(this.errorHandler.handleError)
-      );
-  }
-
-  getBlobStream(url) {
-    this.helperService.showLoader();
-    return this.httpClient
-      .get(`${this.apiBaseUrl}/${url}`, { responseType: 'blob', observe: 'response' }).pipe(
-      finalize(() => {
-        this.helperService.hideLoader();
-      }))
-      .pipe(
-        catchError(this.errorHandler.handleError)
-      );
-  }
-
   getMock(url) {
     return this.httpClient
       .get<IServerResponse>(url).pipe(
       finalize(() => {
         this.helperService.hideLoader();
       }));
-  }
-
-  getArticle(url) {
-    return this.httpClient
-      .get(url, { responseType: 'text' })
-      .pipe(
-        // catchError(this.errorHandler.handleError)
-      );
   }
 
   post(url, postBody: any, showLoader?: boolean, showError?: boolean) {
@@ -117,20 +84,16 @@ export class BaseService {
       }));
   }
 
-  postForBlob(url, showLoader?: boolean, showError?: boolean) {
-    if (showLoader) {
-      this.helperService.showLoader();
-    }
-    let param = '';
-    if (showError) {
-      param = '?alert=' + showError;
-    }
-
+  getBase64String(url, showLoader?: boolean, showError?: boolean) {
+    this.helperService.showLoader();
     return this.httpClient
-      .get(`${this.apiBaseUrl}/${url}${param}`, { responseType: 'blob' }).pipe(
+      .get(`${this.apiBaseUrl}/${url}`, { responseType: 'text'}).pipe(
       finalize(() => {
         this.helperService.hideLoader();
-      }));
+      }))
+      .pipe(
+        catchError(this.errorHandler.handleError)
+      );
   }
 
   patch(url, patchBody: any, showLoader?: boolean, showError?: boolean) {
@@ -149,20 +112,6 @@ export class BaseService {
       }));
   }
 
-  postForBlobParam(url, payload: any, showLoader?: boolean, showError?: boolean) {
-    if (showLoader) {
-      this.helperService.showLoader();
-    }
-    let param = '';
-    if (showError) {
-      param = '?alert=' + showError;
-    }
-    return this.httpClient
-      .post(`${this.apiBaseUrl}/${url}${param}`, payload, { observe: 'response', responseType: 'blob' }).pipe(
-      finalize(() => {
-        this.helperService.hideLoader();
-      }));
-  }
   delete(url, postBody: any, showLoader?: boolean, showError?: boolean) {
     if (showLoader) {
       this.helperService.showLoader();

@@ -20,6 +20,7 @@ import { PAYMENT_ROUTE_PATHS } from '../../payment/payment-routes.constants';
 import { ModelWithButtonComponent } from '../../shared/modal/model-with-button/model-with-button.component';
 import { ErrorModalComponent } from '../../shared/modal/error-modal/error-modal.component';
 import { AuthenticationService } from '../../shared/http/auth/authentication.service';
+import { CapacitorUtils } from '../../shared/utils/capacitor.util';
 
 @Component({
   selector: 'app-comprehensive-dashboard',
@@ -121,13 +122,15 @@ export class ComprehensiveDashboardComponent implements OnInit {
   downloadComprehensiveReport() {
     this.loaderService.showLoader({ title: this.fetchData, autoHide: false });
     let newWindow;
-    if(/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+    if(CapacitorUtils.isIosWeb) {
       newWindow = window.open();
     }
     const payload = { reportId: this.getComprehensiveSummaryDashboard.reportId, enquiryId: this.enquiryId };
     this.comprehensiveApiService.downloadComprehensiveReport(payload).subscribe((data: any) => {
       this.loaderService.hideLoaderForced();
-      this.downloadfile.downloadPDF(data.body, newWindow, COMPREHENSIVE_CONST.REPORT_PDF_NAME);
+      if (data && data["objectList"][0]) {
+        this.downloadfile.downloadPDF(data["objectList"][0], newWindow, COMPREHENSIVE_CONST.REPORT_PDF_NAME);
+      }
     });
   }
 

@@ -12,6 +12,7 @@ import { NavbarService } from '../../shared/navbar/navbar.service';
 import { SIGN_UP_ROUTE_PATHS } from '../../sign-up/sign-up.routes.constants';
 import { LoaderService } from '../../shared/components/loader/loader.service';
 import { ModelWithButtonComponent } from '../../shared/modal/model-with-button/model-with-button.component';
+import { CapacitorUtils } from '../../shared/utils/capacitor.util';
 
 @Component({
   selector: 'app-download-report',
@@ -67,13 +68,15 @@ export class DownloadReportComponent implements OnInit {
     };
     this.showLoader();
     let newWindow;
-    if(/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+    if(CapacitorUtils.isIosWeb) {
       newWindow = window.open();
     }
     this.comprehensiveApiService.downloadComprehensiveReport(payload).subscribe((data: any) => {
       this.loaderService.hideLoaderForced();
-      this.downloadfile.downloadPDF(data.body, newWindow, COMPREHENSIVE_CONST.REPORT_PDF_NAME);
-    }, () => {
+      if (data && data["objectList"][0]) {
+        this.downloadfile.downloadPDF(data["objectList"][0], newWindow, COMPREHENSIVE_CONST.REPORT_PDF_NAME);
+      }
+    }, (error) => {
       this.loaderService.hideLoaderForced();
     });
   }

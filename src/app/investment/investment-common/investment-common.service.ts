@@ -530,7 +530,10 @@ export class InvestmentCommonService {
   }
 
   getCKADocument(documentType) {
-    return this.investmentApiService.getCKADocument(documentType);
+    const data = {
+      "docType": documentType
+    };
+    return this.investmentApiService.getCKADocument(data);
   }
 
   setCKAStatus(ckaStatus) {

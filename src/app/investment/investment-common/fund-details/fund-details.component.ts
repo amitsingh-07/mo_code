@@ -78,7 +78,7 @@ export class FundDetailsComponent implements OnInit {
     if (fund.factSheetLink) {
       highlightSheetFileName = fund.factSheetLink.split('|')[1];
     }
-    this.fileUtil.createDownloadUrl(highlightSheetFileName, INVESTMENT_ENGAGEMENT_JOURNEY_CONSTANTS.FUND_DOC_PATH + highlightSheetFileName, true);
+    this.fileUtil.createDownloadUrl(highlightSheetFileName, INVESTMENT_ENGAGEMENT_JOURNEY_CONSTANTS.FUND_DOC_PATH + highlightSheetFileName);
   }
   getProspectusLink() {
     let prospectusFileName;
@@ -96,7 +96,7 @@ export class FundDetailsComponent implements OnInit {
         prospectusFileName = INVESTMENT_ENGAGEMENT_JOURNEY_CONSTANTS.PROSPECTUS_FILE.CPF_UOB;
       }
     }
-    this.fileUtil.createDownloadUrl(prospectusFileName, INVESTMENT_ENGAGEMENT_JOURNEY_CONSTANTS.FUND_DOC_PATH + prospectusFileName, true);
+    this.fileUtil.createDownloadUrl(prospectusFileName, INVESTMENT_ENGAGEMENT_JOURNEY_CONSTANTS.FUND_DOC_PATH + prospectusFileName);
   }
 
 }

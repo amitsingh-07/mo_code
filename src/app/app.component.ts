@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
-import { App } from '@capacitor/app';
 import { InAppBrowser, UrlEvent } from 'capgo-inappbrowser-intent-fix';
+import { HTTP } from '@awesome-cordova-plugins/http/ngx';
 
 import { IComponentCanDeactivate } from './changes.guard';
 import { ConfigService, IConfig } from './config/config.service';
@@ -23,6 +23,7 @@ import { Util } from './shared/utils/util';
 import { environment } from '../environments/environment';
 import { CapacitorUtils } from './shared/utils/capacitor.util';
 import { MyInfoService } from './shared/Services/my-info.service';
+import { Platform } from '@ionic/angular';
 
 declare global {
   interface Window {
@@ -50,7 +51,7 @@ export class AppComponent implements IComponentCanDeactivate, OnInit, AfterViewI
     private googleAnalyticsService: GoogleAnalyticsService,
     private modal: NgbModal, public route: Router, public routingService: RoutingService, private location: Location,
     private configService: ConfigService, private authService: AuthenticationService, private sessionsService: SessionsService,
-    public activatedRoute: ActivatedRoute, private myInfoService: MyInfoService, private zone: NgZone) {
+    public activatedRoute: ActivatedRoute, private myInfoService: MyInfoService, private zone: NgZone, private http: HTTP, private platform: Platform) {
     this.translate.setDefaultLang('en');
     this.configService.getConfig().subscribe((config: IConfig) => {
       this.translate.setDefaultLang(config.language);
@@ -82,8 +83,9 @@ export class AppComponent implements IComponentCanDeactivate, OnInit, AfterViewI
         this.showFbWarning();
       }
     });
-    // Capacitor Deeplink
-    this.initializeApp();
+    if (CapacitorUtils.isApp) {
+      this.initializeApp();
+    }
   }
 
   ngOnInit() {
@@ -96,9 +98,15 @@ export class AppComponent implements IComponentCanDeactivate, OnInit, AfterViewI
   }
 
   initializeApp() {
-    // Capacitor - Native Android/iOS device specific listeners
-    App.addListener('appStateChange', ({ isActive }) => {
-      console.log('App state changed. Is active?', isActive);
+    // Native Android/iOS device specific methods
+    // SSL Cert Pinning
+    this.platform.ready().then(()=>{
+      this.http.setServerTrustMode('pinned').then(() => {
+        console.log('[SUCCESS] Cert Pinned !');
+      })
+      .catch(() => {
+        console.log('[ERROR] SSL Pinning Fails!');
+      });
     });
     // Capgo Inappbrowser close listener for singpass/myinfo
     InAppBrowser.addListener('closeEvent', () => {

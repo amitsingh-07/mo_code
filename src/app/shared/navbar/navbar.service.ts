@@ -98,7 +98,7 @@ export class NavbarService {
     this.router.events.pipe(
       filter((event) => event instanceof NavigationStart)
     ).subscribe((event: NavigationStart) => {
-      if (CapacitorUtils.isApp && CapacitorUtils.isIOSDevice) { 
+      if (CapacitorUtils.isApp) { 
         this.handlingMobileAppNavigationUrlHistory(event);
       }
       this.unsubscribeBackPress();
@@ -236,7 +236,7 @@ export class NavbarService {
   }
 
   goBack() {
-    if (CapacitorUtils.isApp && CapacitorUtils.isIOSDevice) {
+    if (CapacitorUtils.isApp) {
       this.isBackClicked = true; 
       this.urlHistory.previousUrl = this.urlHistory.previousUrl.filter(item => !item.includes(appConstants.MY_INFO_CALLBACK_URL) );
       this.urlHistory.currentUrl = this.urlHistory.previousUrl[this.urlHistory.previousUrl.length - 1];

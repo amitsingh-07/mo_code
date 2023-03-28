@@ -1,12 +1,11 @@
 import 'hammerjs';
-
 import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
-
 import {
   CurrencyPipe, LocationStrategy, PathLocationStrategy, TitleCasePipe
 } from '@angular/common';
 import {
-  HTTP_INTERCEPTORS, HttpClient, HttpClientJsonpModule, HttpClientModule
+  HTTP_INTERCEPTORS, HttpClient, HttpClientJsonpModule, HttpClientModule,
+  HttpBackend, HttpXhrBackend
 } from '@angular/common/http';
 import { APP_INITIALIZER, Injector, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,6 +15,8 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { NgbActiveModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { DatePipe } from '@angular/common';
+import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
+import { Platform } from '@ionic/angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -118,6 +119,7 @@ import { WillWritingEnableGuard } from './will-writing/will-writing-enable-guard
 import { SessionsService } from './shared/Services/sessions/sessions.service';
 import { NotSupportedComponent } from './not-supported/not-supported.component';
 import { RefereeComponent } from './shared/modal/referee/referee.component';
+import { HttpForceXhrBackend } from './http-force-xhr-backend';
 
 // tslint:disable-next-line:max-line-length
 export function createTranslateLoader(http: HttpClient) {
@@ -165,6 +167,7 @@ export function tokenGetterFn() {
     NotSupportedComponent
   ],
   imports: [
+    NativeHttpModule,
     BrowserModule,
     NgbModule,
     AppRoutingModule,
@@ -188,11 +191,13 @@ export function tokenGetterFn() {
     })
   ],
   providers: [
+    { provide: NativeHttpFallback, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend] },
+    { provide: HttpBackend, useClass: HttpForceXhrBackend, deps: [NativeHttpFallback, HttpXhrBackend] },
     {
       provide: APP_INITIALIZER,
       useFactory: onAppInit,
       multi: true,
-      deps: [Injector]  
+      deps: [Injector]
     },
     NgbActiveModal,
     AuthenticationService, CustomErrorHandlerService, RequestCache,

@@ -10,6 +10,7 @@ import { InvestmentEngagementJourneyService } from '../../investment-engagement-
 import { ManageInvestmentsService } from '../manage-investments.service';
 import { environment } from './../../../../environments/environment';
 import { FileUtil } from '../../../shared//utils/file.util';
+import { CapacitorUtils } from '../../../shared/utils/capacitor.util';
 
 @Component({
   selector: 'app-transactions',
@@ -126,9 +127,8 @@ export class TransactionsComponent implements OnInit {
   }
 
   downloadStatement(month) {
-    const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     let newWindow;
-    if (iOS) {
+    if (CapacitorUtils.isIosWeb) {
       newWindow = window.open();
     }
     const params = this.constructDonwloadStatementParams(month);
@@ -140,8 +140,12 @@ export class TransactionsComponent implements OnInit {
     });
     this.manageInvestmentsService.downloadStatement(params, this.portfolio.customerPortfolioId).subscribe((response) => {
       this.loaderService.hideLoader();
-      const fileName = month.monthName + '_' + month.year + '_' + '.pdf';
-      this.fileUtil.downloadPDF(response, newWindow, fileName);
+      if (response) {
+        const fileName = month.monthName + '_' + month.year + '_' + '.pdf';
+        this.fileUtil.downloadPDF(response, newWindow, fileName);
+      } else {
+        this.investmentAccountService.showGenericErrorModal();
+      }
     },
       (err) => {
         this.loaderService.hideLoader();

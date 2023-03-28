@@ -37,7 +37,13 @@
         <input id="{{filter.title + '_' + c_index}}" type="checkbox" (change)="applyFilter(filter.name, flr.value, filter.allBtn, p_index, c_index)"
           class="field checkbox" [checked]="flr.checked">
         <label for="{{filter.title + '_' + c_index}}" id="tle + '_' + c_index}}Lbl">
-          <div class="input-label-normal">{{flr.name ? flr.name : flr.value}}</div>
+          <div class="input-label-normal">
+            <span>{{flr.name ? flr.name : flr.value}}</span>
+            <span *ngIf="filter.title==='Deferred Period' && flr.value!='All'">{{'SUFFIX.MONTHS' | translate}}</span>
+            <span *ngIf="filter.title==='Escalating Benefit' && flr.value!='All'">{{'SUFFIX.PERCENTAGE' | translate}}</span>
+          </div>
+          
+
         </label>
       </div>
     </div>

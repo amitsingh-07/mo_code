@@ -51,6 +51,7 @@ import { InvestmentEngagementJourneyService } from '../../investment/investment-
 import { INVESTMENT_ENGAGEMENT_JOURNEY_CONSTANTS } from '../../investment/investment-engagement-journey/investment-engagement-journey.constants';
 import { InvestModalComponent } from '../invest-modal/invest-modal.component';
 import { FileUtil } from '../../shared/utils/file.util';
+import { CapacitorUtils } from '../../shared/utils/capacitor.util';
 
 @Component({
   selector: 'app-dashboard',
@@ -461,12 +462,14 @@ export class DashboardComponent implements OnInit {
   }
   downloadWill() {
     let newWindow;
-    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+    if (CapacitorUtils.isIosWeb) {
       newWindow = window.open();
     }
-    this.willWritingApiService.downloadWill().subscribe((data: any) => {
-      this.fileUtil.downloadPDF(data, newWindow, this.translate.instant('DASHBOARD.WILL_WRITING.WILLS_PDF_NAME'));
-    }, (error) => console.log(error));
+    this.willWritingApiService.downloadWill().subscribe((res: any) => {
+      this.fileUtil.downloadPDF(res, newWindow, this.translate.instant('DASHBOARD.WILL_WRITING.WILLS_PDF_NAME'));
+    }, (error) => {
+      this.showCustomErrorModal('Error!', error);
+    });
   }
 
   showCustomErrorModal(title, desc) {

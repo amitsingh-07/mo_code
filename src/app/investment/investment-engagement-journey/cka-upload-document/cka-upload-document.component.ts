@@ -95,10 +95,13 @@ export class CkaUploadDocumentComponent implements OnInit {
     if (ckaStatus && ckaStatus != INVESTMENT_COMMON_CONSTANTS.CKA.CKA_REJECTED_STATUS) {
       this.showLoader();
       this.investmentCommonService.getCKADocument(this.certificateName).subscribe((response: any) => {
-        if (response && response.body && response.body.type && response.body.type.split('/')[1].toLowerCase() != 'json') {
-          this.uploadDocumentService.setStreamResponse(response);
+        if (response && response['objectList'] && response['objectList']['content']) {
+          this.uploadDocumentService.setStreamResponse(response['objectList']);
           this.ckaUploadForm.get('tncCheckboxFlag').setValue(true);
           this.loaderService.hideLoader();
+        } else {
+          this.loaderService.hideLoader();
+          this.investmentAccountService.showGenericErrorModal();
         }
       }, () => {
         this.loaderService.hideLoader();
