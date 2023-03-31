@@ -400,7 +400,11 @@
     "SINGPASS_INVESTMENT_ACC_PENDING_MODAL": {
       "TITLE": "Investment account pending creation",
       "MESSAGE": "We are in the process of creating your investment account and you will be able to use Singpass login after your account is successfully created.<br><br>In the meantime, login to our services using your email/mobile and password."
-    }
+    },
+    "CORBIZ_HELP_TITLE": "Log in to your existing account",
+    "CORBIZ_HELP_BUTTON_LABEL": "Okay, Got it!",
+    "CORBIZ_HELP_INFO": "Please log in to your existing account.",
+    "CORBIZ_HELP_MESSAGE": "Please log in to your existing MoneyOwl account to link and upgrade your account."
   },
   "FORGOTPASSWORD": {
     "SUBMIT": "Submit",
