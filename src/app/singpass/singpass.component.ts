@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/internal/Observable';
 
 import { SingpassService } from './singpass.service';
 import { SingpassModalComponent } from './singpass-modal/singpass-modal.component';
+import { AppService } from '../app.service';
 
 @Component({
   selector: 'app-singpass',
@@ -19,7 +20,8 @@ export class SingPassComponent implements OnInit {
   constructor(
     public translate: TranslateService,
     private modal: NgbModal,
-    private singpassService: SingpassService) {
+    private singpassService: SingpassService,
+    public appService: AppService) {
     this.translate.use('en');
   }
 

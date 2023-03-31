@@ -168,7 +168,8 @@ export class SignUpApiService {
     return {
       customerRef: custRef,
       otp: code,
-      editProfile: editProf
+      editProfile: editProf,
+      canTransferAccessFromEnrolment: this.appService.isUserFromCorpBizLink
     };
   }
 

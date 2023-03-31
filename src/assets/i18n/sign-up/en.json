@@ -156,6 +156,10 @@
         "WITHDRAWAL": "Withdrawal",
         "VEHICLE": "Vehicle"
       }
+    },
+    "LOGIN_INFO": {
+      "MESSAGE1" : "Already have an account?",
+      "MESSAGE2" : "to link with your existing account"
     }
   },
   "RECOMMENDED_CARD": {
