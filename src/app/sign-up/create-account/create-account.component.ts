@@ -200,10 +200,7 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     if (this.distribution && this.distribution.login) {
       this.createAccountForm = this.formBuilder.group({
         countryCode: ['', [Validators.required]],
-        mobileNumber: [{
-          value: this.corpBizData?.maskedMobileNumber || myInfoMobile,
-          disabled: this.isCorpBiz
-        }, [Validators.required]],
+        mobileNumber: [this.corpBizData?.mobileNumber || myInfoMobile, [Validators.required]],
         email: [{
           value: this.corpBizData?.email || myInfoEmail,
           disabled: this.isCorpBiz
@@ -221,7 +218,7 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
           disabled: this.formValue && this.formValue.isMyInfoEnabled
         }, [Validators.required]],
         dob: [{
-          value: myInfoDob,
+          value: this.corpBizData?.dob || myInfoDob,
           disabled: this.formValue && this.formValue.isMyInfoEnabled
         }, [Validators.required]]
       }, { validator: this.validateMatchPasswordEmail() })
@@ -232,10 +229,7 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
 
     this.createAccountForm = this.formBuilder.group({
       countryCode: ['', [Validators.required]],
-      mobileNumber: [{
-        value: this.corpBizData?.maskedMobileNumber || myInfoMobile,
-        disabled: this.isCorpBiz
-      }, [Validators.required]],
+      mobileNumber: [this.corpBizData?.mobileNumber || myInfoMobile, [Validators.required]],
       email: [{
         value: this.corpBizData?.email || myInfoEmail,
         disabled: this.isCorpBiz
@@ -253,7 +247,7 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
         disabled: this.formValue && this.formValue.isMyInfoEnabled
       }, [Validators.required]],
       dob: [{
-        value: myInfoDob,
+        value: this.corpBizData?.dob || myInfoDob,
         disabled: this.formValue && this.formValue.isMyInfoEnabled
       }, [Validators.required]]
     }, { validator: this.validateMatchPasswordEmail() })

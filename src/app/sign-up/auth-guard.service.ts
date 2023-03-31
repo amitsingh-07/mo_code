@@ -178,7 +178,6 @@ export class CorpbizAuthGuardService implements CanActivate {
       this.route.navigate([SIGN_UP_ROUTE_PATHS.CORP_BIZ_ACTIVATIONLINK]);
       return false;
     }
-    this.authService.displayCorporateLogo$.next(true);
     return true;
   }
 }
@@ -204,7 +203,6 @@ export class CorpbizWelcomeFlowAuthGuardService implements CanActivate {
       }
       return false;
     }
-    this.authService.displayCorporateLogo$.next(true);    
     if (this.navbarService.welcomeJourneyCompleted) {
       this.router.navigate([SIGN_UP_ROUTE_PATHS.DASHBOARD]);
       return false;

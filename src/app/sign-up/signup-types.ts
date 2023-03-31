@@ -97,4 +97,5 @@ export interface ICorpBizData {
     maskedMobileNumber: string;
     enrollmentId: number;
     mobileNumber: number;
+    dob?: string;
 }

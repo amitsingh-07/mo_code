@@ -8,12 +8,16 @@ import { SignUpApiService } from '../sign-up.api.service';
 import { SIGN_UP_ROUTE_PATHS } from '../sign-up.routes.constants';
 import { SIGN_UP_CONFIG } from '../sign-up.constant';
 import { AppService } from '../../app.service';
+import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateCustomParserFormatter } from '../../shared/utils/ngb-date-custom-parser-formatter';
+
 
 @Component({
   selector: 'app-corp-biz-activation-link',
   templateUrl: './corp-biz-activation-link.component.html',
   styleUrls: ['./corp-biz-activation-link.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [{ provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
 })
 export class CorpBizActivationLinkComponent implements OnInit {
   screenToShow: string;
@@ -29,7 +33,8 @@ export class CorpBizActivationLinkComponent implements OnInit {
     private route: ActivatedRoute,
     private authService: AuthenticationService,
     private signUpApiService: SignUpApiService,
-    private appService: AppService
+    private appService: AppService,
+    private parserFormatter: NgbDateParserFormatter
   ) {
     this.translate.use('en');
     this.authService.clearSession();
@@ -52,7 +57,8 @@ export class CorpBizActivationLinkComponent implements OnInit {
               email: response.email,
               maskedMobileNumber: response.maskedMobileNumber,
               enrollmentId: response.enrolmentId,
-              mobileNumber: response.mobileNumber
+              mobileNumber: response.mobileNumber,
+              dob: response.dob && this.parserFormatter.parse(response.dob)
             }
             this.appService.setCorpBizData(corpBizData);
             this.router.navigate([SIGN_UP_ROUTE_PATHS.CORP_BIZ_SIGNUP]);

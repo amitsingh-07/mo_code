@@ -75,7 +75,7 @@
         position: relative;
         .view-edit {
             position: absolute;
-            top: 10px;
+            top: 20px;
             right: 20px;
             color: $teal-color;
             z-index: 2;
@@ -85,7 +85,7 @@
                 right: 90px !important;
             }
             @include minMobilemaxPhablet{
-                top: 35px !important;
+                top: 45px !important;
             }
             @include tablet{
                 right: 100px;
@@ -117,6 +117,9 @@
         }
         @include tablet {
             width: 70%;
+        }
+        @include max360 {
+            width: 73%;
         }
     }
     &.container-fluid {
@@ -220,10 +223,7 @@
     }
     .form-group-with-bg--header {
         padding: 15px 20px 5px;
-        @include iphone6 {
-            width: 75%;
-        }
-        @include max360 {
+        @include minMobilemaxPhablet{
             width: 75%;
         }
     }

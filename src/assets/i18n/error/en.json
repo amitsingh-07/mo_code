@@ -34,7 +34,7 @@
     "IMG": "assets/images/corpbiz-activationlink/activation-link-notfound.svg"
     },
     "ACCOUNT_EXIST":{
-    "TITLE": "Account already exist",
+    "TITLE": "Account already created",
     "SUB-TITLE": "This link is no longer available as your account has been created. Click <a href='./accounts/login'>here</a> to log in to your MoneyOwl account.<br/><br/>This page will automatically redirect to MoneyOwl’s home page in 10 seconds,<br/><br/>or click <a href='https://www.moneyowl.com.sg/'>here</a> to immediately redirect.",
     "IMG": "assets/images/corpbiz-activationlink/activation-link-account-exists.svg"
     }
