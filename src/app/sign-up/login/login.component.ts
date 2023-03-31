@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     // tslint:disable-next-line
-    private formBuilder: FormBuilder, private appService: AppService,
+    private formBuilder: FormBuilder, public appService: AppService,
     private modal: NgbModal, private configService: ConfigService,
     public authService: AuthenticationService,
     public sessionsService: SessionsService,
@@ -380,26 +380,40 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
         (this.finlitEnabled && SIGN_UP_ROUTE_PATHS.FINLIT_VERIFY_MOBILE) ||
         (this.organisationEnabled && SIGN_UP_ROUTE_PATHS.CORPORATE_VERIFY_MOBILE) ||
         SIGN_UP_ROUTE_PATHS.VERIFY_MOBILE,
-        false);
+        false,
+        true);
     }
   }
 
-  showErrorModal(title: string, message: string, buttonLabel: string, redirect: string, emailResend: boolean) {
+  showErrorModal(title: string, message: string, buttonLabel: string, redirect: string, emailResend: boolean, unverifiedAccount = false) {
     this.loginForm.controls['captchaValue'].reset();
     this.loginForm.controls['loginPassword'].reset();
     this.refreshCaptcha();
     const ref = this.modal.open(ErrorModalComponent, { centered: true });
-    ref.componentInstance.errorMessage = message;
-    ref.componentInstance.redirect_url = SIGN_UP_ROUTE_PATHS.VERIFY_EMAIL;
-    ref.result.then((data) => {
-      if (!data && redirect) {
-        this.router.navigate([redirect]);
-      }
-    });
     if (title) {
       ref.componentInstance.errorTitle = title;
       ref.componentInstance.buttonLabel = buttonLabel;
     }
+    if (this.appService.isUserFromCorpBizLink && unverifiedAccount) {
+      redirect = SIGN_UP_ROUTE_PATHS.LOGIN; 
+      ref.componentInstance.errorTitle = this.translate.instant('SIGNUP_ERRORS.CORBIZ_UNVERIFIED_TITLE');
+      ref.componentInstance.buttonLabel = this.translate.instant('COMMON.LOGIN');
+      ref.componentInstance.errorMessageList = [
+        this.translate.instant('SIGNUP_ERRORS.CORBIZ_UNVERIFIED_MESSAGE1'),
+        this.translate.instant('SIGNUP_ERRORS.CORBIZ_UNVERIFIED_MESSAGE2')
+      ];      
+    } else {
+      ref.componentInstance.errorMessage = message;
+    }
+    ref.componentInstance.redirect_url = SIGN_UP_ROUTE_PATHS.VERIFY_EMAIL;
+    ref.result.then((data) => {
+      if (!data && redirect) {
+        if (this.appService.isUserFromCorpBizLink && unverifiedAccount && redirect.includes('/login')) {
+          this.appService.clearCorpBizUserData();
+        }
+        this.router.navigate([redirect]);
+      }
+    });
     if (emailResend) {
       ref.componentInstance.enableResendEmail = true;
       if (!this.isCorpBiz && !this.organisationEnabled) {
@@ -497,4 +511,17 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
       this.router.navigate([SIGN_UP_ROUTE_PATHS.CREATE_ACCOUNT_MY_INFO]);
     }
   }
+
+  showCorbizHelpModal() {
+    const ref = this.modal.open(ErrorModalComponent, { centered: true });    
+    ref.componentInstance.errorTitle = this.translate.instant('LOGIN.CORBIZ_HELP_TITLE');
+    ref.componentInstance.buttonLabel = this.translate.instant('LOGIN.CORBIZ_HELP_BUTTON_LABEL');   
+      ref.componentInstance.errorMessageList = [
+        this.translate.instant('LOGIN.CORBIZ_HELP_MESSAGE'),
+        this.translate.instant('SIGNUP_ERRORS.CORBIZ_ACCOUNT_EXIST_MESSAGE2')
+      ];      
+    ref.result.then((data) => {      
+    }).catch((e) => { })
+  }
+
 }

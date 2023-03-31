@@ -433,7 +433,7 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
         (this.finlitEnabled && SIGN_UP_ROUTE_PATHS.FINLIT_VERIFY_MOBILE) ||
         (this.organisationEnabled && SIGN_UP_ROUTE_PATHS.CORPORATE_VERIFY_MOBILE) ||
         SIGN_UP_ROUTE_PATHS.VERIFY_MOBILE,
-        false);
+        false, false, true);
     } else if (data.objectList[0].accountAlreadyCreated) {
       this.showErrorModal(
         this.translate.instant('SIGNUP_ERRORS.TITLE'),
@@ -457,19 +457,37 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     ref.componentInstance.errorMessage = this.translate.instant('CORP_BIZ_ERROR_MODAL.SUB_TITLE');
   }
 
-  showErrorModal(title: string, message: string, buttonLabel: string, redirect: string, emailResend: boolean) {
+  showErrorModal(title: string, message: string, buttonLabel: string, redirect: string, emailResend: boolean, accountAlreadyCreated = false, unverifiedAccount = false) {
     const ref = this.modal.open(ErrorModalComponent, { centered: true });
-    ref.componentInstance.errorMessage = message;
-    ref.componentInstance.redirect_url = SIGN_UP_ROUTE_PATHS.VERIFY_EMAIL;
-    ref.result.then((data) => {
-      if (!data && redirect) {
-        this.router.navigate([redirect]);
-      }
-    }).catch((e) => { });
     if (title) {
       ref.componentInstance.errorTitle = title;
       ref.componentInstance.buttonLabel = buttonLabel;
     }
+    if (this.appService.isUserFromCorpBizLink && accountAlreadyCreated) {      
+      ref.componentInstance.errorMessageList = [
+        this.translate.instant('SIGNUP_ERRORS.CORBIZ_ACCOUNT_EXIST_MESSAGE1'),
+        this.translate.instant('SIGNUP_ERRORS.CORBIZ_ACCOUNT_EXIST_MESSAGE2')
+      ];      
+    } else if (this.appService.isUserFromCorpBizLink && unverifiedAccount) { 
+      redirect = SIGN_UP_ROUTE_PATHS.LOGIN;
+      ref.componentInstance.errorTitle = this.translate.instant('SIGNUP_ERRORS.CORBIZ_UNVERIFIED_TITLE');
+      ref.componentInstance.buttonLabel = this.translate.instant('COMMON.LOGIN');
+      ref.componentInstance.errorMessageList = [
+        this.translate.instant('SIGNUP_ERRORS.CORBIZ_UNVERIFIED_MESSAGE1'),
+        this.translate.instant('SIGNUP_ERRORS.CORBIZ_UNVERIFIED_MESSAGE2')
+      ];      
+    } else {
+      ref.componentInstance.errorMessage = message;
+    }
+    ref.componentInstance.redirect_url = SIGN_UP_ROUTE_PATHS.VERIFY_EMAIL;
+    ref.result.then((data) => {
+      if (!data && redirect) {
+        if (this.appService.isUserFromCorpBizLink && unverifiedAccount && redirect.includes('/login')) {
+          this.appService.clearCorpBizUserData();
+        }
+        this.router.navigate([redirect]);
+      }
+    }).catch((e) => { });
     if (emailResend) {
       ref.componentInstance.enableResendEmail = true;
       if (!this.isCorpBizUser && !this.organisationEnabled) {
