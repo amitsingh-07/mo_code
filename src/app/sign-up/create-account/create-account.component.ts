@@ -311,7 +311,6 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
         form.value.gender = (this.formValue && this.formValue.isMyInfoEnabled && this.formValue.gender) ? this.formValue.gender : '';
       }
       if (this.isCorpBiz && form.value) {
-        form.value.mobileNumber = this.corpBizData?.mobileNumber;
         form.value.email = this.corpBizData?.email;
         form.value.enrolmentId = this.corpBizData?.enrollmentId;
         form.value.isCorpBizEnrollUser = this.corpBizData?.isCorpBiz;
@@ -440,7 +439,8 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
         this.translate.instant('SIGNUP_ERRORS.ACCOUNT_EXIST_MESSAGE'),
         this.translate.instant('COMMON.LOG_IN'),
         redirectUrl,
-        false);
+        false,
+        true);
     } else if (!data.objectList[0].emailVerified) {
       this.signUpService.setUserMobileNo(this.createAccountForm.controls['mobileNumber'].value);
       this.showErrorModal(this.translate.instant('SIGNUP_ERRORS.TITLE'),
