@@ -153,7 +153,7 @@ export class VerifyMobileComponent implements OnInit, OnDestroy {
     if (this.fromLoginPage || this.isCorpBiz) {
       this.mobileNumber = {
         code: (this.signUpService.getUserMobileCountryCode()) ? this.signUpService.getUserMobileCountryCode() : appConstants.SINGAPORE_COUNTRY_CODE,
-        number: this.isCorpBiz ? '****' + this.signUpService.getAccountInfo()?.mobileNumber.substring(4) : this.signUpService.getUserMobileNo()
+        number: this.isCorpBiz ? this.getCorpbizMobileNr(true) : this.signUpService.getUserMobileNo()
       };
     } else {
       this.mobileNumber = this.signUpService.getMobileNumber();
@@ -353,13 +353,13 @@ export class VerifyMobileComponent implements OnInit, OnDestroy {
   }
 
   sendWelcomeEmail() {
-    const mobileNo = this.isCorpBiz ? this.appService.getCorpBizData().mobileNumber.toString() : this.mobileNumber.number.toString();
+    const mobileNo = this.isCorpBiz ? this.getCorpbizMobileNr().toString() : this.mobileNumber.number.toString();
     this.signUpApiService.sendWelcomeEmail(mobileNo, false).subscribe((data) => { });
   }
 
   resendEmailVerification() {
     let organisationCode = (this.organisationEnabled && appConstants.USERTYPE.FACEBOOK) || null;
-    const mobileNo = this.isCorpBiz ? this.appService.getCorpBizData().mobileNumber.toString() : this.mobileNumber.number.toString();
+    const mobileNo = this.isCorpBiz ? this.getCorpbizMobileNr().toString() : this.mobileNumber.number.toString();
     this.signUpApiService.resendEmailVerification(mobileNo, false, organisationCode).subscribe((data) => {
       if (data.responseMessage.responseCode === 6007) {
         this.navbarService.logoutUser();
@@ -670,4 +670,17 @@ export class VerifyMobileComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  getCorpbizMobileNr(isMaskedMobNr = false) {
+    let mobileNr = isMaskedMobNr ? this.appService.getCorpBizData().maskedMobileNumber : this.appService.getCorpBizData().mobileNumber;
+    if (this.fromLoginPage && isMaskedMobNr) {
+      // Taking mobile nr if user uses existing mobile nr in corpbiz login screen
+      mobileNr = this.signUpService.getUserMobileNo();
+    } else if (this.signUpService.getAccountInfo()?.mobileNumber) {
+      // Taking mobile nr if user modified mobile nr in corpbiz account screen
+      mobileNr = isMaskedMobNr ? '****' + this.signUpService.getAccountInfo()?.mobileNumber.substring(4) : this.signUpService.getAccountInfo()?.mobileNumber;
+    }
+    return mobileNr;
+  }
+
 }
