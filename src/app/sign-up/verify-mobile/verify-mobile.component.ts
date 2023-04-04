@@ -153,7 +153,7 @@ export class VerifyMobileComponent implements OnInit, OnDestroy {
     if (this.fromLoginPage || this.isCorpBiz) {
       this.mobileNumber = {
         code: (this.signUpService.getUserMobileCountryCode()) ? this.signUpService.getUserMobileCountryCode() : appConstants.SINGAPORE_COUNTRY_CODE,
-        number: this.isCorpBiz ? this.appService.getCorpBizData().maskedMobileNumber : this.signUpService.getUserMobileNo()
+        number: this.isCorpBiz ? '****' + this.signUpService.getAccountInfo()?.mobileNumber.substring(4) : this.signUpService.getUserMobileNo()
       };
     } else {
       this.mobileNumber = this.signUpService.getMobileNumber();
@@ -472,7 +472,7 @@ export class VerifyMobileComponent implements OnInit, OnDestroy {
       userEmail = sessionStorage.getItem('email');
     }
     const isCorporateUserType = this.signUpService.getUserType() === appConstants.USERTYPE.CORPORATE;
-    this.authService.doValidate2faLogin(otp, userEmail, this.loginService.journeyType, this.loginService.enqId, null, isCorporateUserType).subscribe((data: any) => {
+    this.authService.doValidate2faLogin(otp, userEmail, this.loginService.journeyType, this.loginService.enqId, null, isCorporateUserType, this.appService.isUserFromCorpBizLink, this.appService.getCorpBizData()?.enrollmentId).subscribe((data: any) => {
       if (data.responseMessage.responseCode >= 6000) {
         this.mobileNumberVerified = true;
         this.mobileNumberVerifiedMessage = this.loading['verified2fa'];
