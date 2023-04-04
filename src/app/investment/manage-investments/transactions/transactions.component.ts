@@ -56,15 +56,15 @@ export class TransactionsComponent implements OnInit {
   }
 
   createTransactionStatement() {
-    if (this.portfolio && this.portfolio.accountCreatedDate) {
-      const accountCreationDate = this.convertStringToDate(
-        this.portfolio.accountCreatedDate
+    if (this.portfolio && this.portfolio.statementStartDate) {
+      const statementStartDate = this.convertStringToDate(
+        this.portfolio.statementStartDate
       );
       const recentStatementAvailDate = this.convertStringToDate(
         this.portfolio.statementCreatedDate
       );
       this.statementMonthsList = this.manageInvestmentsService.getMonthListByPeriod(
-        accountCreationDate,
+        statementStartDate,
         recentStatementAvailDate
       );
     }

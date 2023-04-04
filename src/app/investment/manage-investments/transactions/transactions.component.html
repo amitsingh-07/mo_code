@@ -143,6 +143,10 @@
                   </div>
                 </div>
               </div>
+              <div *ngIf="portfolio.isStatementLimitExceeded" class="transaction-note">
+                <img class="info-img" src="assets/images/investment-account/info.svg" />
+                <div class="note-text" [innerHtml]="'TRANSACTIONS.STATEMENTS_NOTE' | translate"></div>
+              </div>
             </div>
           </ng-template>
         </ng-container>
