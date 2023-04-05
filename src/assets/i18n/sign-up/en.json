@@ -997,5 +997,10 @@
     "DESC": "<p>We will assess if you have the knowledge or investment experience in understanding the risks and features of unlisted Specified Investment Products (‘SIPs’).</p>If you have undergone and passed the ABS e-Learning (Module 5), you may upload the certificate. Otherwise, you will be asked to go through the e-learning.",
     "EXPIRED_DESC": "We will assess if you have the knowledge or investment experience in understanding the risks and features of unlisted Specified Investment Products (‘SIPs’).",
     "BTN-TEXT": "Continue"
+  },
+  "UPGRADE_SCREEN": {
+    "TITLE": "Your MoneyOwl Account has been upgraded!",
+    "MESSAGE": "You can now get free life time access to your Comprehensive Financial Planning report, make unlimited changes and generate the report as many times as you might want.",
+    "BTN_TEXT": "Let’s Go" 
   }
 }

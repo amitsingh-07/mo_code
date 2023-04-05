@@ -90,6 +90,7 @@ export class NavbarService {
   wiseIncomeDropDownShow = new BehaviorSubject(false);
   displayingWelcomeFlowContent$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   welcomeJourneyCompleted: boolean = false;
+  upgradeScreenShown = false;
   urlHistory = { currentUrl: null, previousUrl: []};
   isBackClicked = false;
   activeModals = 0;

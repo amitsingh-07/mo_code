@@ -9,6 +9,7 @@ import { FinlitLoggedUserService as FinlitLoggedUserGuard } from './auth-guard.s
 import { LoggedUserService as LoggedUserGuard } from './auth-guard.service';
 import { FacebookLoggedUserService as FacebookLoggedUserGuard } from './auth-guard.service';
 import { CorpbizAuthGuardService as CorpbizAuthGuard } from './auth-guard.service';
+import { CorpbizWelcomeFlowAuthGuardService as UpgradeAuthGuard  } from './auth-guard.service';
 import { CreateAccountComponent } from './create-account/create-account.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { EditPasswordComponent } from './edit-password/edit-password.component';
@@ -45,6 +46,7 @@ import { AddUpdateCpfiaComponent } from './add-update-cpfia/add-update-cpfia.com
 import { CorpBizSignupComponent } from './corp-biz-signup/corp-biz-signup.component';
 import { CorpBizSignupWithDataComponent } from './corp-biz-signup-with-data/corp-biz-signup-with-data.component';
 import { CorpBizActivationLinkComponent } from './corp-biz-activation-link/corp-biz-activation-link.component';
+import { CorpbizUpgradeScreenComponent } from './corpbiz-upgrade-screen/corpbiz-upgrade-screen.component';
 
 const routes: Routes = [
   {
@@ -313,6 +315,11 @@ const routes: Routes = [
   {
     path: SIGN_UP_ROUTES.CORP_BIZ_ACTIVATIONLINK,
     component: CorpBizActivationLinkComponent
+  },
+  {
+    path: SIGN_UP_ROUTES.CORP_BIZ_UPGRADE_SCREEN,
+    component: CorpbizUpgradeScreenComponent,
+    canActivate: [UpgradeAuthGuard]
   },
   { path: '**', redirectTo: '/page-not-found' }
 ];

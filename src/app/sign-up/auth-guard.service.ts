@@ -203,7 +203,7 @@ export class CorpbizWelcomeFlowAuthGuardService implements CanActivate {
       }
       return false;
     }
-    if (this.navbarService.welcomeJourneyCompleted) {
+    if (this.navbarService.welcomeJourneyCompleted || this.navbarService.upgradeScreenShown) {
       this.router.navigate([SIGN_UP_ROUTE_PATHS.DASHBOARD]);
       return false;
     }

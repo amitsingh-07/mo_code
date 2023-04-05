@@ -490,6 +490,8 @@ export class VerifyMobileComponent implements OnInit, OnDestroy {
         if (this.checkInsuranceEnquiry(insuranceEnquiry)) {
           this.updateInsuranceEnquiry(insuranceEnquiry, data);
         } else {
+          this.loginService.isShowUpgradeScreen = data.objectList[0].showUpgradeScreen;
+          this.navbarService.upgradeScreenShown = false;
           this.loginService.goToNext();
         }
 
