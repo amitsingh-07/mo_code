@@ -44,6 +44,7 @@ export class LoginService {
   progressModal: boolean;
   enqId = -1;
   journeyType = '';
+  isShowUpgradeScreen: boolean;
 
   constructor(
     private apiService: ApiService,
@@ -103,6 +104,8 @@ export class LoginService {
       if (this.authService.isShowWelcomeFlow) {
         this.redirectAfterLogin = CORPBIZ_ROUTES_PATHS.GET_STARTED;
         this.navbarService.displayingWelcomeFlowContent$.next(true);
+      } else if(this.isShowUpgradeScreen) {
+        this.redirectAfterLogin = SIGN_UP_ROUTE_PATHS.CORP_BIZ_UPGRADE_SCREEN;
       } else {
         this.redirectAfterLogin = SIGN_UP_ROUTE_PATHS.DASHBOARD;
       }
