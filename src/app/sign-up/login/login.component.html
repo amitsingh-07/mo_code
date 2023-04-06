@@ -82,8 +82,11 @@
               'COMMON.LOGIN' | translate }}</button>
             <!-- FORGOT -->
             <div class="forgot-link mt30" *ngIf="!hideForgotPassword">
-              <a id="login_forgotpwd_link" (click)="navigateForgotPassword()">{{ 'LOGIN.FORGOT_PASSWORD' |
+              <a *ngIf="!appService.isUserFromCorpBizLink" id="login_forgotpwd_link" (click)="navigateForgotPassword()">{{ 'LOGIN.FORGOT_PASSWORD' |
                 translate}}</a>
+              <a *ngIf="appService.isUserFromCorpBizLink" id="login_forgotpwd_link" target="_blank" routerLink='../forgot-password' [queryParams]="{isCorpBiz: true}">
+                {{ 'LOGIN.FORGOT_PASSWORD' | translate}}
+              </a>
             </div>
             <div *ngIf="!appService.isUserFromCorpBizLink" class="start-link mt10"><a id="login_signup_link" (click)="navigateSignUp()">{{'LOGIN.DON_T_HAVE_AN_ACCOUNT'
                 |
@@ -185,8 +188,11 @@
             </div>
             <!-- FORGOT -->
             <div class="forgot-link" *ngIf="!hideForgotPassword">
-              <a id="login_forgotpwd_link" (click)="navigateForgotPassword()">{{
+              <a *ngIf="!appService.isUserFromCorpBizLink" id="login_forgotpwd_link" (click)="navigateForgotPassword()">{{
                 'LOGIN.FORGOT_PASSWORD' | translate}}</a>
+              <a *ngIf="appService.isUserFromCorpBizLink" id="login_forgotpwd_link" target="_blank" routerLink='../forgot-password' [queryParams]="{isCorpBiz: true}">
+                {{ 'LOGIN.FORGOT_PASSWORD' | translate}}
+              </a>
             </div>
             <div class="start-link"><a id="login_signup_link" (click)="navigateSignUp()">{{
                 'LOGIN.DON_T_HAVE_AN_ACCOUNT' | translate}}</a></div>

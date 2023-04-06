@@ -39,6 +39,7 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
   emailResend: string;
   finlitEnabled = false;
   organisationEnabled = false;
+  isCorpBiz: boolean = false;
 
   constructor(
     // tslint:disable-next-line
@@ -58,7 +59,7 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
     this.route.params.subscribe((params) => {
       this.heighlightMobileNumber = params.heighlightMobileNumber;
     });
-
+    this.isCorpBiz = this.route.snapshot.queryParams.isCorpBiz;
     this.translate.get('COMMON').subscribe((result: string) => {
       this.emailNotFoundTitle = this.translate.instant('FORGOTPASSWORD.EMAIL_NOT_FOUND');
       this.emailNotFoundDesc = this.translate.instant('FORGOTPASSWORD.EMAIL_NOT_FOUND_DESC');
@@ -67,6 +68,9 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
     });
     if (!this.authService.isAuthenticated()) {
       this.authService.authenticate().subscribe((token) => {
+        if (this.isCorpBiz) {
+          this.refreshCaptcha();
+        }
       });
     }
     this.configService.getConfig().subscribe((config: IConfig) => {
@@ -86,7 +90,9 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.refreshCaptcha();
+    if (!this.isCorpBiz) {
+      this.refreshCaptcha();
+    }
   }
 
   buildForgotPasswordForm() {
