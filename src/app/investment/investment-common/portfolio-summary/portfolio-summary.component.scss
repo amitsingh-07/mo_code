@@ -122,6 +122,7 @@ app-portfolio-summary {
 
               &.text-lower {
                 text-transform: lowercase;
+                word-break: break-all;
               }
 
               &.text-normal {
