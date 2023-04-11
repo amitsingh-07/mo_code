@@ -43,6 +43,9 @@ app-edit-profile {
       font-family: $muli-regular;
       color: $watercourse-color;
       margin-bottom: 10px;
+      span{
+        word-break: break-all;
+      }
     }
     .password-button {
       background-color: $robins-egg-blue-color;
