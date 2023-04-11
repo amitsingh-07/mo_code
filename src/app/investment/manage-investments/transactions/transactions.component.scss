@@ -252,13 +252,18 @@ app-transactions {
       align-items: center;
       background-color: $black-squeeze-grey-color;
       padding: 20px;
+      margin-top: -4px;
         .info-img {
           margin-right: 10px;
+          width: 16px;
+          height: 16px;
+          display: flex;
         }
         .note-text {
         font-family: $muli-italic;
         font-size: 13px;
-        letter-spacing: -0.14px;    
+        letter-spacing: -0.14px;
+        line-height: 16px;   
         color: $dark-grey-color;
           a {
             font-family: $muli-bold-italic;
