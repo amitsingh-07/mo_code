@@ -26,6 +26,7 @@ export class TransactionsComponent implements OnInit {
   activeTransactionIndex;
   userProfileInfo;
   portfolio: any;
+  isTransactionExceeded: boolean;
   constructor(
     public footerService: FooterService,
     public navbarService: NavbarService,
@@ -92,8 +93,9 @@ export class TransactionsComponent implements OnInit {
       this.manageInvestmentsService.getTransactionHistory(
         this.portfolio.customerPortfolioId).subscribe((response) => {
           this.loaderService.hideLoaderForced();
-          this.transactionHistory = response.objectList;
+          this.transactionHistory = response.objectList.transactionsHistory;
           this.transactionHistory = this.calculateSplitAmounts(this.transactionHistory);
+          this.isTransactionExceeded = response.objectList.isTransactionPeriodExceeded;
           this.investmentEngagementJourneyService.sortByProperty(
             this.transactionHistory,
             'createdDate',
