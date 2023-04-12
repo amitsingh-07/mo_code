@@ -929,7 +929,7 @@
       "ABOUT": "Once it is ready, we will notify you via email at ",
       "ABOUT_LITE": "You can view your personalised report via your dashboard.",
       "ABOUT_PAY": "Please follow the payment instructions in your Dashboard to make payment.",
-      "ABOUT_WAIVED": "You will be receiving an email at EMAIL_ID with instructions on booking your appointment with an adviser.",
+      "ABOUT_WAIVED": "You will be receiving an email at <span class=\"break-all\">EMAIL_ID</span> with instructions on booking your appointment with an adviser.",
       "STEP_TITLE": "What’s Next?",
       "STEP_DESC": "Our adviser will analyse your needs using our proprietary models. He or she may contact you for clarifications on your inputs.",
       "STEP_1": "Keep a lookout for our notification mail!",
