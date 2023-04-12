@@ -70,6 +70,10 @@
   word-break: break-word;
 }
 
+.break-all {
+  word-break: break-all;
+}
+
 @include allmobiles {
   .sm-text-align-center {
     text-align: center !important;
