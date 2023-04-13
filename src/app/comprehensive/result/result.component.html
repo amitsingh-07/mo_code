@@ -14,8 +14,7 @@
       <span *ngIf="isPayment"> {{'CMP.RESULT.ABOUT_PAY' | translate }}</span>
     </div>
     <div *ngIf="isCorporate && !lockedWithWaived">{{'CMP.RESULT.ABOUT_LITE' | translate }}</div>
-    <div *ngIf="isCorporate && lockedWithWaived">
-      {{('CMP.RESULT.ABOUT_WAIVED' | translate).replace('EMAIL_ID', emailID.emailAddress) }}</div>
+    <div *ngIf="isCorporate && lockedWithWaived" [innerHtml]="('CMP.RESULT.ABOUT_WAIVED' | translate).replace('EMAIL_ID', emailID.emailAddress)"></div>
   </div>
   <div class="what-next" *ngIf="!isCorporate || (isCorporate && lockedWithWaived)">
     <div class="what-next--title">{{'CMP.RESULT.STEP_TITLE' | translate }}</div>

@@ -17,7 +17,7 @@
             {{'EDIT_PROFILE.MOBILE_NO' | translate}} {{personalData?.countryCode}} {{personalData.mobileNumber}}
           </div>
           <div class="email-address">
-            {{'EDIT_PROFILE.EMAIL_ADDRESS' | translate}} {{personalData.email}}
+            {{'EDIT_PROFILE.EMAIL_ADDRESS' | translate}} <span>{{personalData.email}}</span>
           </div>
           <div>
             <button type="button" class="password-button" (click)="editPassword()">
