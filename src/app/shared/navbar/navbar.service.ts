@@ -334,7 +334,7 @@ export class NavbarService {
   }
 
   handlingMobileAppNavigationUrlHistory(event) {
-    if (!this.isBackClicked && !event.url.includes('/accounts/update-bank')) {
+    if (!this.isBackClicked) {
       this.urlHistory.currentUrl && this.urlHistory.previousUrl.push(this.urlHistory.currentUrl);
       this.urlHistory.currentUrl = event.url;
     }
