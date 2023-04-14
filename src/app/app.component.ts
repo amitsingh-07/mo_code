@@ -6,6 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { InAppBrowser, UrlEvent } from 'capgo-inappbrowser-intent-fix';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
+import { App } from '@capacitor/app';
 
 import { IComponentCanDeactivate } from './changes.guard';
 import { ConfigService, IConfig } from './config/config.service';
@@ -130,6 +131,11 @@ export class AppComponent implements IComponentCanDeactivate, OnInit, AfterViewI
       } else if (urlEvt.url.startsWith(environment.singpassBaseUrl)) {
         InAppBrowser.close();
       }
+    });
+
+    //Android device back navigation restriction
+    App.addListener('backButton', () => {
+      CapacitorUtils.showToastMessage("Back button is disabled, please use the on-screen navigation.");
     });
   }
 
