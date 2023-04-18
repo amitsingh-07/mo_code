@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+
+import { CapacitorUtils } from '../utils/capacitor.util';
 import { environment } from './../../../environments/environment';
 
 declare let ga: any;
-declare let gtag: any;
 
 @Injectable({
   providedIn: 'root'
@@ -14,41 +15,43 @@ export class GoogleAnalyticsService {
 
   public initGoogleAnalyticsService() {
     // Initialization for Google Pixel
-    this.gtag('js', new Date());
-    this.gtag('config', environment.gAdPropertyId);
-
-
-    // Router Events
-    this.router.events.subscribe((event) => {
-      try {
-        if (typeof ga === 'function') {
-          if (event instanceof NavigationEnd) {
-            ga('set', 'page', event.urlAfterRedirects);
-            ga('send', 'pageview');
+    if (!CapacitorUtils.isApp) {
+      this.gtag('js', new Date());
+      this.gtag('config', environment.gAdPropertyId);
+      // Router Events
+      this.router.events.subscribe((event) => {
+        try {
+          if (typeof ga === 'function') {
+            if (event instanceof NavigationEnd) {
+              ga('set', 'page', event.urlAfterRedirects);
+              ga('send', 'pageview');
+            }
           }
+        } catch (e) {
+          console.log(e);
         }
-      } catch (e) {
-        console.log(e);
-      }
-    });
+      });
+    }
   }
 
-  public gtag(...args: any[]) {
+  private gtag(...args: any[]) {
     (window as any).dataLayer.push(arguments);
   }
 
   // Emit Conversions
   public emitConversionsTracker(trackingId: string) {
-    const updatedTrackingId: string = environment.gAdPropertyId + '/' + trackingId;
-    try {
-      this.gtag(
-        'event', 'conversion', {
-        send_to: updatedTrackingId
+    if (!CapacitorUtils.isApp) {
+      const updatedTrackingId: string = environment.gAdPropertyId + '/' + trackingId;
+      try {
+        this.gtag(
+          'event', 'conversion', {
+          send_to: updatedTrackingId
+        }
+        );
+        return true;
+      } catch (Exception) {
+        return false;
       }
-      );
-      return true;
-    } catch (Exception) {
-      return false;
     }
   }
 
@@ -56,7 +59,7 @@ export class GoogleAnalyticsService {
     eventAction: string,
     eventLabel: string = null,
     eventValue: number = null) {
-    if (typeof ga === 'function') {
+    if (typeof ga === 'function' && !CapacitorUtils.isApp) {
       ga('send', 'event', {
         eventCategory,
         eventLabel,
@@ -70,7 +73,7 @@ export class GoogleAnalyticsService {
     socialAction: string,
     socialTarget: string,
   ) {
-    if (typeof ga === 'function') {
+    if (typeof ga === 'function' && !CapacitorUtils.isApp) {
       ga('send', 'social', {
         socialNetwork,
         socialAction,
@@ -81,47 +84,53 @@ export class GoogleAnalyticsService {
 
   // Timing Functions
   public startTime(timeId: string) {
-    const name: string = 'time_' + timeId;
-    const expireDays = 1;
-    const currDate: Date = new Date();
-    const d: Date = new Date();
-    d.setTime(d.getTime() + expireDays * 24 * 60 * 60 * 1000);
-    const expires = `expires=${d.toUTCString()}`;
-    document.cookie = `${name}=${currDate}; ${expires}`;
+    if (!CapacitorUtils.isApp) {
+      const name: string = 'time_' + timeId;
+      const expireDays = 1;
+      const currDate: Date = new Date();
+      const d: Date = new Date();
+      d.setTime(d.getTime() + expireDays * 24 * 60 * 60 * 1000);
+      const expires = `expires=${d.toUTCString()}`;
+      document.cookie = `${name}=${currDate}; ${expires}`;
+    }
   }
 
   public getTime(timeId: string) {
-    const name: string = 'time_' + timeId;
-    const ca: string[] = document.cookie.split(';');
-    const caLen: number = ca.length;
-    const cookieName = `${name}=`;
-    let c: string;
-    let oldDate: string = null;
-    const d: Date = new Date();
-    let timeDiff = 0;
-    const currDate = `${d.toUTCString()}`;
+    if (!CapacitorUtils.isApp) {
+      const name: string = 'time_' + timeId;
+      const ca: string[] = document.cookie.split(';');
+      const caLen: number = ca.length;
+      const cookieName = `${name}=`;
+      let c: string;
+      let oldDate: string = null;
+      const d: Date = new Date();
+      let timeDiff = 0;
+      const currDate = `${d.toUTCString()}`;
 
-    for (let i = 0; i < caLen; i += 1) {
-      c = ca[i].replace(/^\s+/g, '');
-      if (c.indexOf(cookieName) === 0) {
-        oldDate = c.substring(cookieName.length, c.length);
+      for (let i = 0; i < caLen; i += 1) {
+        c = ca[i].replace(/^\s+/g, '');
+        if (c.indexOf(cookieName) === 0) {
+          oldDate = c.substring(cookieName.length, c.length);
+        }
       }
-    }
-    if (oldDate !== 'null') {
-      timeDiff = (Date.parse(currDate) - Date.parse(oldDate));
-      return timeDiff;
-    } else {
-      return false;
+      if (oldDate !== 'null') {
+        timeDiff = (Date.parse(currDate) - Date.parse(oldDate));
+        return timeDiff;
+      } else {
+        return false;
+      }
     }
   }
 
   public endTime(timeId: string) {
-    const name: string = 'time_' + timeId;
-    const empty = null;
-    const d: Date = new Date();
-    d.setTime(d.getTime() + 1000 * 10); // Setting Expire in 10secs
-    const expires = `expires=${d.toUTCString()}`;
-    document.cookie = `${name}=${empty}; ${expires}`;
+    if (!CapacitorUtils.isApp) {
+      const name: string = 'time_' + timeId;
+      const empty = null;
+      const d: Date = new Date();
+      d.setTime(d.getTime() + 1000 * 10); // Setting Expire in 10secs
+      const expires = `expires=${d.toUTCString()}`;
+      document.cookie = `${name}=${empty}; ${expires}`;
+    }
   }
 
   public emitTime(timeId: string,
@@ -131,7 +140,7 @@ export class GoogleAnalyticsService {
   ) {
     const timingValue = this.getTime(timeId);
     this.endTime(timeId);
-    if (typeof ga === 'function') {
+    if (typeof ga === 'function' && !CapacitorUtils.isApp) {
       this.endTime(timeId);
       ga('send', 'timing', [timingCategory], [timingVar], [timingValue], [timingLabel]);
     }
