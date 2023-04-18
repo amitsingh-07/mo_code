@@ -38,7 +38,9 @@ export class SingPassComponent implements OnInit {
   }
 
   openSingpassLogin(){
-    this.singpassService.openSingpassUrl();
+    if (this.singpassService.getStateNonce()) {
+      this.singpassService.openSingpassUrl();
+    }
   }
 
 }
