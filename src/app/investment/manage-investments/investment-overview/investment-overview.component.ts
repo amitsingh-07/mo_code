@@ -66,7 +66,7 @@ export class InvestmentOverviewComponent implements OnInit, OnDestroy {
   wiseIncomePortfolio: any[];
   showBannerInfo = false;
   wiseIncomeInfoMonth: any;
-  backPressSubscription : Subscription;
+  deviceBackPressSubscription : Subscription;
   constructor(
     public readonly translate: TranslateService,
     public headerService: HeaderService,
@@ -82,7 +82,6 @@ export class InvestmentOverviewComponent implements OnInit, OnDestroy {
     private signUpApiService: SignUpApiService,
     private loaderService: LoaderService
   ) {
-      
     this.translate.use('en');
     this.translate.get('COMMON').subscribe((result: string) => {
       this.pageTitle = this.translate.instant('YOUR_INVESTMENT.TITLE');
@@ -120,7 +119,7 @@ export class InvestmentOverviewComponent implements OnInit, OnDestroy {
 
     this.portfolioCategories = INVESTMENT_COMMON_CONSTANTS.PORTFOLIO_CATEGORY;
     /** Redirects to Dashboard on click of Device Back*/
-    this.backPressSubscription = this.navbarService
+    this.deviceBackPressSubscription = this.navbarService
       .subscribeDeviceBackPress$
       .subscribe(() => {
         this.router.navigate([SIGN_UP_ROUTE_PATHS.DASHBOARD]);
@@ -128,7 +127,7 @@ export class InvestmentOverviewComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    this.backPressSubscription.unsubscribe();
+    this.deviceBackPressSubscription.unsubscribe();
     this.navbarService.unsubscribeBackPress();
   }
 
