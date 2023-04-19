@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
 import { NgbActiveModal, NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { TitleCasePipe } from '@angular/common';
 import { InvestmentCommonService } from './../../investment/investment-common/investment-common.service';
 
@@ -97,6 +97,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   isMyInfoEnabled = false;
   ckaInfo: any;
   displaySingpassLink: boolean;
+  backPressSubscription : Subscription;
 
   constructor(
     private modal: NgbModal,
@@ -119,6 +120,13 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     public activeModal: NgbActiveModal,
     private titleCasePipe: TitleCasePipe
   ) {
+    this.backPressSubscription = this.router.events.pipe(
+      filter((event) => event instanceof NavigationStart)
+    ).subscribe((event: NavigationStart) => {
+      if (event.navigationTrigger === 'popstate') {
+        this.router.navigate([SIGN_UP_ROUTE_PATHS.DASHBOARD]);
+      }
+    });
     this.translate.use('en');
     this.translate.get('COMMON').subscribe(() => {
       this.pageTitle = this.translate.instant('EDIT_PROFILE.MY_PROFILE');
@@ -238,6 +246,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
     this.navbarService.unsubscribeBackPress();
+    this.backPressSubscription.unsubscribe();
     // singpass
     if (this.myinfoChangeListener) {
       this.myinfoChangeListener.unsubscribe();
