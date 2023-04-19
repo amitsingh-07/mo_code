@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription, filter } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { LoaderService } from '../../../shared/components/loader/loader.service';
 import { FooterService } from '../../../shared/footer/footer.service';
@@ -82,13 +82,7 @@ export class InvestmentOverviewComponent implements OnInit, OnDestroy {
     private signUpApiService: SignUpApiService,
     private loaderService: LoaderService
   ) {
-    this.backPressSubscription = this.router.events.pipe(
-      filter((event) => event instanceof NavigationStart)
-    ).subscribe((event: NavigationStart) => {
-      if (event.navigationTrigger === 'popstate') {
-        this.router.navigate([SIGN_UP_ROUTE_PATHS.DASHBOARD]);
-      }
-    });
+      
     this.translate.use('en');
     this.translate.get('COMMON').subscribe((result: string) => {
       this.pageTitle = this.translate.instant('YOUR_INVESTMENT.TITLE');
@@ -125,6 +119,12 @@ export class InvestmentOverviewComponent implements OnInit, OnDestroy {
     this.toastMsg = this.manageInvestmentsService.getToastMessage();
 
     this.portfolioCategories = INVESTMENT_COMMON_CONSTANTS.PORTFOLIO_CATEGORY;
+    /** Redirects to Dashboard on click of Device Back*/
+    this.backPressSubscription = this.navbarService
+      .subscribeDeviceBackPress$
+      .subscribe(() => {
+        this.router.navigate([SIGN_UP_ROUTE_PATHS.DASHBOARD]);
+      });  
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

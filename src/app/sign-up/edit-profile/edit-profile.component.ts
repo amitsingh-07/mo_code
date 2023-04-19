@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { NavigationStart, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { NgbActiveModal, NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject, Subscription } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { TitleCasePipe } from '@angular/common';
 import { InvestmentCommonService } from './../../investment/investment-common/investment-common.service';
 
@@ -119,14 +119,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     private myInfoService: MyInfoService,
     public activeModal: NgbActiveModal,
     private titleCasePipe: TitleCasePipe
-  ) {
-    this.backPressSubscription = this.router.events.pipe(
-      filter((event) => event instanceof NavigationStart)
-    ).subscribe((event: NavigationStart) => {
-      if (event.navigationTrigger === 'popstate') {
-        this.router.navigate([SIGN_UP_ROUTE_PATHS.DASHBOARD]);
-      }
-    });
+  ) { 
     this.translate.use('en');
     this.translate.get('COMMON').subscribe(() => {
       this.pageTitle = this.translate.instant('EDIT_PROFILE.MY_PROFILE');
@@ -238,8 +231,14 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       }
     });
     this.displaySingpassLink = this.signUpService.getUserType() === appConstants.USERTYPE.FINLIT ||
-      this.signUpService.getUserType() === appConstants.USERTYPE.CORPORATE ? false : true;
-  }
+    this.signUpService.getUserType() === appConstants.USERTYPE.CORPORATE ? false : true;
+    /** Redirects to Dashboard on click of Device Back*/
+    this.backPressSubscription = this.navbarService
+      .subscribeDeviceBackPress$
+      .subscribe(() => {
+        this.router.navigate([SIGN_UP_ROUTE_PATHS.DASHBOARD]);
+      }); 
+    }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
