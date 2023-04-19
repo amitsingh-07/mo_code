@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
+import { CapacitorUtils } from '../utils/capacitor.util';
+
 declare const fbq: any;
 
 @Injectable({
@@ -23,9 +25,8 @@ export class FBPixelService {
     });
    }
 
-   track(trackId: string) {
-    console.log('FB Pixel Track:', trackId);
-    if (typeof fbq === 'function') {
+   public track(trackId: string) {
+    if (typeof fbq === 'function' && !CapacitorUtils.isApp) {
       fbq('track', trackId);
     }
    }
