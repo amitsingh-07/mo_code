@@ -40,10 +40,6 @@ export class InvestmentAccountCommon {
     // Set Thumbnail
     const defaultThumb = INVESTMENT_ACCOUNT_CONSTANTS.upload_documents.default_thumb;
     let reader: FileReader = new FileReader();
-    const realFileReader = (reader as any)._realReader;
-    if (realFileReader) {
-      reader = realFileReader;
-    }
     reader.onloadend = () => {
       thumbElem.src = reader.result;
     };
