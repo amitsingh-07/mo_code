@@ -97,6 +97,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   isMyInfoEnabled = false;
   ckaInfo: any;
   displaySingpassLink: boolean;
+  browserBackPressSubscription : Subscription;
 
   constructor(
     private modal: NgbModal,
@@ -118,7 +119,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     private myInfoService: MyInfoService,
     public activeModal: NgbActiveModal,
     private titleCasePipe: TitleCasePipe
-  ) {
+  ) { 
     this.translate.use('en');
     this.translate.get('COMMON').subscribe(() => {
       this.pageTitle = this.translate.instant('EDIT_PROFILE.MY_PROFILE');
@@ -230,7 +231,13 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       }
     });
     this.displaySingpassLink = this.signUpService.getUserType() === appConstants.USERTYPE.FINLIT ||
-      this.signUpService.getUserType() === appConstants.USERTYPE.CORPORATE ? false : true;
+    this.signUpService.getUserType() === appConstants.USERTYPE.CORPORATE ? false : true;
+    /** Redirects to Dashboard on click of Device Back*/
+    this.browserBackPressSubscription = this.navbarService
+      .subscribeBrowserBackPress$
+      .subscribe(() => {
+        this.router.navigate([SIGN_UP_ROUTE_PATHS.DASHBOARD]);
+      });
   }
 
   ngOnDestroy() {
@@ -238,6 +245,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
     this.navbarService.unsubscribeBackPress();
+    this.browserBackPressSubscription.unsubscribe();
     // singpass
     if (this.myinfoChangeListener) {
       this.myinfoChangeListener.unsubscribe();
