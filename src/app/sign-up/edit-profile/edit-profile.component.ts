@@ -97,7 +97,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   isMyInfoEnabled = false;
   ckaInfo: any;
   displaySingpassLink: boolean;
-  deviceBackPressSubscription : Subscription;
+  browserBackPressSubscription : Subscription;
 
   constructor(
     private modal: NgbModal,
@@ -233,19 +233,19 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     this.displaySingpassLink = this.signUpService.getUserType() === appConstants.USERTYPE.FINLIT ||
     this.signUpService.getUserType() === appConstants.USERTYPE.CORPORATE ? false : true;
     /** Redirects to Dashboard on click of Device Back*/
-    this.deviceBackPressSubscription = this.navbarService
-      .subscribeDeviceBackPress$
+    this.browserBackPressSubscription = this.navbarService
+      .subscribeBrowserBackPress$
       .subscribe(() => {
         this.router.navigate([SIGN_UP_ROUTE_PATHS.DASHBOARD]);
-      }); 
-    }
+      });
+  }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
     this.navbarService.unsubscribeBackPress();
-    this.deviceBackPressSubscription.unsubscribe();
+    this.browserBackPressSubscription.unsubscribe();
     // singpass
     if (this.myinfoChangeListener) {
       this.myinfoChangeListener.unsubscribe();

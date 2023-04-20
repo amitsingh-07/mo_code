@@ -28,7 +28,7 @@ export class NavbarService {
   private scrollTo = new Subject();
   private currentActive = new Subject();
   private setCpfPromoCode = new BehaviorSubject(null);
-  private deviceBackPress = new Subject();
+  private browserBackPress = new Subject();
 
 
   existingNavbar = this.navbar.asObservable();
@@ -41,7 +41,7 @@ export class NavbarService {
   scrollToObserv = this.scrollTo.asObservable();
   currentActiveObserv = this.currentActive.asObservable();
   getCpfPromoCodeObservable = this.setCpfPromoCode.asObservable();
-  subscribeDeviceBackPress$ = this.deviceBackPress.asObservable()
+  subscribeBrowserBackPress$ = this.browserBackPress.asObservable()
 
   /* Header Params */
   private pageTitle = new BehaviorSubject('');
@@ -109,7 +109,7 @@ export class NavbarService {
         if(this.activeModals > 0) {
           this.modal.dismissAll();
         }
-        this.deviceBackPress.next(true);
+        this.browserBackPress.next(true);
       } 
     });
     
