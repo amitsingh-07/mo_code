@@ -47,7 +47,7 @@ import { CorpBizSignupComponent } from './corp-biz-signup/corp-biz-signup.compon
 import { CorpBizSignupWithDataComponent } from './corp-biz-signup-with-data/corp-biz-signup-with-data.component';
 import { CorpBizActivationLinkComponent } from './corp-biz-activation-link/corp-biz-activation-link.component';
 import { CorpbizUpgradeScreenComponent } from './corpbiz-upgrade-screen/corpbiz-upgrade-screen.component';
-
+import { ForcedUpdateComponent } from './forced-update/forced-update.component'
 const routes: Routes = [
   {
     path: SIGN_UP_ROUTES.ROOT,
@@ -320,6 +320,10 @@ const routes: Routes = [
     path: SIGN_UP_ROUTES.CORP_BIZ_UPGRADE_SCREEN,
     component: CorpbizUpgradeScreenComponent,
     canActivate: [UpgradeAuthGuard]
+  },
+  {
+    path: SIGN_UP_ROUTES.FORCED_UPDATE,
+    component: ForcedUpdateComponent
   },
   { path: '**', redirectTo: '/page-not-found' }
 ];

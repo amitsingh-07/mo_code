@@ -1002,5 +1002,10 @@
     "TITLE": "Your MoneyOwl Account has been upgraded!",
     "MESSAGE": "You can now get free life time access to your Comprehensive Financial Planning report, make unlimited changes and generate the report as many times as you might want.",
     "BTN_TEXT": "Let’s Go" 
+  },
+  "FORCED_UPDATE": {
+    "TITLE": "New Update Available!",
+    "MESSAGE": "We have made some changes to provide you with a better experience. Update now to continue using the MoneyOwl app.",
+    "BTN_TEXT": "Update Now" 
   }
 }
