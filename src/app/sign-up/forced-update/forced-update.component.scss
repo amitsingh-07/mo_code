@@ -10,22 +10,21 @@ app-forced-update {
         text-align: center;
     }
     .container-fluid{
+        padding-top: 40px;
         &.max-width--1024{
             max-width: 600px !important;
         }
-        padding-top: 40px;
-    }
-    .container-fluid{
-            &.forced-update-screen{
-              text-align: center;
-              max-width: 450px;
-              padding: 56px 0px 140px 0px;
-              @include allmobiles{
-                background-color: $white-color;
-                min-height: calc(100vh - 45px);
-                width: 100%;
-              }
+        &.forced-update-screen{
+            text-align: center;
+            max-width: 450px;
+            padding: 56px 0px 140px 0px;
+            @include allmobiles{
+              padding: 130px 0 35px 0;
+              background-color: $white-color;
+              min-height: 100vh;
+              width: 100%;
             }
+          }
     }
 
     .form-container{
@@ -61,13 +60,13 @@ app-forced-update {
         margin: 40px 0px 0px;
         justify-content: space-between;
         align-items: center;
-        bottom: 50px;
+        bottom: 35px;
         right: 0px;
         left: 0px;
         justify-content: center;
         @include allmobiles{
             position: absolute;
-            margin:40px 26px 0px;
+            margin:40px 20px 0px;
         }
         .btn-primary{
             font-family: $muli-bold;
