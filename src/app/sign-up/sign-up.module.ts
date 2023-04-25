@@ -63,6 +63,7 @@ import { InvestModalComponent } from './invest-modal/invest-modal.component';
 import { RecommendedCardComponent } from './recommended-card/recommended-card.component';
 import { RecommendedCardModalComponent } from './recommended-card-modal/recommended-card-modal.component';
 import { CorpbizUpgradeScreenComponent } from './corpbiz-upgrade-screen/corpbiz-upgrade-screen.component';
+import { MaintenancePageComponent } from './maintenance-page/maintenance-page.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new MultiTranslateHttpLoader(
@@ -131,7 +132,8 @@ export function createTranslateLoader(http: HttpClient) {
     InvestModalComponent,
     RecommendedCardComponent,
     RecommendedCardModalComponent,
-    CorpbizUpgradeScreenComponent
+    CorpbizUpgradeScreenComponent,
+    MaintenancePageComponent
   ],
   providers: [SignUpAccessGuard, SignUpCorporateAccessGuard, AuthGuardService, TwoFactorAuthGuardService, SingpassLoginGuard, LoginService],
   entryComponents: [EditMobileNumberComponent, SrsSuccessModalComponent]
