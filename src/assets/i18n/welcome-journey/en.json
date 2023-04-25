@@ -2,7 +2,6 @@
   "GET_START":{
     "TITLE": "Welcome to MoneyOwl!",
     "SUB_TITLE": "In just a few steps, you will embark on a Comprehensive Financial Planning Journey with MoneyOwl. <span class=\"txt-desc\"> We’ll be taking you through your finances now and throughout your retirement years.</span>",
-    "SUB_TEXT": "Corporate partner plans for Free!",
     "CONT_BTN": "Let’s Go"
   },
   "TELL_ABOUT_YOU":{
@@ -49,8 +48,7 @@
     "SUB_TXT3": "Refine your report when you continue to update more details about you and your family.",
     "SUB_HEAD4": "Speak to adviser",
     "SUB_TXT4": "Contact us for a one-on-one advice should you need any customised planning.",
-    "BTN_TXT": "Start Now",
-    "MESSAGE": "Corporate partner plans for Free!"
+    "BTN_TXT": "Start Now"
   },
   "LOADER_MESSAGES": {
     "LOADING": {

@@ -195,6 +195,10 @@ export class AppService {
     return JSON.parse(sessionStorage.getItem(CORP_BIZ_DATA));
   }
 
+  get isUserFromCorpBizLink() {
+    return this.getCorpBizData()?.isCorpBiz;
+  } 
+
   setCorpBizViaPublicData(corpBizViaPublic) {
     sessionStorage.setItem(CORPBIZ_VIA_PUBLIC, JSON.stringify(corpBizViaPublic))
   }

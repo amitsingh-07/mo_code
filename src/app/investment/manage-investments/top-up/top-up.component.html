@@ -52,11 +52,11 @@
                             Portfolio'}}
                           </button>
                           <div class="dropdown" ngbDropdownMenu aria-labelledby="courseDropdown">
-                            <button class="dropdown-item capital-letter"
-                              *ngFor="let portfolio of portfolioList; let i = index;"
-                              (click)="setDropDownValue('portfolio',portfolio)"
-                              id="topup_portfolio_option-{{i}}">{{portfolio.portfolioName}} -
-                              {{portfolio['refNo']}}</button>
+                            <div *ngFor="let portfolio of portfolioList; let i = index;">
+                              <button *ngIf="portfolio['refNo']" class="dropdown-item capital-letter"
+                                (click)="setDropDownValue('portfolio',portfolio)" id="topup_portfolio_option-{{i}}">{{portfolio.portfolioName}} -
+                                {{portfolio['refNo']}}</button>
+                            </div>
                           </div>
                         </div>
                       </div>

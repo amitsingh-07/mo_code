@@ -1,0 +1,80 @@
+@import '../../../variables';
+@import '../../../mixins';
+
+app-corpbiz-upgrade-screen {
+
+    .owl-start{
+        width: 300px;
+        height: 300px;
+        display: flex;
+        margin: 0 auto;
+        @include allmobiles{
+            width: 250px;
+            height: 250px;
+            }
+    }
+    .container-fluid{
+        &.max-width--1024{
+            max-width: 600px !important;
+        }
+        padding-top: 40px;
+    }
+    .container-fluid{
+            &.upgrade-screen{
+              text-align: center;
+              max-width: 450px;
+              padding: 56px 0px 140px 0px;
+              @include allmobiles{
+                background-color: $white-color;
+                min-height: 100vh;
+                width: 100%;
+                padding-left: 32px !important;
+                padding-right: 33px !important;
+              }
+            }
+    }
+
+    .form-container{
+        padding: 50px 57px 30px;
+        @include allmobiles{
+            padding: 0;
+        }
+        background-color: $white-color;
+        border-radius: 6px;
+    }
+    .title-txt {
+        font-family: $muli-bold;
+        font-size: 24px;
+        color: $teal-color;
+        line-height: 32px;
+        letter-spacing: -0.18px;;
+        text-align: center;
+    }
+    .sub-title-txt {
+        font-family: $muli-regular;
+        font-size: 16px;
+        line-height: 24px;
+        color: $black-color;
+        letter-spacing: -0.18px;;
+        margin-top: 20px;
+        text-align: center;
+        @include allmobiles{
+        max-width: 320px;
+        margin:20px auto 0;
+        }
+    }
+
+    .page-btn-block{
+        margin: 40px 0px 0px;
+        justify-content: space-between;
+        align-items: center;
+        bottom: 50px;
+        right: 0px;
+        left: 0px;
+        justify-content: center;
+        @include allmobiles{
+            position: absolute;
+            margin:40px 26px 0px;
+        }
+    }
+}

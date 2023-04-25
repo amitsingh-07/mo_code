@@ -62,16 +62,16 @@
                     </span>
                     <button type="button" class="btn-with-icon show-sm" id="invest_button"
                       (click)="openInvestMenuModal()"
-                      *ngIf="getReferralInfo && !getReferralInfo.isWelcomeRewardsValid && !getReferralInfo.refereeExists">
-                      <span>{{'DASHBOARD.INVESTMENT.INVEST' | translate}}</span>
+                      *ngIf="getReferralInfo && !getReferralInfo.isWelcomeRewardsValid && !getReferralInfo.refereeExists">                   
                       <span class="invest-btn-img"><img id="top-up_img"
                           src="assets/images/investment-account/plus-white.svg" alt="" /></span>
+                      <span>{{'DASHBOARD.INVESTMENT.INVEST' | translate}}</span>
                     </button>
                     <button id="investMenu" ngbDropdownToggle type="button" class="btn-with-icon hidden-sm"
                       *ngIf="getReferralInfo && !getReferralInfo.isWelcomeRewardsValid && !getReferralInfo.refereeExists">
-                      <span>{{'DASHBOARD.INVESTMENT.INVEST' | translate}}</span>
                       <span class="invest-btn-img"><img id="top-up_img"
                           src="assets/images/investment-account/plus-white.svg" alt="" /></span>
+                      <span>{{'DASHBOARD.INVESTMENT.INVEST' | translate}}</span>
                     </button>
                     <div ngbDropdownMenu="investMenu">
                       <button ngbDropdownItem (click)="newPortfolio()">
@@ -399,8 +399,10 @@
               <div class="widget-title">
                 <span class="flex">{{'DASHBOARD.WILL_WRITING.TITLE' | translate}}
                 </span>
-                <span class="view_all" *ngIf="wills.completedWill" (click)="redirectTo('edit')"><img
-                    src="assets/images/button-edit.svg"></span>
+                <span class="btn-with-icon" *ngIf="wills.completedWill" (click)="redirectTo('edit')">
+                  <span class="edit-btn-img"><img src="assets/images/editIcon.svg"></span>
+                  <span>{{'DASHBOARD.INVESTMENT.EDIT' | translate}}</span>  
+                </span>
               </div>
               <div class="widget-body">
                 <div class="scenarios flex-col-12">

@@ -28,7 +28,12 @@
     "LOGIN_EMAIL_MESSAGE": "Okay, Got it",
     "ACCOUNT_EXIST_MESSAGE": "Seems like you may have an existing account with Moneyowl. Login now!",
     "VERIFY_EMAIL_MESSAGE": "You are almost there! An email verification is sent. We need you to verify your email to complete your account creation!",
-    "VERIFY_MOBILE_OTP": "Seems like you have previously created an account but has yet to complete the account verification. Let us guide you through it."
+    "VERIFY_MOBILE_OTP": "Seems like you have previously created an account but has yet to complete the account verification. Let us guide you through it.",
+    "CORBIZ_ACCOUNT_EXIST_MESSAGE1": "Seems like you already have an existing account using this mobile number. Please log in to your existing MoneyOwl account to link and upgrade your account.",
+    "CORBIZ_ACCOUNT_EXIST_MESSAGE2": "You will gain access to additional benefits after your account has been successfully linked.",
+    "CORBIZ_UNVERIFIED_TITLE": "Oops, account verification pending!",
+    "CORBIZ_UNVERIFIED_MESSAGE1": "Seems like you already have an existing account using this mobile number. Please log in to your existing account and complete your account verification.",
+    "CORBIZ_UNVERIFIED_MESSAGE2": "Once verified, <strong>please log in through the activation link sent to your email</strong> previously to link and upgrade your account."
   },
   "CORP_BIZ_SIGN_UP": {
     "SIGN_UP_DESC": "Choose how you want to activate your Corporate Account",
@@ -151,6 +156,10 @@
         "WITHDRAWAL": "Withdrawal",
         "VEHICLE": "Vehicle"
       }
+    },
+    "LOGIN_INFO": {
+      "MESSAGE1" : "Already have an account?",
+      "MESSAGE2" : "to link with your existing account"
     }
   },
   "RECOMMENDED_CARD": {
@@ -395,7 +404,11 @@
     "SINGPASS_INVESTMENT_ACC_PENDING_MODAL": {
       "TITLE": "Investment account pending creation",
       "MESSAGE": "We are in the process of creating your investment account and you will be able to use Singpass login after your account is successfully created.<br><br>In the meantime, login to our services using your email/mobile and password."
-    }
+    },
+    "CORBIZ_HELP_TITLE": "Log in to your existing account",
+    "CORBIZ_HELP_BUTTON_LABEL": "Okay, Got it!",
+    "CORBIZ_HELP_INFO": "Please log in to your existing account.",
+    "CORBIZ_HELP_MESSAGE": "Please log in to your existing MoneyOwl account to link and upgrade your account."
   },
   "FORGOTPASSWORD": {
     "SUBMIT": "Submit",
@@ -580,6 +593,7 @@
       "CASH_ACCOUNT_BALANCE_MESSAGE": "The cash account is where all your investment funds are held before it is transferred to a portfolio or your bank account.",
       "SERVICE_UNAVAILABLE": "Sorry, this service is temporarily unavailable. Please try again later.",
       "INVEST": "Invest",
+      "EDIT": "Edit",
       "MENU_LBL_1": "New Portfolio",
       "MENU_SUB_LBL_1": "Investible with CPF, SRS and Cash",
       "MENU_LBL_2": "Existing Portfolio",
@@ -983,5 +997,10 @@
     "DESC": "<p>We will assess if you have the knowledge or investment experience in understanding the risks and features of unlisted Specified Investment Products (‘SIPs’).</p>If you have undergone and passed the ABS e-Learning (Module 5), you may upload the certificate. Otherwise, you will be asked to go through the e-learning.",
     "EXPIRED_DESC": "We will assess if you have the knowledge or investment experience in understanding the risks and features of unlisted Specified Investment Products (‘SIPs’).",
     "BTN-TEXT": "Continue"
+  },
+  "UPGRADE_SCREEN": {
+    "TITLE": "Your MoneyOwl Account has been upgraded!",
+    "MESSAGE": "You can now get free life time access to your Comprehensive Financial Planning report, make unlimited changes and generate the report as many times as you might want.",
+    "BTN_TEXT": "Let’s Go" 
   }
 }

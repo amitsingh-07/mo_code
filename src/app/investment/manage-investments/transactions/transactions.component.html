@@ -113,6 +113,10 @@
                   </div>
                 </div>
               </div>
+              <div *ngIf="isTransactionExceeded" class="transaction-note">
+                <div class="info-img"><img src="assets/images/investment-account/info.svg" /></div>
+                <div class="note-text">{{'TRANSACTIONS.HISTORY_NOTE' | translate}}</div>
+              </div>
             </div>
           </ng-template>
         </ng-container>
@@ -142,6 +146,10 @@
                     <div class="mt15">{{ 'TRANSACTIONS.NO_TRANSACTION_STATEMENTS' | translate}}</div>
                   </div>
                 </div>
+              </div>
+              <div *ngIf="portfolio.isStatementLimitExceeded" class="transaction-note">
+                <div class="info-img"><img src="assets/images/investment-account/info.svg" /></div>
+                <div class="note-text" [innerHtml]="'TRANSACTIONS.STATEMENTS_NOTE' | translate"></div>
               </div>
             </div>
           </ng-template>

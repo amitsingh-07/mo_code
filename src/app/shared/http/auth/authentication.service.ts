@@ -413,7 +413,7 @@ export class AuthenticationService {
         return response;
       }));
   }
-  public doValidate2faLogin(otp: string, userEmail: any, journeyType: any, enquiryId: any, handleError?: string, isCorporateUserType = false) {
+  public doValidate2faLogin(otp: string, userEmail: any, journeyType: any, enquiryId: any, handleError?: string, isCorporateUserType = false, isUserFromCorpBizLink?, enrolmentId?) {
     if (!handleError) {
       handleError = '?handleError=true';
     }
@@ -422,7 +422,9 @@ export class AuthenticationService {
       email: (userEmail && this.isUserNameEmail(userEmail)) ? userEmail : '',
       mobile: (userEmail && !this.isUserNameEmail(userEmail)) ? userEmail : '',
       enquiryId: enquiryId,
-      journeyType: journeyType
+      journeyType: journeyType,
+      canTransferAccessFromEnrolment: isUserFromCorpBizLink,
+      enrolmentId
     };
     if (this.getAccessCode()) {
       validate2faBody['accessCode'] = this.getAccessCode();

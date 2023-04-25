@@ -417,7 +417,9 @@
         "TITLE": "Downloading Statement",
         "MESSAGE": "Please wait while the statement is downloaded."
       }
-    }
+    },
+    "STATEMENTS_NOTE": "To view statements that are more than 36 months, please email <a target='_blank' href='mailto:clientsupport@moneyowl.com.sg'>clientsupport@moneyowl.com.sg</a> for further assistance.",
+    "HISTORY_NOTE": "To view transactions that are more than 12 months, please view your statements."
   },
   "HOLDINGS": {
     "TITLE": "Holdings",

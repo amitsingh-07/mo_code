@@ -327,6 +327,22 @@ app-login {
         margin-bottom: 20px;
       }
     }
+    .corbiz-help-text {
+      justify-content : center;
+      font-size: 16px;
+      margin-bottom: 15px;
+      font-family: $muli-semi-bold;
+      display: flex;
+
+      .tooltip-icon {
+        background: url('../../../assets/images/tooltip-icon-white.svg') no-repeat;
+        height: 20px;
+        width: 20px;
+        cursor: pointer;
+        display: block;
+        margin-left: 12px;
+      }
+    }
     .img-container {
       display: flex;
       justify-content: center;
