@@ -48,7 +48,7 @@ import { CorpBizSignupWithDataComponent } from './corp-biz-signup-with-data/corp
 import { CorpBizActivationLinkComponent } from './corp-biz-activation-link/corp-biz-activation-link.component';
 import { CorpbizUpgradeScreenComponent } from './corpbiz-upgrade-screen/corpbiz-upgrade-screen.component';
 import { MaintenancePageComponent } from './maintenance-page/maintenance-page.component';
-
+import { ForcedUpdateComponent } from './forced-update/forced-update.component'
 const routes: Routes = [
   {
     path: SIGN_UP_ROUTES.ROOT,
@@ -325,6 +325,10 @@ const routes: Routes = [
   {
     path: SIGN_UP_ROUTES.MAINTENANCE_PAGE,
     component: MaintenancePageComponent
+  },
+  {
+    path: SIGN_UP_ROUTES.FORCED_UPDATE,
+    component: ForcedUpdateComponent
   },
   { path: '**', redirectTo: '/page-not-found' }
 ];

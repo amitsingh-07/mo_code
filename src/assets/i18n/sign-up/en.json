@@ -1008,5 +1008,10 @@
     "DESC": "We're working on providing you with a <br>better experience, owl be right back!",
     "CONTACT": "Contact Us",
     "FOOTER": "MoneyOwl Pte Ltd (UEN. 201820691C) is a financial adviser and fund management company licensed by MAS. We are a social enterprise under NTUC Enterprise Co-operative Ltd."
+  },
+  "FORCED_UPDATE": {
+    "TITLE": "New Update Available!",
+    "MESSAGE": "We have made some changes to provide you with a better experience. Update now to continue using the MoneyOwl app.",
+    "BTN_TEXT": "Update Now" 
   }
 }
