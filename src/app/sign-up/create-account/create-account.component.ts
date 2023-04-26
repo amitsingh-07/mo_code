@@ -613,9 +613,9 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
       }
 
       // Mobile Number
-      if (!this.isCorpBiz && !mobileNumberInput.value) {
+      if (!mobileNumberInput.value) {
         mobileNumberInput.setErrors({ required: true });
-      } else if (!this.isCorpBiz && !SINGAPORE_MOBILE_REGEXP.test(mobileNumberInput.value)) {
+      } else if (!SINGAPORE_MOBILE_REGEXP.test(mobileNumberInput.value)) {
         mobileNumberInput.setErrors({ mobileRange: true });
       } else {
         mobileNumberInput.setErrors(null);
