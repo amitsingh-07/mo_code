@@ -1002,5 +1002,11 @@
     "TITLE": "Your MoneyOwl Account has been upgraded!",
     "MESSAGE": "You can now get free life time access to your Comprehensive Financial Planning report, make unlimited changes and generate the report as many times as you might want.",
     "BTN_TEXT": "Let’s Go" 
+  },
+  "MAINTENANCE_PAGE": {
+    "TITLE": "Upgrading In Progress",
+    "DESC": "We're working on providing you with a <br>better experience, owl be right back!",
+    "CONTACT": "Contact Us",
+    "FOOTER": "MoneyOwl Pte Ltd (UEN. 201820691C) is a financial adviser and fund management company licensed by MAS. We are a social enterprise under NTUC Enterprise Co-operative Ltd."
   }
 }

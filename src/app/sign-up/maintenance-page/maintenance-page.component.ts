@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation} from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-maintenance-page',
@@ -8,9 +9,11 @@ import { Component, OnInit, ViewEncapsulation} from '@angular/core';
 })
 export class MaintenancePageComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private translate: TranslateService) { }
 
   ngOnInit(): void {
+    this.translate.use('en');
   }
 
 }
