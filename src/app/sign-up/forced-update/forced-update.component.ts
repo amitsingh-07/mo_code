@@ -27,11 +27,11 @@ export class ForcedUpdateComponent implements OnInit {
     // To prevent browser back button
     this.subscription = this.navbarService.preventBackButton().subscribe();
     // To remove navbar in mobile view for coprbiz upgrade screen
-    this.navbarService.hideNavbar$.next(true);
+    this.navbarService.displayingWelcomeFlowContent$.next(true);
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    this.navbarService.hideNavbar$.next(false);
+    this.navbarService.displayingWelcomeFlowContent$.next(false);
   }
 }

@@ -91,7 +91,6 @@ export class NavbarService {
   logoutObservable$ = this.logoutSubject.asObservable();
   wiseIncomeDropDownShow = new BehaviorSubject(false);
   displayingWelcomeFlowContent$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  hideNavbar$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   welcomeJourneyCompleted: boolean = false;
   upgradeScreenShown = false;
   urlHistory = { currentUrl: null, previousUrl: []};
