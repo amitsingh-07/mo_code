@@ -61,6 +61,12 @@ export class JwtInterceptor implements HttpInterceptor {
                     'sessionId': `${this.auth.getSessionId()}`
                 })
             });
+        } else if(request.url.includes('appConfig.json')) {
+            request = request.clone({
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json'
+                })
+            });
         } else {
             request = request.clone({
                 headers: new HttpHeaders({

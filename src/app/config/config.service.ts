@@ -48,6 +48,7 @@ export class ConfigService {
   private cache$: Observable<IConfig> = null;
   private configUrl = 'assets/config.json';
   private s3ConfigUrl = environment.configJsonUrl;
+  private mobileAppBuildInfoUrl = 'https://mo-static-assets-nonprod.s3.ap-southeast-1.amazonaws.com/promo/dev/appConfig.json';
 
   constructor(private http: HttpClient) { }
 
@@ -89,6 +90,10 @@ export class ConfigService {
       }),
       catchError(this.handleError) // then handle the error
     );
+  }
+
+  getMobileAppInfoConfig() {
+    return this.http.get<any>(this.mobileAppBuildInfoUrl).toPromise();
   }
 
   private handleError(error: HttpErrorResponse) {

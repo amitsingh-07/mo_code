@@ -11,6 +11,9 @@ import { LoginService } from './login.service';
 import { LoaderService } from '../shared/components/loader/loader.service';
 import { SingpassService } from '../singpass/singpass.service';
 import { NavbarService } from '../shared/navbar/navbar.service';
+import { CapacitorUtils } from '../shared/utils/capacitor.util';
+import { App } from '@capacitor/app';
+import { ConfigService } from '../config/config.service';
 
 @Injectable({
   providedIn: 'root'
@@ -159,6 +162,32 @@ export class SingpassLoginGuard implements CanActivate {
       }
       return true;
     }
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+
+// tslint:disable-next-line:max-classes-per-file
+export class MobileAppUpgradeGuard implements CanActivate {
+  constructor(private route: Router,
+    private authService: AuthenticationService,
+    private configService: ConfigService
+  ) {   }
+  async canActivate(route: ActivatedRouteSnapshot): Promise<boolean> {
+    if (CapacitorUtils.isApp) {
+      const latestMobileAppInfo = await this.configService.getMobileAppInfoConfig();
+      const localMobileAppInfo = await App.getInfo();
+      if (CapacitorUtils.isAndroidDevice && localMobileAppInfo.version < latestMobileAppInfo['android'].version) {
+        this.route.navigate([SIGN_UP_ROUTE_PATHS.FORCED_UPDATE]);
+        return false;
+      } else if (CapacitorUtils.isIOSDevice && localMobileAppInfo.version < latestMobileAppInfo['ios'].version) {
+        this.route.navigate([SIGN_UP_ROUTE_PATHS.FORCED_UPDATE]);
+        return false;
+      }
+    }
+    return true;
   }
 }
 
