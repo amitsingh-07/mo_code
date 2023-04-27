@@ -95,7 +95,7 @@ export class TransactionsComponent implements OnInit {
           this.loaderService.hideLoaderForced();
           this.transactionHistory = response.objectList.transactionsHistory;
           this.transactionHistory = this.calculateSplitAmounts(this.transactionHistory);
-          this.isTransactionExceeded = response.objectList.isTransactionPeriodExceeded;
+          this.isTransactionExceeded = response.objectList.transactionPeriodExceeded;
           this.investmentEngagementJourneyService.sortByProperty(
             this.transactionHistory,
             'createdDate',
