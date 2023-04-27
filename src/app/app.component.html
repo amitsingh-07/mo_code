@@ -3,7 +3,7 @@
 </div>
 
 <div>
-  <app-navbar [ngClass]="{'hidden-sm-md': (navbarService.displayingWelcomeFlowContent$ | async) === true}"></app-navbar>
+  <app-navbar [ngClass]="{'hidden-sm-md': (navbarService.displayingWelcomeFlowContent$ | async) === true }"></app-navbar>
 </div>
 <div>
   <router-outlet (activate)="onActivate($event)" (window:beforeunload)="doBeforeUnload()" (window:unload)="doUnload()"></router-outlet>

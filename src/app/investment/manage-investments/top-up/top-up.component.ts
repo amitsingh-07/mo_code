@@ -30,6 +30,7 @@ import { PromoCodeService } from './../../../promo-code/promo-code.service';
 import { appConstants } from '../../../app.constants';
 import { INVESTMENT_ENGAGEMENT_JOURNEY_ROUTE_PATHS } from './../../../investment/investment-engagement-journey/investment-engagement-journey-routes.constants';
 import { INVESTMENT_COMMON_CONSTANTS } from '../../investment-common/investment-common.constants'
+import { SIGN_UP_CONFIG } from '../../../sign-up/sign-up.constant';
 @Component({
   selector: 'app-top-up',
   templateUrl: './top-up.component.html',
@@ -62,6 +63,7 @@ export class TopUpComponent implements OnInit, OnDestroy {
   corpFaq = appConstants.CORPORATE_FAQ;
   isCPF;
   ckaInfo;
+  investmentAccountStatus = SIGN_UP_CONFIG.INVESTMENT
 
   constructor(
     public readonly translate: TranslateService,
