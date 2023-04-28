@@ -133,6 +133,10 @@ export class CorpBizSignupComponent implements OnInit {
       });
   }
 
+  redirectToLogin() {
+    this.router.navigate([SIGN_UP_ROUTE_PATHS.LOGIN]);
+  }
+
   getMyInfo(attributesFlags: any) {
     let attributes = this.signUpService.corpBizMyInfoAttributes;
     if (attributesFlags) {
