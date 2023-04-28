@@ -177,12 +177,10 @@ export class MobileAppUpgradeGuard implements CanActivate {
   ) {   }
   async canActivate(route: ActivatedRouteSnapshot): Promise<boolean> {
     if (CapacitorUtils.isApp) {
-      const latestMobileAppInfo = await this.configService.getMobileAppInfoConfig();
-      const localMobileAppInfo = await App.getInfo();
-      if (CapacitorUtils.isAndroidDevice && localMobileAppInfo.version < latestMobileAppInfo['android'].version) {
-        this.route.navigate([SIGN_UP_ROUTE_PATHS.FORCED_UPDATE]);
+      if (this.configService.checkMobAppInMaintenance()) {
+        this.route.navigate([SIGN_UP_ROUTE_PATHS.MAINTENANCE_PAGE]);
         return false;
-      } else if (CapacitorUtils.isIOSDevice && localMobileAppInfo.version < latestMobileAppInfo['ios'].version) {
+      } else if (this.configService.checkMobAppVersionHigher()) {
         this.route.navigate([SIGN_UP_ROUTE_PATHS.FORCED_UPDATE]);
         return false;
       }

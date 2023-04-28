@@ -3,6 +3,8 @@ import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { FooterService } from '../../shared/footer/footer.service';
 import { NavbarService } from '../../shared/navbar/navbar.service';
+import { CapacitorUtils } from '../../shared/utils/capacitor.util';
+import { appConstants } from '../../app.constants';
 
 @Component({
   selector: 'app-forced-update',
@@ -28,6 +30,14 @@ export class ForcedUpdateComponent implements OnInit {
     this.subscription = this.navbarService.preventBackButton().subscribe();
     // To remove navbar in mobile view for coprbiz upgrade screen
     this.navbarService.displayingWelcomeFlowContent$.next(true);
+  }
+
+  openLinkDirectOnStore() {
+    let url = appConstants.PLAY_STORE_URL;
+    if (CapacitorUtils.isIOSDevice) {
+      url = appConstants.APP_STORE_URL;
+    }
+    window.open(url);
   }
 
   ngOnDestroy() {

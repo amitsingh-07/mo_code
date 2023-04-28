@@ -1,10 +1,12 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { App } from '@capacitor/app';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, shareReplay } from 'rxjs/operators';
 
 import { IProductCategory } from '../direct/product-info/product-category/product-category';
 import { HospitalPlan } from '../guide-me/hospital-plan/hospital-plan';
+import { ANDROID_DEVICE, CapacitorUtils, IOS_DEVICE } from '../shared/utils/capacitor.util';
 import { environment } from './../../environments/environment';
 
 export interface IConfig {
@@ -48,7 +50,7 @@ export class ConfigService {
   private cache$: Observable<IConfig> = null;
   private configUrl = 'assets/config.json';
   private s3ConfigUrl = environment.configJsonUrl;
-  private mobileAppBuildInfoUrl = 'https://mo-static-assets-nonprod.s3.ap-southeast-1.amazonaws.com/promo/dev/appConfig.json';
+  s3BucketCacheControl = Date.now();
 
   constructor(private http: HttpClient) { }
 
@@ -93,7 +95,23 @@ export class ConfigService {
   }
 
   getMobileAppInfoConfig() {
-    return this.http.get<any>(this.mobileAppBuildInfoUrl).toPromise();
+    return fetch(`${this.s3ConfigUrl}?time=${this.s3BucketCacheControl}`).then(response => response.json());
+  }
+
+  async checkMobAppInMaintenance() {
+    const configInfo = await this.getMobileAppInfoConfig();
+    return configInfo.showMOMaintenancePage;
+  }
+
+  async checkMobAppVersionHigher() {
+    const configInfo = await this.getMobileAppInfoConfig();
+    const localMobileAppInfo = await App.getInfo();
+    if (CapacitorUtils.isAndroidDevice && (localMobileAppInfo.version < configInfo[ANDROID_DEVICE].version || localMobileAppInfo.build < configInfo[ANDROID_DEVICE].build)) {
+      return true;
+    } else if (CapacitorUtils.isIOSDevice && localMobileAppInfo.version < configInfo[IOS_DEVICE].version || localMobileAppInfo.build < configInfo[IOS_DEVICE].build) {      
+      return true;
+    }
+    return false;
   }
 
   private handleError(error: HttpErrorResponse) {
