@@ -133,8 +133,7 @@ export class CreateAccountMyinfoComponent implements OnInit {
       if (data.responseMessage.responseCode === 6000 && data && data.objectList[0]) {
         this.closeMyInfoPopup(false);
         const email = data.objectList[0].email?.value;
-        const mobile = data.objectList[0].mobileno?.nbr;
-        this.signUpService.setCreateAccountMyInfoFormData(data.objectList[0],email,mobile);
+        this.signUpService.setCreateAccountMyInfoFormData(data.objectList[0],email);
         if (this.finlitEnabled) {
           this.router.navigate([SIGN_UP_ROUTE_PATHS.FINLIT_CREATE_ACCOUNT + this.referralCode]);
         } else {
