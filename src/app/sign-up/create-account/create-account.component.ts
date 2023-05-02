@@ -452,7 +452,8 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
   }
 
   showErrorModal(title: string, message: string, buttonLabel: string, redirect: string, emailResend: boolean, accountAlreadyCreated = false, unverifiedAccount = false) {
-    const ref = this.modal.open(ErrorModalComponent, { centered: true });
+    const windowClassOnCondition = this.appService.isUserFromCorpBizLink && unverifiedAccount ? 'corpbiz-verification-modal' : '';
+    const ref = this.modal.open(ErrorModalComponent, { centered: true, windowClass: windowClassOnCondition });
     if (title) {
       ref.componentInstance.errorTitle = title;
       ref.componentInstance.buttonLabel = buttonLabel;
