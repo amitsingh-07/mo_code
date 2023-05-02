@@ -115,7 +115,7 @@ export class CorpBizSignupComponent implements OnInit {
             this.signUpService.clearCorpbizSessionData();
           }
           this.signUpService.setCorpBizMyInfoStatus(true);
-          this.signUpService.setCreateAccountMyInfoFormData(data.objectList[0],email,mobile);
+          this.signUpService.setCreateAccountMyInfoFormData(data.objectList[0],email);
           this.signUpService.loadCorpBizUserMyInfoData(data.objectList[0]);
           this.router.navigate([SIGN_UP_ROUTE_PATHS.CORP_BIZ_SIGNUP_DATA]);
         } else if (data.responseMessage.responseCode === 6014) {
@@ -131,6 +131,10 @@ export class CorpBizSignupComponent implements OnInit {
       }, (error) => {
         this.closeMyInfoPopup(true);
       });
+  }
+
+  redirectToLogin() {
+    this.router.navigate([SIGN_UP_ROUTE_PATHS.LOGIN]);
   }
 
   getMyInfo(attributesFlags: any) {

@@ -128,7 +128,8 @@ export class SingpassLoginGuard implements CanActivate {
     private authService: AuthenticationService,
     private loginService: LoginService,
     private loaderService: LoaderService,
-    private singpassService: SingpassService
+    private singpassService: SingpassService,
+    private appService: AppService
   ) {
   }
   canActivate(activatedRoute: ActivatedRouteSnapshot): Observable<boolean> | boolean {
@@ -136,7 +137,7 @@ export class SingpassLoginGuard implements CanActivate {
     this.loginService.setEnquiryIdAndJourneyType();
     if (queryParams['code'] && queryParams['state']) {
       this.loaderService.showLoader({ title: 'Logging in' });
-      return this.singpassService.loginSingpass(queryParams['code'], queryParams['state'], this.loginService.enqId, this.loginService.journeyType).pipe(map((data) => {
+      return this.singpassService.loginSingpass(queryParams['code'], queryParams['state'], this.loginService.enqId, this.loginService.journeyType, this.appService.getCorpBizData()?.enrollmentId).pipe(map((data) => {
         if (data.responseMessage.responseCode >= 6000 && data.objectList[0] && data.objectList[0].securityToken) {
           this.authService.saveAuthDetails(data.objectList[0]);
           this.authService.checkAndSetFlag(data);

@@ -35,12 +35,13 @@ export class SingpassService {
   }
 
   // Singpass redirecting back to MO
-  loginSingpass(code, state, enquiryId, journeyType) {
+  loginSingpass(code, state, enquiryId, journeyType, enrolmentId) {
     const payload = {
       enquiryId: enquiryId,
       journeyType: journeyType,
       code: code,
-      state: state
+      state: state,
+      enrolmentId: enrolmentId
     };
     return this.apiService.loginSingpass(payload);
   }
