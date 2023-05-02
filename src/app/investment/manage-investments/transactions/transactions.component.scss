@@ -249,7 +249,7 @@ app-transactions {
     .transaction-note {
       width: 100%;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       background-color: $black-squeeze-grey-color;
       padding: 20px;
       margin-top: -4px;
