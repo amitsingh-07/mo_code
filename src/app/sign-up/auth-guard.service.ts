@@ -172,17 +172,16 @@ export class SingpassLoginGuard implements CanActivate {
 
 // tslint:disable-next-line:max-classes-per-file
 export class MobileAppUpgradeGuard implements CanActivate {
-  constructor(private route: Router,
-    private authService: AuthenticationService,
+  constructor(private router: Router,
     private configService: ConfigService
   ) {   }
   async canActivate(route: ActivatedRouteSnapshot): Promise<boolean> {
     if (CapacitorUtils.isApp) {
-      if (this.configService.checkMobAppInMaintenance()) {
-        this.route.navigate([SIGN_UP_ROUTE_PATHS.MAINTENANCE_PAGE]);
+      if (await this.configService.checkMobAppInMaintenance()) {
+        this.router.navigate([SIGN_UP_ROUTE_PATHS.MAINTENANCE_PAGE]);
         return false;
-      } else if (this.configService.checkMobAppVersionHigher()) {
-        this.route.navigate([SIGN_UP_ROUTE_PATHS.FORCED_UPDATE]);
+      } else if (await this.configService.checkMobAppVersionHigher()) {
+        this.router.navigate([SIGN_UP_ROUTE_PATHS.FORCED_UPDATE]);
         return false;
       }
     }
