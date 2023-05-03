@@ -203,6 +203,7 @@ export let SIGN_UP_CONFIG = {
     'residentialstatus',
     'cpfbalances',
     'cpfhousingwithdrawal',
+    'mobileno',
     'noa',
     'uinfin',
     'hdbownership.dateofpurchase',
