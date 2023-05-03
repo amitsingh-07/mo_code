@@ -1581,3 +1581,20 @@ body.modal-open::-webkit-scrollbar {
     padding-right: 10px;
   }
 }
+
+.corpbiz-help-modal {
+  .modal-body-title {
+    margin-right: 0px !important;
+  }
+  .btn-primary {
+    font-family: $muli-bold;
+    background: $teal-color !important;
+  }
+}
+
+.corpbiz-verification-modal {
+  .btn-primary {
+    font-family: $muli-bold;
+    background: $teal-color !important;
+  }
+}
