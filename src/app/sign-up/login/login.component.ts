@@ -389,7 +389,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loginForm.controls['captchaValue'].reset();
     this.loginForm.controls['loginPassword'].reset();
     this.refreshCaptcha();
-    const ref = this.modal.open(ErrorModalComponent, { centered: true });
+    const windowClassOnCondition = this.appService.isUserFromCorpBizLink && unverifiedAccount ? 'corpbiz-verification-modal': '';
+    const ref = this.modal.open(ErrorModalComponent, { centered: true, windowClass: windowClassOnCondition });
     if (title) {
       ref.componentInstance.errorTitle = title;
       ref.componentInstance.buttonLabel = buttonLabel;
@@ -513,9 +514,10 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   showCorbizHelpModal() {
-    const ref = this.modal.open(ErrorModalComponent, { centered: true });    
+    const ref = this.modal.open(ErrorModalComponent, { centered: true, windowClass: 'corpbiz-help-modal' });    
     ref.componentInstance.errorTitle = this.translate.instant('LOGIN.CORBIZ_HELP_TITLE');
-    ref.componentInstance.buttonLabel = this.translate.instant('LOGIN.CORBIZ_HELP_BUTTON_LABEL');   
+    ref.componentInstance.buttonLabel = this.translate.instant('LOGIN.CORBIZ_HELP_BUTTON_LABEL');  
+    ref.componentInstance.closeBtn = false; 
       ref.componentInstance.errorMessageList = [
         this.translate.instant('LOGIN.CORBIZ_HELP_MESSAGE'),
         this.translate.instant('SIGNUP_ERRORS.CORBIZ_ACCOUNT_EXIST_MESSAGE2')
