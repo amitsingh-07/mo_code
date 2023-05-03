@@ -151,7 +151,7 @@
     "PROD_INFO_TOOLTIP": {
         "COMMISSION": {
             "TITLE": "Commission Rebate",
-            "MESSAGE": "<div><div class='rebate'><div>We rebate up to <span>50%</span> of the first-year basic commission that we receive from the insurer when you purchase a policy through us.</div><div>This excludes an admin charge of $26.75 per policy and is limited to the period that the insurer pays us commission.</div></div></div>"
+            "MESSAGE": "<div><div class='rebate'><div>We rebate <span>30%</span> of the first-year basic commission that we receive from the insurer when you purchase a policy through us.</div><div>This excludes an admin charge of $26.75 per policy and is limited to the period that the insurer pays us commission.</div></div></div>"
         },
         "RATING": {
             "TITLE": "Insurer’s Financial Strength Rating",

@@ -780,7 +780,7 @@ export class SignUpService {
       this.disableAttributes.push('nricNumber');
     }
       this.signUpFormData.email = email;
-      this.signUpFormData.mobileNumber = data.mobileno.nbr;
+      this.signUpFormData.mobileNumber = data.mobileno?.nbr;
     if (data.dob.value) {
       this.signUpFormData.dob = this.investmentAccountService.dateFormat(data.dob.value);
       this.disableAttributes.push('dob');
