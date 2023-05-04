@@ -81,6 +81,7 @@ export class LoginService {
     if (this.checkInsuranceEnquiry(insuranceEnquiry)) {
       this.updateInsuranceEnquiry(insuranceEnquiry, data, true);
     } else {
+      this.isShowUpgradeScreen = (data.objectList[0] && data.objectList[0].showUpgradeScreen);
       this.goToNext();
     }
   }
