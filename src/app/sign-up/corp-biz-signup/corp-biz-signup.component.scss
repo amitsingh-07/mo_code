@@ -68,7 +68,8 @@ app-corp-biz-signup {
                 a {
                     text-decoration: underline;
                     color: $teal-color;
-
+                    cursor: pointer;
+                    
                     &:hover {
                         text-decoration: underline;
                         color: $teal-color;
