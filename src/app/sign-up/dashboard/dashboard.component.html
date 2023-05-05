@@ -99,9 +99,9 @@
                   <div ngbDropdown placement="bottom-right" class="invest-btn hidden-sm"
                     *ngIf="getReferralInfo && getReferralInfo.isWelcomeRewardsValid && getReferralInfo.refereeExists">
                     <button type="button" class="btn-with-icon" id="rewardInvestMenu" ngbDropdownToggle>
-                      <span>{{'DASHBOARD.INVESTMENT.INVEST' | translate}}</span>
                       <span class="invest-btn-img"><img id="top-up_img"
                           src="assets/images/investment-account/plus-white.svg" alt="" /></span>
+                      <span>{{'DASHBOARD.INVESTMENT.INVEST' | translate}}</span>
                     </button>
                     <div ngbDropdownMenu="rewardInvestMenu">
                       <button ngbDropdownItem (click)="newPortfolio()">
@@ -128,9 +128,9 @@
                   <div class="invest-btn show-sm"
                     *ngIf="getReferralInfo && getReferralInfo.isWelcomeRewardsValid && getReferralInfo.refereeExists">
                     <button type="button" class="btn-with-icon" id="invest_button" (click)="openInvestMenuModal()">
-                      <span>{{'DASHBOARD.INVESTMENT.INVEST' | translate}}</span>
                       <span class="invest-btn-img"><img id="top-up_img"
                           src="assets/images/investment-account/plus-white.svg" alt="" /></span>
+                      <span>{{'DASHBOARD.INVESTMENT.INVEST' | translate}}</span>
                     </button>
                   </div>
                   <div class="widget-body investment-card">
