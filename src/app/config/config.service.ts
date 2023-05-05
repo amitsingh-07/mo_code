@@ -94,17 +94,22 @@ export class ConfigService {
     );
   }
 
-  getMobileAppInfoConfig() {
+  /**
+   * Gets mobile app(Android & IOS) released version and maintenance info 
+   * Gets iFast maintenance info(Web & Mobile app)
+   * from s3 appConfig file
+   */
+  getMobileAppAndIFastMaintenanceInfo() {
     return fetch(`${this.s3ConfigUrl}?time=${this.s3BucketCacheControl}`).then(response => response.json());
   }
 
   async checkMobAppInMaintenance() {
-    const configInfo = await this.getMobileAppInfoConfig();
+    const configInfo = await this.getMobileAppAndIFastMaintenanceInfo();
     return configInfo.showMOMaintenancePage;
   }
 
   async checkMobAppVersionHigher() {
-    const configInfo = await this.getMobileAppInfoConfig();
+    const configInfo = await this.getMobileAppAndIFastMaintenanceInfo();
     const localMobileAppInfo = await App.getInfo();
     if (CapacitorUtils.isAndroidDevice && (localMobileAppInfo.version < configInfo[ANDROID_DEVICE].version || localMobileAppInfo.build < configInfo[ANDROID_DEVICE].build)) {
       return true;
