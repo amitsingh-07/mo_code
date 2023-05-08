@@ -192,15 +192,13 @@ export class ReferalRedirectingPartComponent implements OnInit {
     this.showInvestmentsSummary(investmentStatus);
 
   }
-  enableInvestment() {
+  async enableInvestment() {
     this.isInvestmentEnabled = true;
     // Check if iFast is in maintenance
-    this.configService.getConfig().subscribe((config) => {
-      if (config.iFastMaintenance && this.configService.checkIFastStatus(config.maintenanceStartTime, config.maintenanceEndTime)) {
-        this.iFastMaintenance = true;
-        this.isInvestmentEnabled = false;
-      }
-    });
+    if (await this.configService.checkIFastUnderMaintenance()) {
+      this.iFastMaintenance = true;
+      this.isInvestmentEnabled = false;
+    }
   }
   showInvestmentsSummary(investmentStatus) {
     switch (investmentStatus) {

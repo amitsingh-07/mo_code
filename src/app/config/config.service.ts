@@ -111,9 +111,9 @@ export class ConfigService {
   async checkMobAppVersionHigher() {
     const configInfo = await this.getMobileAppAndIFastMaintenanceInfo();
     const localMobileAppInfo = await App.getInfo();
-    if (CapacitorUtils.isAndroidDevice && (localMobileAppInfo.version < configInfo[ANDROID_DEVICE].version || localMobileAppInfo.build < configInfo[ANDROID_DEVICE].build)) {
+    if ((CapacitorUtils.isApp && CapacitorUtils.isAndroidDevice) && (localMobileAppInfo.version < configInfo[ANDROID_DEVICE].version || localMobileAppInfo.build < configInfo[ANDROID_DEVICE].build)) {
       return true;
-    } else if (CapacitorUtils.isIOSDevice && localMobileAppInfo.version < configInfo[IOS_DEVICE].version || localMobileAppInfo.build < configInfo[IOS_DEVICE].build) {      
+    } else if ((CapacitorUtils.isApp && CapacitorUtils.isIOSDevice) && (localMobileAppInfo.version < configInfo[IOS_DEVICE].version || localMobileAppInfo.build < configInfo[IOS_DEVICE].build)) {      
       return true;
     }
     return false;

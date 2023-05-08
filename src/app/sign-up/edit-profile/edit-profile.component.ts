@@ -195,13 +195,6 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     });
     this.isMailingAddressSame = true;
 
-    // Check if iFast is in maintenance
-    this.configService.getConfig().subscribe((config) => {
-      if (config.iFastMaintenance && this.configService.checkIFastStatus(config.maintenanceStartTime, config.maintenanceEndTime)) {
-        this.disableBankAcctEdit = true;
-      }
-    });
-
     this.translate.get('ERROR').subscribe((results) => {
       this.authService.get2faErrorEvent
         .pipe(takeUntil(this.ngUnsubscribe))
@@ -238,6 +231,16 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.router.navigate([SIGN_UP_ROUTE_PATHS.DASHBOARD]);
       });
+      this.checkIFastInMaintenance();
+  }
+
+  /**
+   * Check if iFast is in maintenance
+   */
+  async checkIFastInMaintenance() {
+    if (await this.configService.checkIFastUnderMaintenance()) {
+      this.disableBankAcctEdit = true;
+    }
   }
 
   ngOnDestroy() {
