@@ -558,22 +558,15 @@ app-dashboard {
                 }
             }
 
-            div.reward-points+.widget-portfolio-title {
+            div.reward-points+.widget-portfolio-title .btn-with-icon {
                 @include allmobiles {
-                    width: 68%;
+                    margin-top: 40px;
+                    z-index: 1;
                 }
             }
 
-            div.reward-points~.invest-btn {
-                @include allmobiles {
-                    margin-top: -35px !important;
-                }
-            }
-
-            .reward-points~.investment-card {
-                @include desktop {
-                    margin-top: -50px !important;
-                }
+            .reward-points~ .widget-portfolio-title .btn-with-icon{
+                margin-top: 40px;
             }
 
             .widget-portfolio-body {
