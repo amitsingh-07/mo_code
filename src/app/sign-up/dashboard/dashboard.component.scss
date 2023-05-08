@@ -553,36 +553,20 @@ app-dashboard {
                 align-items: self-start !important;
                 line-height: 1.25;
                 position: relative;
+                span.flex{
+                    max-width: calc(100% - 101px);
+                }
             }
 
-            div.reward-points+.widget-portfolio-title {
+            div.reward-points+.widget-portfolio-title .btn-with-icon {
                 @include allmobiles {
-                    width: 68%;
+                    margin-top: 40px;
+                    z-index: 1;
                 }
             }
 
-            div.reward-points~.invest-btn {
-                @include allmobiles {
-                    margin-top: -37px !important;
-                }
-
-                @include iPhone13ProMax {
-                    margin-top: -11px !important;
-                }
-
-                @include min450max475 {
-                    margin-top: -15px !important;
-                }
-
-                @include min475max568 {
-                    margin-top: -15px !important;
-                }
-            }
-
-            .reward-points~.investment-card {
-                @include desktop {
-                    margin-top: -50px !important;
-                }
+            .reward-points~ .widget-portfolio-title .btn-with-icon{
+                margin-top: 40px;
             }
 
             .widget-portfolio-body {

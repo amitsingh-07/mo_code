@@ -12,20 +12,16 @@ import { APP_ROUTES } from './../../app-routes.constants';
 export class InvestmentChildEnableGuard implements CanActivateChild {
   constructor(private configService: ConfigService, private router: Router) { }
 
-  canActivateChild(): Observable<boolean> | Promise<boolean> | boolean {
-    return this.configService.getConfig().pipe(map((config: IConfig) => {
-      // Check if iFast is in maintenance
-      if (config.iFastMaintenance && this.configService.checkIFastStatus(config.maintenanceStartTime, config.maintenanceEndTime)) {
-        this.router.navigate([APP_ROUTES.INVEST_MAINTENANCE]);
-        return false;
-      } else {
-        if (config.investmentEngagementEnabled) {
-          return true;
-        } else {
-          this.router.navigate([appConstants.homePageUrl]);
-          return false;
-        }
-      }
-    }));
+  async canActivateChild(): Promise<boolean> {
+    const config = await this.configService.getConfig().toPromise();
+    if (await this.configService.checkIFastUnderMaintenance()) {
+      this.router.navigate([APP_ROUTES.INVEST_MAINTENANCE]);
+      return false;
+    } else if (config.investmentEngagementEnabled) {
+      return true;
+    } else {
+      this.router.navigate([appConstants.homePageUrl]);
+      return false;
+    }
   }
 }

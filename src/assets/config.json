@@ -20,9 +20,6 @@
   "corpBizEmailVerifyUrl": "/app/accounts/corpbiz/email-verification",
   "showAnnualizedReturns": false,
   "paymentEnabled": true,
-  "iFastMaintenance": true,
-  "maintenanceStartTime": "2022-03-08T17:50:00.000+08:00",
-  "maintenanceEndTime": "2022-03-08T19:10:00.000+08:00",
   "showPortfolioInfo": true,
   "investment": {
     "myInfoLoader2StartTime": 60,

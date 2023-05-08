@@ -9,6 +9,8 @@ import { CapacitorUtils } from '../utils/capacitor.util';
 
 import { IHeaderMenuItem } from './navbar.types';
 import { appConstants } from '../../app.constants';
+import { ConfigService } from './../../config/config.service';
+import { SIGN_UP_ROUTE_PATHS } from '../../sign-up/sign-up.routes.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -97,12 +99,16 @@ export class NavbarService {
   isBackClicked = false;
   activeModals = 0;
 
-  constructor(private router: Router, private _location: Location, private ngZone: NgZone, private modal: NgbModal) {
+  constructor(private router: Router, private _location: Location, private ngZone: NgZone, private modal: NgbModal, private configService: ConfigService) {
     this.router.events.pipe(
       filter((event) => event instanceof NavigationStart)
-    ).subscribe((event: NavigationStart) => {
-      if (CapacitorUtils.isApp) { 
-        this.handlingMobileAppNavigationUrlHistory(event);
+    ).subscribe(async (event: NavigationStart) => {
+      if (CapacitorUtils.isApp) {
+        if (!event.url.includes('maintenance-page') && await this.configService.checkMobAppInMaintenance()) {
+          this.router.navigate([SIGN_UP_ROUTE_PATHS.MAINTENANCE_PAGE]);
+        } else {
+          this.handlingMobileAppNavigationUrlHistory(event);
+        } 
       }
       this.unsubscribeBackPress();
       if (event.navigationTrigger === 'popstate') {
