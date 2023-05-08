@@ -11,15 +11,13 @@ import { Util } from '../shared/utils/util';
 export class InvestmentMaintenanceGuard implements CanActivate {
   constructor(private configService: ConfigService, private router: Router) { }
 
-  canActivate(): Observable<boolean> | Promise<boolean> | boolean {
-    return this.configService.getConfig().pipe(map((config: IConfig) => {
-      // Check if iFast is in maintenance
-      if (config.iFastMaintenance && this.configService.checkIFastStatus(config.maintenanceStartTime, config.maintenanceEndTime)) {
-        return true;
-      } else {
-        Util.openExternalUrl('/', '_self');
-        return false;
-      }
-    }));
+  async canActivate():Promise<boolean> {
+    // Check if iFast is in maintenance
+    if (await this.configService.checkIFastUnderMaintenance()) {
+      return true;
+    } else {
+      Util.openExternalUrl('/', '_self');
+      return false;
+    }
   }
 }
