@@ -71,7 +71,7 @@ export class ConfigService {
    * Gets iFast maintenance info(Web & Mobile app)
    * from s3 appConfig file
    */
-  getMobileAppAndIFastMaintenanceInfo() {
+  getAppConfig() {
     return fetch(`${this.s3ConfigUrl}?time=${this.s3BucketCacheControl}`).then(response => response.json());
   }
 
@@ -79,18 +79,18 @@ export class ConfigService {
    * Web & Mob app - checking iFast is under maintenance
    */
   async checkIFastUnderMaintenance() {
-    const config = await this.getMobileAppAndIFastMaintenanceInfo();
+    const config = await this.getAppConfig();
     const isIFastUnderMaintenance = config.iFast.showMaintenancePage && this.checkIFastStatus(config.iFast.maintenanceStartTime, config.iFast.maintenanceEndTime);
     return isIFastUnderMaintenance;
   }
 
   async checkMobAppInMaintenance() {
-    const configInfo = await this.getMobileAppAndIFastMaintenanceInfo();
+    const configInfo = await this.getAppConfig();
     return configInfo.showMOMaintenancePage;
   }
 
   async checkMobAppVersionHigher() {
-    const configInfo = await this.getMobileAppAndIFastMaintenanceInfo();
+    const configInfo = await this.getAppConfig();
     const localMobileAppInfo = await App.getInfo();
     if ((CapacitorUtils.isApp && CapacitorUtils.isAndroidDevice) && (localMobileAppInfo.version < configInfo[ANDROID_DEVICE].version || localMobileAppInfo.build < configInfo[ANDROID_DEVICE].build)) {
       return true;
