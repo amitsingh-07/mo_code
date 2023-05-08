@@ -63,34 +63,9 @@ export class ConfigService {
     return this.cache$;
   }
 
-  fetchConfig() {
-    return new Observable<IConfig>((observer) => {
-      fetch(this.s3ConfigUrl)
-        .then(response => response.json())
-        .then(data => {
-          observer.next(data);
-          observer.complete();
-          shareReplay(CACHE_SIZE);
-        })
-        .catch(err => {
-          this.handleError;
-        });
-    });
-  }
-
   private readConfig() {
     return this.http.get<IConfig>(this.configUrl).pipe(
-      map((response) => {
-        this.fetchConfig().subscribe((res) => {
-          if (res) {
-            response['iFastMaintenance'] = res['iFastMaintenance'];
-            response['maintenanceStartTime'] = res['maintenanceStartTime'];
-            response['maintenanceEndTime'] = res['maintenanceEndTime'];
-          }
-        });
-        return response;
-      }),
-      catchError(this.handleError) // then handle the error
+      catchError(this.handleError) // handle the error
     );
   }
 
@@ -101,6 +76,15 @@ export class ConfigService {
    */
   getMobileAppAndIFastMaintenanceInfo() {
     return fetch(`${this.s3ConfigUrl}?time=${this.s3BucketCacheControl}`).then(response => response.json());
+  }
+
+  /** 
+   * Web & Mob app - checking iFast is under maintenance
+   */
+  async checkIFastUnderMaintenance() {
+    const config = await this.getMobileAppAndIFastMaintenanceInfo();
+    const isIFastUnderMaintenance = config.iFast.showMaintenancePage && this.checkIFastStatus(config.iFast.maintenanceStartTime, config.iFast.maintenanceEndTime);
+    return isIFastUnderMaintenance;
   }
 
   async checkMobAppInMaintenance() {
