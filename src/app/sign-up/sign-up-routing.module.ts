@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AccountCreatedComponent } from './account-created/account-created.component';
 import { AccountUpdatedComponent } from './account-updated/account-updated.component';
 import { AddUpdateBankComponent } from './add-update-bank/add-update-bank.component';
-import { AuthGuardService as AuthGuard, SingpassLoginGuard } from './auth-guard.service';
+import { AuthGuardService as AuthGuard, MobileAppUpgradeGuard, SingpassLoginGuard } from './auth-guard.service';
 import { FinlitLoggedUserService as FinlitLoggedUserGuard } from './auth-guard.service';
 import { LoggedUserService as LoggedUserGuard } from './auth-guard.service';
 import { FacebookLoggedUserService as FacebookLoggedUserGuard } from './auth-guard.service';
@@ -128,7 +128,7 @@ const routes: Routes = [
   {
     path: SIGN_UP_ROUTES.LOGIN,
     component: LoginComponent,
-    canActivate: [SingpassLoginGuard],
+    canActivate: [MobileAppUpgradeGuard, SingpassLoginGuard],
     runGuardsAndResolvers: 'pathParamsOrQueryParamsChange'
   },
   {
