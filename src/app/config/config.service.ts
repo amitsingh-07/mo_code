@@ -33,9 +33,6 @@ export interface IConfig {
   comprehensiveLiveEnabled: boolean;
   showAnnualizedReturns: boolean;
   paymentEnabled: boolean;
-  iFastMaintenance: boolean;
-  maintenanceStartTime: string;
-  maintenanceEndTime: string;
   showPortfolioInfo: boolean;
   investment: any;
   account: any;
