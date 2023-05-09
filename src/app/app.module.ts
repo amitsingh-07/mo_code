@@ -87,7 +87,6 @@ import { ComprehensiveChildEnableGuard } from './comprehensive/comprehensive-chi
 import { ComprehensiveEnableGuard } from './comprehensive/comprehensive-enable-guard';
 import { EmailEnquirySuccessComponent } from './email-enquiry-success/email-enquiry-success.component';
 import { ExternalRouteGuard } from './external-route-guard';
-import { InvestmentMaintenanceGuard } from './investment-maintenance/investment-maintenance-guard';
 import { InvestmentMaintenanceComponent } from './investment-maintenance/investment-maintenance.component';
 import { PaymentChildEnableGuard } from './payment/payment-child-enable-guard';
 import { PaymentEnableGuard } from './payment/payment-enable-guard';
@@ -232,7 +231,6 @@ window.FileReader = FileReaderReplace;
     AboutAge,
     PaymentEnableGuard,
     PaymentChildEnableGuard,
-    InvestmentMaintenanceGuard,
     ExternalRouteGuard,
     DatePipe
   ],

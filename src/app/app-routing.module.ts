@@ -10,7 +10,6 @@ import {
   EmailEnquirySuccessComponent
 } from './email-enquiry-success/email-enquiry-success.component';
 import { ExternalRouteGuard } from './external-route-guard';
-import { InvestmentMaintenanceGuard } from './investment-maintenance/investment-maintenance-guard';
 import { InvestmentMaintenanceComponent } from './investment-maintenance/investment-maintenance.component';
 import { InvestmentChildEnableGuard } from './investment/investment-engagement-journey/investment-child-enable-guard';
 import { InvestmentEnableGuard } from './investment/investment-engagement-journey/investment-enable-guard';
@@ -35,7 +34,7 @@ const routes: Routes = [
       { path: 'guideme', loadChildren: () => import('./guide-me/guide-me.module').then(m => m.GuideMeModule) },
       { path: 'accounts', loadChildren: () => import('./sign-up/sign-up.module').then(m => m.SignUpModule) },
       { path: 'myinfo', component: CallBackComponent },
-      { path: 'investment-maintenance', component: InvestmentMaintenanceComponent, canActivate: [InvestmentMaintenanceGuard]},
+      { path: 'investment-maintenance', component: InvestmentMaintenanceComponent },
       {
         path: APP_ROUTES.COMPREHENSIVE, loadChildren: () => import('./comprehensive/comprehensive.module').then(m => m.ComprehensiveModule),
         canActivate: [ComprehensiveEnableGuard],
