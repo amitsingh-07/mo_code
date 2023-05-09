@@ -69,6 +69,6 @@ export let appConstants = {
    RESTRICTED_HYPERLINK_URL_CONTENTS: ['mailto', 'javascript:', 'tel:', 'callto:', '.pdf'],
    COMPREHENSIVE_PAYMENT_FAQ: 'https://www.moneyowl.com.sg/faq-comprehensive/#comprehensive|2',
    WISE_INCOME_FAQ: 'https://www.moneyowl.com.sg/faq-investment/#wise-income',
-   PLAY_STORE_URL: 'https://play.google.com/store/apps/details?id=com.moneyowl.app&pli=1',
+   PLAY_STORE_URL: 'https://play.google.com/store/apps/details?id=com.moneyowl.app',
    APP_STORE_URL: 'https://apps.apple.com/us/app/moneyowl-plan-invest-insure/id6445839454'
 };
