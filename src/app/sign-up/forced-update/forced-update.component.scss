@@ -25,7 +25,7 @@ app-forced-update {
               width: 100%;
               @supports (-webkit-touch-callout: none) {
                 /* CSS specific to iOS devices */ 
-                min-height: calc(100vh - 60px);
+                min-height: calc(100vh - 47px);
               }
             }
           }
