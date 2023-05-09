@@ -16,6 +16,10 @@ app-investment-maintenance {
             height: 100vh;
             padding: 0 24px;
             margin-top: 0px;
+            @supports (-webkit-touch-callout: none) {
+                /* CSS specific to iOS devices */
+                height: calc(100vh - 60px);
+            }
         }
     }
 
@@ -78,6 +82,9 @@ app-investment-maintenance {
             vertical-align: bottom;
             margin-left: 50px;
             text-decoration: none;
+            @include max360 {
+                margin-left: 30px;
+            }
         }
 
         .contact-us-txt {
