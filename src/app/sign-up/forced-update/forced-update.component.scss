@@ -75,9 +75,8 @@ app-forced-update {
         .btn-primary{
             font-family: $muli-bold;
             background: $watercourse-color;
-            &:hover, &:active{
+            &:hover, &:active, &:focus{
                 background: $watercourse-color !important;
-                text-decoration: none !important;
             }
         }
     }
