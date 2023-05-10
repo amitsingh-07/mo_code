@@ -214,6 +214,7 @@ export class DashboardComponent implements OnInit {
         this.insurance.hasInsurance = false;
       }
     });
+    this.enableInvestment();
     this.getInvestmentsSummary();
     this.investmentAccountService.deactivateReassess();
     const toastMessage = this.comprehensiveService.getToastMessage();
