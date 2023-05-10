@@ -619,10 +619,6 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     this.showFAQs = MenuConfig.aboutUs.showFAQs;
   }
 
-  goToWrapFeeDetails() {
-    this.router.navigate([MANAGE_INVESTMENTS_ROUTE_PATHS.FEES]);
-  }
-
   //wiseIncome Dropdown
   wiseIncomeDropDown(event) {
     this.wiseIncomeDropDownShow = !this.wiseIncomeDropDownShow;
