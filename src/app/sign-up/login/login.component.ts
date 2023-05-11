@@ -372,7 +372,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
       this.showErrorModal(this.translate.instant('SIGNUP_ERRORS.LOGIN_EMAIL_TITLE'),
         this.translate.instant('SIGNUP_ERRORS.VERIFY_EMAIL_MESSAGE'),
         this.translate.instant('SIGNUP_ERRORS.LOGIN_EMAIL_MESSAGE'),
-        '', true);
+        '', true, true);
     } else if (data.responseMessage.responseCode === 5014) {
       this.showErrorModal(this.translate.instant('SIGNUP_ERRORS.TITLE'),
         this.translate.instant('SIGNUP_ERRORS.VERIFY_MOBILE_OTP'),
@@ -416,8 +416,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
     if (emailResend) {
-      ref.componentInstance.enableResendEmail = true;
-      if (!this.isCorpBiz && !this.organisationEnabled) {
+      ref.componentInstance.enableResendEmail = this.appService.isUserFromCorpBizLink ? false : true;
+      if (!this.isCorpBiz && !this.organisationEnabled && !this.appService.isUserFromCorpBizLink) {
         ref.componentInstance.enableChangeEmail = true;
       }
       ref.componentInstance.resendEmail.pipe(

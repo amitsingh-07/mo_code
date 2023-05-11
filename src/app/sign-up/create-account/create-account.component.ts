@@ -441,7 +441,7 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
         this.translate.instant('SIGNUP_ERRORS.VERIFY_EMAIL_MESSAGE'),
         this.translate.instant('COMMON.LOG_IN'),
         redirectUrl,
-        true);
+        true, false, true);
     }
   }
 
@@ -484,8 +484,8 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
       }
     }).catch((e) => { });
     if (emailResend) {
-      ref.componentInstance.enableResendEmail = true;
-      if (!this.isCorpBizUser && !this.organisationEnabled) {
+      ref.componentInstance.enableResendEmail = this.appService.isUserFromCorpBizLink ? false : true;
+      if (!this.isCorpBizUser && !this.organisationEnabled && !this.appService.isUserFromCorpBizLink) {
         ref.componentInstance.enableChangeEmail = true;
       }
       ref.componentInstance.resendEmail.pipe(

@@ -84,7 +84,7 @@
           (click)="checkCurrentRouteAndNavigate('/accounts/edit-profile')">
           <a class="navbar--text" href="javascript: void(0);">Profile</a>
         </li>
-        <li *ngIf="isLoggedIn && showMenuItemInvestUser" class="nav-item hidden-lg" (click)="goToWrapFeeDetails()">
+        <li *ngIf="isLoggedIn && showMenuItemInvestUser" class="nav-item hidden-lg" (click)="checkCurrentRouteAndNavigate('/investment/manage/fee')">
           <a class="navbar--text" href="javascript: void(0);">Fees</a>
         </li>
         <li *ngIf="isLoggedIn && showMenuItemInvestUser" class="nav-item hidden-lg" (click)="checkCurrentRouteAndNavigate('/promo-code')">
@@ -225,7 +225,7 @@
             <button class="dropdown-item" (click)="checkCurrentRouteAndNavigate('/accounts/edit-profile')">
               <a class="navbar--text" href="javascript: void(0);">Profile</a>
             </button>
-            <button *ngIf="showMenuItemInvestUser" class="dropdown-item" (click)="goToWrapFeeDetails()">
+            <button *ngIf="showMenuItemInvestUser" class="dropdown-item" (click)="checkCurrentRouteAndNavigate('/investment/manage/fee')">
               <a class="navbar--text" href="javascript: void(0);">Fees</a>
             </button>
             <button class="dropdown-item" *ngIf="showMenuItemInvestUser" (click)="checkCurrentRouteAndNavigate('/promo-code')">

@@ -557,11 +557,11 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   }
 
   // Added to check if current route is same as the navigating route
-  // If its current route, close the menu else navigate as usual
   checkCurrentRouteAndNavigate(route) {
-    if (this.router.url === route) {
-      this.hideMenu();
-    } else {
+    //close the menu bar
+    this.hideMenu();
+    // If its not current route then navigate to the route
+    if (this.router.url !== route) {
       this.router.navigate([route]);
     }
   }
@@ -603,10 +603,6 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     this.showCareers = MenuConfig.aboutUs.showCareers;
     this.showContactUs = MenuConfig.aboutUs.showContactUs;
     this.showFAQs = MenuConfig.aboutUs.showFAQs;
-  }
-
-  goToWrapFeeDetails() {
-    this.router.navigate([MANAGE_INVESTMENTS_ROUTE_PATHS.FEES]);
   }
 
   //wiseIncome Dropdown

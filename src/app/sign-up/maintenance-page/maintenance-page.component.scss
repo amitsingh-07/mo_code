@@ -51,6 +51,12 @@ app-maintenance-page{
         height: 50px;
         object-fit: contain;
     }
+    a {
+        text-decoration: none;
+        &:hover{
+            text-decoration: none !important;
+        }
+    }
     a span.footer-contact {
         color: $white-color;
         text-decoration: none;
