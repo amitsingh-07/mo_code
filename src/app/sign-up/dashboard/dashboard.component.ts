@@ -215,6 +215,7 @@ export class DashboardComponent implements OnInit {
       }
     });
     this.enableInvestment();
+    this.getInvestmentsSummary();
     this.investmentAccountService.deactivateReassess();
     const toastMessage = this.comprehensiveService.getToastMessage();
     if (toastMessage) {
@@ -438,9 +439,7 @@ export class DashboardComponent implements OnInit {
     if (await this.configService.checkIFastUnderMaintenance()) {
       this.iFastMaintenance = true;
       this.isInvestmentEnabled = false;
-    } else {
-      this.getInvestmentsSummary();
-    }
+    } 
   }
 
   // Will-writing
