@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { FooterService } from 'src/app/shared/footer/footer.service';
-import { NavbarService } from 'src/app/shared/navbar/navbar.service';
+import { FooterService } from '../../shared/footer/footer.service';
+import { NavbarService } from '../../shared/navbar/navbar.service';
+import { Util } from '../../shared/utils/util';
 
 @Component({
   selector: 'app-maintenance-page',
@@ -33,4 +34,7 @@ export class MaintenancePageComponent implements OnInit {
     this.navbarService.displayingWelcomeFlowContent$.next(false);
   }
   
+  openMOsite(url){
+    Util.openExternalUrl(url);
+  }
 }
