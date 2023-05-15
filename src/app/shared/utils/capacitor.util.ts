@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { FileOpener } from '@capacitor-community/file-opener';
+import { Toast } from '@capacitor/toast';
 
 export const FILE_TYPE = 'application/pdf';
 export const IOS_DEVICE = 'ios';
@@ -43,6 +44,12 @@ export class CapacitorUtils {
       .catch((e) => {
         console.error(e);
       });
+  }
+
+  static async showToastMessage(message) {
+    await Toast.show({
+      text: message,
+    });
   }
 
 }

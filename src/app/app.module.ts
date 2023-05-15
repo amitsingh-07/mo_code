@@ -118,7 +118,6 @@ import { WillWritingEnableGuard } from './will-writing/will-writing-enable-guard
 import { SessionsService } from './shared/Services/sessions/sessions.service';
 import { NotSupportedComponent } from './not-supported/not-supported.component';
 import { RefereeComponent } from './shared/modal/referee/referee.component';
-import { HttpForceXhrBackend } from './http-force-xhr-backend';
 
 // tslint:disable-next-line:max-line-length
 export function createTranslateLoader(http: HttpClient) {
@@ -132,6 +131,15 @@ export function createTranslateLoader(http: HttpClient) {
 export function tokenGetterFn() {
   return sessionStorage.getItem(appConstants.APP_JWT_TOKEN_KEY);
 }
+// Fixed for Native Http Issue with blob/file type
+export class FileReaderReplace extends window['FileReader'] {
+  constructor() {
+    super();
+    const zoneOriginalInstance = (this as any)['__zone_symbol__originalInstance'];
+    return zoneOriginalInstance || this;
+  }
+}
+window.FileReader = FileReaderReplace;
 
 @NgModule({
   declarations: [
@@ -190,8 +198,7 @@ export function tokenGetterFn() {
     })
   ],
   providers: [
-    { provide: NativeHttpFallback, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend] },
-    { provide: HttpBackend, useClass: HttpForceXhrBackend, deps: [NativeHttpFallback, HttpXhrBackend] },
+    {provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
     {
       provide: APP_INITIALIZER,
       useFactory: onAppInit,

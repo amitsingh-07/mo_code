@@ -17,6 +17,7 @@ def capacitor_pods
   pod 'CapacitorCamera', :path => '../../node_modules/@capacitor/camera'
   pod 'CapacitorFilesystem', :path => '../../node_modules/@capacitor/filesystem'
   pod 'CapacitorSplashScreen', :path => '../../node_modules/@capacitor/splash-screen'
+  pod 'CapacitorToast', :path => '../../node_modules/@capacitor/toast'
   pod 'CapgoInappbrowserIntentFix', :path => '../../node_modules/capgo-inappbrowser-intent-fix'
   pod 'CordovaPlugins', :path => '../capacitor-cordova-ios-plugins'
 end
@@ -28,4 +29,12 @@ end
 
 post_install do |installer|
   assertDeploymentTarget(installer)
+  # Added for Azure iOS Pipeline Build
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['EXPANDED_CODE_SIGN_IDENTITY'] = ""
+      config.build_settings['CODE_SIGNING_REQUIRED'] = "NO"
+      config.build_settings['CODE_SIGNING_ALLOWED'] = "NO"
+    end
+  end
 end
