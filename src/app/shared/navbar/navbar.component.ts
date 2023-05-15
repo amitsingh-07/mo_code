@@ -7,7 +7,6 @@ import { NgbDropdownConfig, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-boots
 import { ViewportScroller } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { App } from '@capacitor/app';
 
 import { APP_ROUTES } from '../../app-routes.constants';
 import { appConstants } from '../../app.constants';
@@ -218,19 +217,6 @@ export class NavbarComponent implements OnInit, AfterViewInit {
 
     this.corpBizData = appService.getCorpBizData();
 
-    //Device back navigation
-    App.addListener('backButton', (BackButtonListener) => {
-      console.log('Device Back Button Clicked');
-      this.ngZone.run(() => {
-        if (BackButtonListener.canGoBack) {
-          console.log('Nav bar Go the previous screen');
-          this.goBack();
-        } else {
-          console.log('Nav Bar No Back screen');
-          App.exitApp();
-        }
-      });
-    });
   }
 
   @HostListener('window:scroll', ['$event'])
