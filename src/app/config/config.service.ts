@@ -105,7 +105,6 @@ export class ConfigService {
       return localAppVersion[index] < configVersion[index];
     })
     const isHigherBuildAvailable = parseInt(localMobileAppInfo.build) < parseInt(configInfo[platform].build);
-    console.log('...is build HigherVersionAvailable ',isHigherVersionAvailable,  isHigherBuildAvailable, platform, localMobileAppInfo, configInfo[platform])
     return isHigherVersionAvailable || isHigherBuildAvailable;
   }
 
