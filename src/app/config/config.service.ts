@@ -92,12 +92,21 @@ export class ConfigService {
   async checkMobAppVersionHigher() {
     const configInfo = await this.getAppConfig();
     const localMobileAppInfo = await App.getInfo();
-    if ((CapacitorUtils.isApp && CapacitorUtils.isAndroidDevice) && (localMobileAppInfo.version < configInfo[ANDROID_DEVICE].version || localMobileAppInfo.build < configInfo[ANDROID_DEVICE].build)) {
-      return true;
-    } else if ((CapacitorUtils.isApp && CapacitorUtils.isIOSDevice) && (localMobileAppInfo.version < configInfo[IOS_DEVICE].version || localMobileAppInfo.build < configInfo[IOS_DEVICE].build)) {      
-      return true;
+    const platform = CapacitorUtils.isApp && CapacitorUtils.isAndroidDevice ? ANDROID_DEVICE : IOS_DEVICE;
+    var localAppVersion = localMobileAppInfo.version.split('.').map(ele => parseInt(ele));
+    var configVersion = configInfo[platform].version.split('.').map(ele => parseInt(ele));
+    if (localAppVersion.length === 2) {
+      localAppVersion.push(0);
     }
-    return false;
+    if (configVersion.length === 2) {
+      configVersion.push(0);
+    }
+    const isHigherVersionAvailable = localAppVersion.some((ele, index) => {
+      return localAppVersion[index] < configVersion[index];
+    })
+    const isHigherBuildAvailable = parseInt(localMobileAppInfo.build) < parseInt(configInfo[platform].build);
+    console.log('...is build HigherVersionAvailable ',isHigherVersionAvailable,  isHigherBuildAvailable, platform, localMobileAppInfo, configInfo[platform])
+    return isHigherVersionAvailable || isHigherBuildAvailable;
   }
 
   private handleError(error: HttpErrorResponse) {
