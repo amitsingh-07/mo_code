@@ -47,7 +47,6 @@ export class ConfigService {
   private cache$: Observable<IConfig> = null;
   private configUrl = 'assets/config.json';
   private s3ConfigUrl = environment.configJsonUrl;
-  s3BucketCacheControl = Date.now();
 
   constructor(private http: HttpClient) { }
 
@@ -72,8 +71,7 @@ export class ConfigService {
    * from s3 appConfig file
    */
   getAppConfig() {
-    this.s3BucketCacheControl = Date.now();
-    return fetch(`${this.s3ConfigUrl}?time=${this.s3BucketCacheControl}`).then(response => response.json());
+    return fetch(`${this.s3ConfigUrl}?time=${Date.now()}`).then(response => response.json());
   }
 
   /** 
