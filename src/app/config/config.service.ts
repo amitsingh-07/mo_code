@@ -72,6 +72,7 @@ export class ConfigService {
    * from s3 appConfig file
    */
   getAppConfig() {
+    this.s3BucketCacheControl = Date.now();
     return fetch(`${this.s3ConfigUrl}?time=${this.s3BucketCacheControl}`).then(response => response.json());
   }
 
