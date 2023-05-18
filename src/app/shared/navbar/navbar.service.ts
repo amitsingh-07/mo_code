@@ -103,13 +103,6 @@ export class NavbarService {
     this.router.events.pipe(
       filter((event) => event instanceof NavigationStart)
     ).subscribe(async (event: NavigationStart) => {
-      if (CapacitorUtils.isApp) {
-        if (!event.url.includes('maintenance-page') && await this.configService.checkMobAppInMaintenance()) {
-          this.router.navigate([SIGN_UP_ROUTE_PATHS.MAINTENANCE_PAGE]);
-        } else {
-          this.handlingMobileAppNavigationUrlHistory(event);
-        } 
-      }
       this.unsubscribeBackPress();
       if (event.navigationTrigger === 'popstate') {
         if(this.activeModals > 0) {
@@ -117,6 +110,13 @@ export class NavbarService {
         }
         this.browserBackPress.next(true);
       } 
+      if (CapacitorUtils.isApp) {
+        if (!event.url.includes('maintenance-page') && await this.configService.checkMobAppInMaintenance()) {
+          this.router.navigate([SIGN_UP_ROUTE_PATHS.MAINTENANCE_PAGE]);
+        } else {
+          this.handlingMobileAppNavigationUrlHistory(event);
+        } 
+      }
     });
     
     this.modal.activeInstances.subscribe(list => {
