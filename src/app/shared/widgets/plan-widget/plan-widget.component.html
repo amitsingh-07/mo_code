@@ -95,7 +95,7 @@
           <div class="help-icon" (click)="openRatingModal()"></div>
         </div>
         <div class="insurance-plan-widget__container__rank-box" *ngIf="canShowDiscount">
-          <div class="feature-head">30%</div>
+          <div class="feature-head">{{ 'PRODUCT_DETAILS.LBL_COMMISSION_VALUE' | translate }}</div>
           <div class="feature-caption">{{ 'PRODUCT_DETAILS.LBL_COMMISSION' | translate }}</div>
           <div class="help-icon" (click)="openCommissionModal()"></div>
         </div>
