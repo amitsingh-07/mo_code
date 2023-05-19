@@ -106,6 +106,7 @@
         "LBL_RANKING_BY_VALUE": "Ranking By Value",
         "LBL_RATING": "Insurer's Rating",
         "LBL_COMMISSION": "First-Year Basic Commission Rebate",
+        "LBL_COMMISSION_VALUE": "30%",
         "SEE_MORE_DETAILS": "See more details"
     },
     "SETTINGS": {
