@@ -62,6 +62,7 @@ import { CapacitorUtils } from '../../shared/utils/capacitor.util';
 export class DashboardComponent implements OnInit {
   userProfileInfo: any;
   showPortfolioPurchased = false;
+  showInvestmentWidget = false
   showStartInvesting = false;
   showInvestmentDetailsSaved = false;
   showCddCheckOngoing = false;
@@ -276,6 +277,7 @@ export class DashboardComponent implements OnInit {
         }
         this.setInvestmentsSummary(this.investmentsSummary);
         this.getInvestmentStatus();
+        this.showInvestmentWidget = true;
       } else {
         this.investmentAccountService.showGenericErrorModal();
       }
