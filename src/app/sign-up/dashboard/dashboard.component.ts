@@ -214,7 +214,6 @@ export class DashboardComponent implements OnInit {
         this.insurance.hasInsurance = false;
       }
     });
-    this.enableInvestment();
     this.getInvestmentsSummary();
     this.investmentAccountService.deactivateReassess();
     const toastMessage = this.comprehensiveService.getToastMessage();
@@ -357,16 +356,19 @@ export class DashboardComponent implements OnInit {
       case SIGN_UP_CONFIG.INVESTMENT.RECOMMENDED:
       case SIGN_UP_CONFIG.INVESTMENT.ACCEPTED_NATIONALITY: {
         this.showSetupAccount = true;
+        this.enableInvestment();
         break;
       }
       case SIGN_UP_CONFIG.INVESTMENT.BLOCKED_NATIONALITY: {
         this.showBlockedNationalityStatus = true;
+        this.enableInvestment();
         break;
       }
       case SIGN_UP_CONFIG.INVESTMENT.INVESTMENT_ACCOUNT_DETAILS_SAVED:
       case SIGN_UP_CONFIG.INVESTMENT.DOCUMENTS_UPLOADED:
       case SIGN_UP_CONFIG.INVESTMENT.PORTFOLIO_CONFIRMED: {
         this.showInvestmentDetailsSaved = true;
+        this.enableInvestment();
         break;
       }
       case SIGN_UP_CONFIG.INVESTMENT.CDD_CHECK_PENDING:
@@ -374,15 +376,18 @@ export class DashboardComponent implements OnInit {
       case SIGN_UP_CONFIG.INVESTMENT.EDD_CHECK_PENDING:
       case SIGN_UP_CONFIG.INVESTMENT.CKA_PENDING: {
         this.showCddCheckOngoing = true;
+        this.enableInvestment();
         break;
       }
       case SIGN_UP_CONFIG.INVESTMENT.EDD_CHECK_FAILED: {
         this.showEddCheckFailStatus = true;
+        this.enableInvestment();
         break;
       }
       case SIGN_UP_CONFIG.INVESTMENT.CDD_CHECK_FAILED:
       case SIGN_UP_CONFIG.INVESTMENT.ACCOUNT_CREATION_FAILED: {
         this.showCddCheckFail = true;
+        this.enableInvestment();
         break;
       }
       case SIGN_UP_CONFIG.INVESTMENT.ACCOUNT_CREATED:
@@ -394,6 +399,7 @@ export class DashboardComponent implements OnInit {
           this.showStartInvesting = true;
           this.portfolioExists = true;
         }
+        this.enableInvestment();
         if (this.investmentsSummary.portfolioSummary && this.investmentsSummary.portfolioSummary.numberOfPortfolios > 0) {
           this.navbarService.setMenuItemInvestUser(true);
         }
@@ -401,11 +407,13 @@ export class DashboardComponent implements OnInit {
       }
       case SIGN_UP_CONFIG.INVESTMENT.ACCOUNT_SUSPENDED: {
         this.showSuspendedAccount = true;
+        this.enableInvestment();
         break;
       }
       default: {
         if (this.isInvestmentConfigEnabled) {
           this.showStartInvesting = true;
+          this.enableInvestment();
         } else {
           this.showStartInvesting = false;
         }
@@ -434,12 +442,12 @@ export class DashboardComponent implements OnInit {
   }
 
   async enableInvestment() {
-    this.isInvestmentEnabled = true;
     // Check if iFast is in maintenance    
     if (await this.configService.checkIFastUnderMaintenance()) {
       this.iFastMaintenance = true;
-      this.isInvestmentEnabled = false;
-    } 
+    } else {
+      this.isInvestmentEnabled = true;
+    }
   }
 
   // Will-writing
