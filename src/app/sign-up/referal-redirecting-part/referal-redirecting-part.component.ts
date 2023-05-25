@@ -161,7 +161,7 @@ export class ReferalRedirectingPartComponent implements OnInit {
   }
 
   redirectPathOnModalClose(redirectUrl) {
-    if (CapacitorUtils.isApp && CapacitorUtils.isIOSDevice) {
+    if (CapacitorUtils.isApp) {
       this.navbarService.goBack();
     } else {
       this.router.navigate([redirectUrl]);
