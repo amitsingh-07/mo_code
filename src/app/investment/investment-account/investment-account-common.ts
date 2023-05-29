@@ -118,14 +118,14 @@ export class InvestmentAccountCommon {
     for (i = 1; i < 8; i++) {
       weight += icArray[i];
     }
-    const offset = icArray[0] === 'T' || icArray[0] === 'G' ? 4 : 0;
+    const offset = icArray[0] === 'T' || icArray[0] === 'G' ? 4 : icArray[0] === 'M' ? 3 : 0;
     const temp = (offset + weight) % 11;
     const st = ['J', 'Z', 'I', 'H', 'G', 'F', 'E', 'D', 'C', 'B', 'A'];
     const fg = ['X', 'W', 'U', 'T', 'R', 'Q', 'P', 'N', 'M', 'L', 'K'];
     let theAlpha;
     if (icArray[0] === 'S' || icArray[0] === 'T') {
       theAlpha = st[temp];
-    } else if (icArray[0] === 'F' || icArray[0] === 'G') {
+    } else if (icArray[0] === 'F' || icArray[0] === 'G' || icArray[0] === 'M') {
       theAlpha = fg[temp];
     }
     return icArray[8] === theAlpha;

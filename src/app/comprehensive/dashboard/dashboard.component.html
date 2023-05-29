@@ -19,15 +19,6 @@
         <span *ngIf="!comprehensiveInfo[0].isEnabled"><img
             src="assets/images/refer-friend/gift-icon-grey.svg"></span><span *ngIf="comprehensiveInfo[0].isEnabled"><img
             src="assets/images/refer-friend/gift-icon.svg"></span>${{comprehensiveInfo[0].creditValue}}</div>
-      <div class="view-edit">
-        <div class="form-group-with-bg--header-label plan-view-icon text-right comprehensive-plan-view"
-          [hidden]="comprehensivePlanning !== 0" (click)="goToEditComprehensivePlan(true)">
-          {{ 'COMPREHENSIVE.DASHBOARD.COMPREHENSIVE_PLANNING_VIEW' | translate }}</div>
-        <div class="form-group-with-bg--header-label plan-view-icon text-right comprehensive-plan-view"
-          [hidden]="!(comprehensivePlanning === 5 || comprehensivePlanning === 1 || comprehensivePlanning === 2)"
-          (click)="goToEditComprehensivePlan(false)">
-          <span class="edit-icon"><img src="assets/images/comprehensive/comprehesive-edit-icon.svg"></span></div>
-      </div>
       <div class="form-group-with-bg overlay-bg">
         <div [ngClass]="{'hidden': !isLoadComplete}">
           <!--Form Header-->
@@ -37,7 +28,18 @@
                 <div class="form-group-with-bg--header-label pr10">
                   {{'COMPREHENSIVE.DASHBOARD.COMPREHENSIVE_PLANNING_LITE_TITLE' | translate}}
                 </div>
-              </div>
+                <div class="view-edit">
+                  <div class="form-group-with-bg--header-label plan-view-icon text-right comprehensive-plan-view"
+                    [hidden]="comprehensivePlanning !== 0" (click)="goToEditComprehensivePlan(true)">
+                    {{ 'COMPREHENSIVE.DASHBOARD.COMPREHENSIVE_PLANNING_VIEW' | translate }}</div>
+                  <div class="btn-with-icon"
+                    [hidden]="!(comprehensivePlanning === 5 || comprehensivePlanning === 1 || comprehensivePlanning === 2)"
+                    (click)="goToEditComprehensivePlan(false)">
+                    <span class="edit-btn-img"><img src="assets/images/editIcon.svg"></span>
+                    <span>{{ 'COMPREHENSIVE.DASHBOARD.COMPREHENSIVE_PLANNING_EDIT' | translate }}</span>
+                  </div>
+                </div>
+              </div>              
             </div>
           </div>
           <!--Form Content-->

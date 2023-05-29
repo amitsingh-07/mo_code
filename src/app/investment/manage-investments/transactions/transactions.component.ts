@@ -26,6 +26,7 @@ export class TransactionsComponent implements OnInit {
   activeTransactionIndex;
   userProfileInfo;
   portfolio: any;
+  isTransactionExceeded: boolean;
   constructor(
     public footerService: FooterService,
     public navbarService: NavbarService,
@@ -56,15 +57,15 @@ export class TransactionsComponent implements OnInit {
   }
 
   createTransactionStatement() {
-    if (this.portfolio && this.portfolio.accountCreatedDate) {
-      const accountCreationDate = this.convertStringToDate(
-        this.portfolio.accountCreatedDate
+    if (this.portfolio && this.portfolio.statementStartDate) {
+      const statementStartDate = this.convertStringToDate(
+        this.portfolio.statementStartDate
       );
       const recentStatementAvailDate = this.convertStringToDate(
         this.portfolio.statementCreatedDate
       );
       this.statementMonthsList = this.manageInvestmentsService.getMonthListByPeriod(
-        accountCreationDate,
+        statementStartDate,
         recentStatementAvailDate
       );
     }
@@ -92,8 +93,9 @@ export class TransactionsComponent implements OnInit {
       this.manageInvestmentsService.getTransactionHistory(
         this.portfolio.customerPortfolioId).subscribe((response) => {
           this.loaderService.hideLoaderForced();
-          this.transactionHistory = response.objectList;
+          this.transactionHistory = response.objectList.transactionsHistory;
           this.transactionHistory = this.calculateSplitAmounts(this.transactionHistory);
+          this.isTransactionExceeded = response.objectList.transactionPeriodExceeded;
           this.investmentEngagementJourneyService.sortByProperty(
             this.transactionHistory,
             'createdDate',

@@ -51,6 +51,7 @@ export interface IVerifyRequestOTP {
     customerRef: string;
     otp?: number;
     editProfile?: boolean;
+    canTransferAccessFromEnrolment?: boolean;
 }
 export interface IEmailRequestOTP {
     emailAddress: string;
@@ -96,4 +97,5 @@ export interface ICorpBizData {
     maskedMobileNumber: string;
     enrollmentId: number;
     mobileNumber: number;
+    dob?: string;
 }

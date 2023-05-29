@@ -1,10 +1,12 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { App } from '@capacitor/app';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, shareReplay } from 'rxjs/operators';
 
 import { IProductCategory } from '../direct/product-info/product-category/product-category';
 import { HospitalPlan } from '../guide-me/hospital-plan/hospital-plan';
+import { ANDROID_DEVICE, CapacitorUtils, IOS_DEVICE } from '../shared/utils/capacitor.util';
 import { environment } from './../../environments/environment';
 
 export interface IConfig {
@@ -31,9 +33,6 @@ export interface IConfig {
   comprehensiveLiveEnabled: boolean;
   showAnnualizedReturns: boolean;
   paymentEnabled: boolean;
-  iFastMaintenance: boolean;
-  maintenanceStartTime: string;
-  maintenanceEndTime: string;
   showPortfolioInfo: boolean;
   investment: any;
   account: any;
@@ -60,35 +59,52 @@ export class ConfigService {
     return this.cache$;
   }
 
-  fetchConfig() {
-    return new Observable<IConfig>((observer) => {
-      fetch(this.s3ConfigUrl)
-        .then(response => response.json())
-        .then(data => {
-          observer.next(data);
-          observer.complete();
-          shareReplay(CACHE_SIZE);
-        })
-        .catch(err => {
-          this.handleError;
-        });
-    });
-  }
-
   private readConfig() {
     return this.http.get<IConfig>(this.configUrl).pipe(
-      map((response) => {
-        this.fetchConfig().subscribe((res) => {
-          if (res) {
-            response['iFastMaintenance'] = res['iFastMaintenance'];
-            response['maintenanceStartTime'] = res['maintenanceStartTime'];
-            response['maintenanceEndTime'] = res['maintenanceEndTime'];
-          }
-        });
-        return response;
-      }),
-      catchError(this.handleError) // then handle the error
+      catchError(this.handleError) // handle the error
     );
+  }
+
+  /**
+   * Gets mobile app(Android & IOS) released version and maintenance info 
+   * Gets iFast maintenance info(Web & Mobile app)
+   * from s3 appConfig file
+   */
+  getAppConfig() {
+    return fetch(`${this.s3ConfigUrl}?time=${Date.now()}`).then(response => response.json());
+  }
+
+  /** 
+   * Web & Mob app - checking iFast is under maintenance
+   */
+  async checkIFastUnderMaintenance() {
+    const config = await this.getAppConfig();
+    const isIFastUnderMaintenance = config.iFast.showMaintenancePage && this.checkIFastStatus(config.iFast.maintenanceStartTime, config.iFast.maintenanceEndTime);
+    return isIFastUnderMaintenance;
+  }
+
+  async checkMobAppInMaintenance() {
+    const configInfo = await this.getAppConfig();
+    return configInfo.showMOMaintenancePage;
+  }
+
+  async checkMobAppVersionHigher() {
+    const configInfo = await this.getAppConfig();
+    const localMobileAppInfo = await App.getInfo();
+    const platform = CapacitorUtils.isApp && CapacitorUtils.isAndroidDevice ? ANDROID_DEVICE : IOS_DEVICE;
+    var localAppVersion = localMobileAppInfo.version.split('.').map(ele => parseInt(ele));
+    var configVersion = configInfo[platform].version.split('.').map(ele => parseInt(ele));
+    if (localAppVersion.length === 2) {
+      localAppVersion.push(0);
+    }
+    if (configVersion.length === 2) {
+      configVersion.push(0);
+    }
+    const isHigherVersionAvailable = localAppVersion.some((ele, index) => {
+      return localAppVersion[index] < configVersion[index];
+    })
+    const isHigherBuildAvailable = parseInt(localMobileAppInfo.build) < parseInt(configInfo[platform].build);
+    return isHigherVersionAvailable || isHigherBuildAvailable;
   }
 
   private handleError(error: HttpErrorResponse) {

@@ -441,15 +441,13 @@ export class DashboardComponent implements OnInit {
     return this.investmentAccountService.formatReturns(value);
   }
 
-  enableInvestment() {
-    this.isInvestmentEnabled = true;
-    // Check if iFast is in maintenance
-    this.configService.getConfig().subscribe((config) => {
-      if (config.iFastMaintenance && this.configService.checkIFastStatus(config.maintenanceStartTime, config.maintenanceEndTime)) {
-        this.iFastMaintenance = true;
-        this.isInvestmentEnabled = false;
-      }
-    });
+  async enableInvestment() {
+    // Check if iFast is in maintenance    
+    if (await this.configService.checkIFastUnderMaintenance()) {
+      this.iFastMaintenance = true;
+    } else {
+      this.isInvestmentEnabled = true;
+    }
   }
 
   // Will-writing

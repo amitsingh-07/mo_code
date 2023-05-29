@@ -148,22 +148,22 @@ const routes: Routes = [
   {
     path: INVESTMENT_ENGAGEMENT_JOURNEY_ROUTES.CKA_ASSESSMENT,
     component: CkaAssessmentComponent,
-    canActivate: [InvestmentEngagementJourneyGuard, AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: INVESTMENT_ENGAGEMENT_JOURNEY_ROUTES.CKA_UPLOAD,
     component: CkaUploadDocumentComponent,
-    canActivate: [InvestmentEngagementJourneyGuard, AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: INVESTMENT_ENGAGEMENT_JOURNEY_ROUTES.NONE_OF_THE_ABOVE,
     component: NoneOfTheAboveComponent,
-    canActivate: [InvestmentEngagementJourneyGuard, AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: INVESTMENT_ENGAGEMENT_JOURNEY_ROUTES.CKA_PASSED_SCREEN,
     component: CkaPassedResultComponent,
-    canActivate: [InvestmentEngagementJourneyGuard, AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: INVESTMENT_ENGAGEMENT_JOURNEY_ROUTES.PORTFOLIO_APP_IN_PROGRESS,

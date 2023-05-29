@@ -4,11 +4,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { AccountCreatedComponent } from './account-created/account-created.component';
 import { AccountUpdatedComponent } from './account-updated/account-updated.component';
 import { AddUpdateBankComponent } from './add-update-bank/add-update-bank.component';
-import { AuthGuardService as AuthGuard, SingpassLoginGuard } from './auth-guard.service';
+import { AuthGuardService as AuthGuard, MobileAppUpgradeGuard, SingpassLoginGuard } from './auth-guard.service';
 import { FinlitLoggedUserService as FinlitLoggedUserGuard } from './auth-guard.service';
 import { LoggedUserService as LoggedUserGuard } from './auth-guard.service';
 import { FacebookLoggedUserService as FacebookLoggedUserGuard } from './auth-guard.service';
 import { CorpbizAuthGuardService as CorpbizAuthGuard } from './auth-guard.service';
+import { CorpbizWelcomeFlowAuthGuardService as UpgradeAuthGuard  } from './auth-guard.service';
 import { CreateAccountComponent } from './create-account/create-account.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { EditPasswordComponent } from './edit-password/edit-password.component';
@@ -45,7 +46,9 @@ import { AddUpdateCpfiaComponent } from './add-update-cpfia/add-update-cpfia.com
 import { CorpBizSignupComponent } from './corp-biz-signup/corp-biz-signup.component';
 import { CorpBizSignupWithDataComponent } from './corp-biz-signup-with-data/corp-biz-signup-with-data.component';
 import { CorpBizActivationLinkComponent } from './corp-biz-activation-link/corp-biz-activation-link.component';
-
+import { CorpbizUpgradeScreenComponent } from './corpbiz-upgrade-screen/corpbiz-upgrade-screen.component';
+import { MaintenancePageComponent } from './maintenance-page/maintenance-page.component';
+import { ForcedUpdateComponent } from './forced-update/forced-update.component'
 const routes: Routes = [
   {
     path: SIGN_UP_ROUTES.ROOT,
@@ -125,7 +128,7 @@ const routes: Routes = [
   {
     path: SIGN_UP_ROUTES.LOGIN,
     component: LoginComponent,
-    canActivate: [SingpassLoginGuard],
+    canActivate: [MobileAppUpgradeGuard, SingpassLoginGuard],
     runGuardsAndResolvers: 'pathParamsOrQueryParamsChange'
   },
   {
@@ -313,6 +316,19 @@ const routes: Routes = [
   {
     path: SIGN_UP_ROUTES.CORP_BIZ_ACTIVATIONLINK,
     component: CorpBizActivationLinkComponent
+  },
+  {
+    path: SIGN_UP_ROUTES.CORP_BIZ_UPGRADE_SCREEN,
+    component: CorpbizUpgradeScreenComponent,
+    canActivate: [UpgradeAuthGuard]
+  },
+  {
+    path: SIGN_UP_ROUTES.MAINTENANCE_PAGE,
+    component: MaintenancePageComponent
+  },
+  {
+    path: SIGN_UP_ROUTES.FORCED_UPDATE,
+    component: ForcedUpdateComponent
   },
   { path: '**', redirectTo: '/page-not-found' }
 ];

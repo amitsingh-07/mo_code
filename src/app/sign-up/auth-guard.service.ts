@@ -11,6 +11,9 @@ import { LoginService } from './login.service';
 import { LoaderService } from '../shared/components/loader/loader.service';
 import { SingpassService } from '../singpass/singpass.service';
 import { NavbarService } from '../shared/navbar/navbar.service';
+import { CapacitorUtils } from '../shared/utils/capacitor.util';
+import { App } from '@capacitor/app';
+import { ConfigService } from '../config/config.service';
 
 @Injectable({
   providedIn: 'root'
@@ -128,7 +131,8 @@ export class SingpassLoginGuard implements CanActivate {
     private authService: AuthenticationService,
     private loginService: LoginService,
     private loaderService: LoaderService,
-    private singpassService: SingpassService
+    private singpassService: SingpassService,
+    private appService: AppService
   ) {
   }
   canActivate(activatedRoute: ActivatedRouteSnapshot): Observable<boolean> | boolean {
@@ -136,7 +140,7 @@ export class SingpassLoginGuard implements CanActivate {
     this.loginService.setEnquiryIdAndJourneyType();
     if (queryParams['code'] && queryParams['state']) {
       this.loaderService.showLoader({ title: 'Logging in' });
-      return this.singpassService.loginSingpass(queryParams['code'], queryParams['state'], this.loginService.enqId, this.loginService.journeyType).pipe(map((data) => {
+      return this.singpassService.loginSingpass(queryParams['code'], queryParams['state'], this.loginService.enqId, this.loginService.journeyType, this.appService.getCorpBizData()?.enrollmentId).pipe(map((data) => {
         if (data.responseMessage.responseCode >= 6000 && data.objectList[0] && data.objectList[0].securityToken) {
           this.authService.saveAuthDetails(data.objectList[0]);
           this.authService.checkAndSetFlag(data);
@@ -167,6 +171,29 @@ export class SingpassLoginGuard implements CanActivate {
 })
 
 // tslint:disable-next-line:max-classes-per-file
+export class MobileAppUpgradeGuard implements CanActivate {
+  constructor(private router: Router,
+    private configService: ConfigService
+  ) {   }
+  async canActivate(route: ActivatedRouteSnapshot): Promise<boolean> {
+    if (CapacitorUtils.isApp) {
+      if (await this.configService.checkMobAppInMaintenance()) {
+        this.router.navigate([SIGN_UP_ROUTE_PATHS.MAINTENANCE_PAGE]);
+        return false;
+      } else if (await this.configService.checkMobAppVersionHigher()) {
+        this.router.navigate([SIGN_UP_ROUTE_PATHS.FORCED_UPDATE]);
+        return false;
+      }
+    }
+    return true;
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+
+// tslint:disable-next-line:max-classes-per-file
 export class CorpbizAuthGuardService implements CanActivate {
   constructor(private route: Router,
     private authService: AuthenticationService,
@@ -178,7 +205,6 @@ export class CorpbizAuthGuardService implements CanActivate {
       this.route.navigate([SIGN_UP_ROUTE_PATHS.CORP_BIZ_ACTIVATIONLINK]);
       return false;
     }
-    this.authService.displayCorporateLogo$.next(true);
     return true;
   }
 }
@@ -204,8 +230,7 @@ export class CorpbizWelcomeFlowAuthGuardService implements CanActivate {
       }
       return false;
     }
-    this.authService.displayCorporateLogo$.next(true);    
-    if (this.navbarService.welcomeJourneyCompleted) {
+    if (this.navbarService.welcomeJourneyCompleted || this.navbarService.upgradeScreenShown) {
       this.router.navigate([SIGN_UP_ROUTE_PATHS.DASHBOARD]);
       return false;
     }

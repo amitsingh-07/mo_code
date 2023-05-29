@@ -200,10 +200,7 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     if (this.distribution && this.distribution.login) {
       this.createAccountForm = this.formBuilder.group({
         countryCode: ['', [Validators.required]],
-        mobileNumber: [{
-          value: this.corpBizData?.maskedMobileNumber || myInfoMobile,
-          disabled: this.isCorpBiz
-        }, [Validators.required]],
+        mobileNumber: [ myInfoMobile || this.corpBizData?.mobileNumber, [Validators.required]],        
         email: [{
           value: this.corpBizData?.email || myInfoEmail,
           disabled: this.isCorpBiz
@@ -221,7 +218,7 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
           disabled: this.formValue && this.formValue.isMyInfoEnabled
         }, [Validators.required]],
         dob: [{
-          value: myInfoDob,
+          value: myInfoDob || this.corpBizData?.dob,
           disabled: this.formValue && this.formValue.isMyInfoEnabled
         }, [Validators.required]]
       }, { validator: this.validateMatchPasswordEmail() })
@@ -232,10 +229,7 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
 
     this.createAccountForm = this.formBuilder.group({
       countryCode: ['', [Validators.required]],
-      mobileNumber: [{
-        value: this.corpBizData?.maskedMobileNumber || myInfoMobile,
-        disabled: this.isCorpBiz
-      }, [Validators.required]],
+      mobileNumber: [myInfoMobile || this.corpBizData?.mobileNumber, [Validators.required]],
       email: [{
         value: this.corpBizData?.email || myInfoEmail,
         disabled: this.isCorpBiz
@@ -253,7 +247,7 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
         disabled: this.formValue && this.formValue.isMyInfoEnabled
       }, [Validators.required]],
       dob: [{
-        value: myInfoDob,
+        value: myInfoDob || this.corpBizData?.dob,
         disabled: this.formValue && this.formValue.isMyInfoEnabled
       }, [Validators.required]]
     }, { validator: this.validateMatchPasswordEmail() })
@@ -311,7 +305,6 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
         form.value.gender = (this.formValue && this.formValue.isMyInfoEnabled && this.formValue.gender) ? this.formValue.gender : '';
       }
       if (this.isCorpBiz && form.value) {
-        form.value.mobileNumber = this.corpBizData?.mobileNumber;
         form.value.email = this.corpBizData?.email;
         form.value.enrolmentId = this.corpBizData?.enrollmentId;
         form.value.isCorpBizEnrollUser = this.corpBizData?.isCorpBiz;
@@ -433,21 +426,22 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
         (this.finlitEnabled && SIGN_UP_ROUTE_PATHS.FINLIT_VERIFY_MOBILE) ||
         (this.organisationEnabled && SIGN_UP_ROUTE_PATHS.CORPORATE_VERIFY_MOBILE) ||
         SIGN_UP_ROUTE_PATHS.VERIFY_MOBILE,
-        false);
+        false, false, true);
     } else if (data.objectList[0].accountAlreadyCreated) {
       this.showErrorModal(
         this.translate.instant('SIGNUP_ERRORS.TITLE'),
         this.translate.instant('SIGNUP_ERRORS.ACCOUNT_EXIST_MESSAGE'),
         this.translate.instant('COMMON.LOG_IN'),
         redirectUrl,
-        false);
+        false,
+        true);
     } else if (!data.objectList[0].emailVerified) {
       this.signUpService.setUserMobileNo(this.createAccountForm.controls['mobileNumber'].value);
       this.showErrorModal(this.translate.instant('SIGNUP_ERRORS.TITLE'),
         this.translate.instant('SIGNUP_ERRORS.VERIFY_EMAIL_MESSAGE'),
         this.translate.instant('COMMON.LOG_IN'),
         redirectUrl,
-        true);
+        true, false, true);
     }
   }
 
@@ -457,22 +451,41 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     ref.componentInstance.errorMessage = this.translate.instant('CORP_BIZ_ERROR_MODAL.SUB_TITLE');
   }
 
-  showErrorModal(title: string, message: string, buttonLabel: string, redirect: string, emailResend: boolean) {
-    const ref = this.modal.open(ErrorModalComponent, { centered: true });
-    ref.componentInstance.errorMessage = message;
-    ref.componentInstance.redirect_url = SIGN_UP_ROUTE_PATHS.VERIFY_EMAIL;
-    ref.result.then((data) => {
-      if (!data && redirect) {
-        this.router.navigate([redirect]);
-      }
-    }).catch((e) => { });
+  showErrorModal(title: string, message: string, buttonLabel: string, redirect: string, emailResend: boolean, accountAlreadyCreated = false, unverifiedAccount = false) {
+    const windowClassOnCondition = this.appService.isUserFromCorpBizLink && unverifiedAccount ? 'corpbiz-verification-modal' : '';
+    const ref = this.modal.open(ErrorModalComponent, { centered: true, windowClass: windowClassOnCondition });
     if (title) {
       ref.componentInstance.errorTitle = title;
       ref.componentInstance.buttonLabel = buttonLabel;
     }
+    if (this.appService.isUserFromCorpBizLink && accountAlreadyCreated) {      
+      ref.componentInstance.errorMessageList = [
+        this.translate.instant('SIGNUP_ERRORS.CORBIZ_ACCOUNT_EXIST_MESSAGE1'),
+        this.translate.instant('SIGNUP_ERRORS.CORBIZ_ACCOUNT_EXIST_MESSAGE2')
+      ];      
+    } else if (this.appService.isUserFromCorpBizLink && unverifiedAccount) { 
+      redirect = SIGN_UP_ROUTE_PATHS.LOGIN;
+      ref.componentInstance.errorTitle = this.translate.instant('SIGNUP_ERRORS.CORBIZ_UNVERIFIED_TITLE');
+      ref.componentInstance.buttonLabel = this.translate.instant('COMMON.LOGIN');
+      ref.componentInstance.errorMessageList = [
+        this.translate.instant('SIGNUP_ERRORS.CORBIZ_UNVERIFIED_MESSAGE1'),
+        this.translate.instant('SIGNUP_ERRORS.CORBIZ_UNVERIFIED_MESSAGE2')
+      ];      
+    } else {
+      ref.componentInstance.errorMessage = message;
+    }
+    ref.componentInstance.redirect_url = SIGN_UP_ROUTE_PATHS.VERIFY_EMAIL;
+    ref.result.then((data) => {
+      if (!data && redirect) {
+        if (this.appService.isUserFromCorpBizLink && unverifiedAccount && redirect.includes('/login')) {
+          this.appService.clearCorpBizUserData();
+        }
+        this.router.navigate([redirect]);
+      }
+    }).catch((e) => { });
     if (emailResend) {
-      ref.componentInstance.enableResendEmail = true;
-      if (!this.isCorpBizUser && !this.organisationEnabled) {
+      ref.componentInstance.enableResendEmail = this.appService.isUserFromCorpBizLink ? false : true;
+      if (!this.isCorpBizUser && !this.organisationEnabled && !this.appService.isUserFromCorpBizLink) {
         ref.componentInstance.enableChangeEmail = true;
       }
       ref.componentInstance.resendEmail.pipe(
@@ -601,9 +614,9 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
       }
 
       // Mobile Number
-      if (!this.isCorpBiz && !mobileNumberInput.value) {
+      if (!mobileNumberInput.value) {
         mobileNumberInput.setErrors({ required: true });
-      } else if (!this.isCorpBiz && !SINGAPORE_MOBILE_REGEXP.test(mobileNumberInput.value)) {
+      } else if (!SINGAPORE_MOBILE_REGEXP.test(mobileNumberInput.value)) {
         mobileNumberInput.setErrors({ mobileRange: true });
       } else {
         mobileNumberInput.setErrors(null);

@@ -9,6 +9,8 @@ import { CapacitorUtils } from '../utils/capacitor.util';
 
 import { IHeaderMenuItem } from './navbar.types';
 import { appConstants } from '../../app.constants';
+import { ConfigService } from './../../config/config.service';
+import { SIGN_UP_ROUTE_PATHS } from '../../sign-up/sign-up.routes.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +30,7 @@ export class NavbarService {
   private scrollTo = new Subject();
   private currentActive = new Subject();
   private setCpfPromoCode = new BehaviorSubject(null);
+  private browserBackPress = new Subject();
 
 
   existingNavbar = this.navbar.asObservable();
@@ -40,6 +43,7 @@ export class NavbarService {
   scrollToObserv = this.scrollTo.asObservable();
   currentActiveObserv = this.currentActive.asObservable();
   getCpfPromoCodeObservable = this.setCpfPromoCode.asObservable();
+  subscribeBrowserBackPress$ = this.browserBackPress.asObservable()
 
   /* Header Params */
   private pageTitle = new BehaviorSubject('');
@@ -90,20 +94,28 @@ export class NavbarService {
   wiseIncomeDropDownShow = new BehaviorSubject(false);
   displayingWelcomeFlowContent$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   welcomeJourneyCompleted: boolean = false;
+  upgradeScreenShown = false;
   urlHistory = { currentUrl: null, previousUrl: []};
   isBackClicked = false;
   activeModals = 0;
 
-  constructor(private router: Router, private _location: Location, private ngZone: NgZone, private modal: NgbModal) {
+  constructor(private router: Router, private _location: Location, private ngZone: NgZone, private modal: NgbModal, private configService: ConfigService) {
     this.router.events.pipe(
       filter((event) => event instanceof NavigationStart)
-    ).subscribe((event: NavigationStart) => {
-      if (CapacitorUtils.isApp) { 
-        this.handlingMobileAppNavigationUrlHistory(event);
-      }
+    ).subscribe(async (event: NavigationStart) => {
       this.unsubscribeBackPress();
-      if (event.navigationTrigger === 'popstate' && this.activeModals > 0) {
-        this.modal.dismissAll();
+      if (event.navigationTrigger === 'popstate') {
+        if(this.activeModals > 0) {
+          this.modal.dismissAll();
+        }
+        this.browserBackPress.next(true);
+      } 
+      if (CapacitorUtils.isApp) {
+        if (!event.url.includes('maintenance-page') && await this.configService.checkMobAppInMaintenance()) {
+          this.router.navigate([SIGN_UP_ROUTE_PATHS.MAINTENANCE_PAGE]);
+        } else {
+          this.handlingMobileAppNavigationUrlHistory(event);
+        } 
       }
     });
     

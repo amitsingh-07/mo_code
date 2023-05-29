@@ -361,22 +361,6 @@ app-dashboard {
                         margin: 0 56px 6px 0;
                     }
                 }
-
-                .view_all {
-                    font-family: $muli-regular;
-                    font-size: 16px;
-                    font-weight: normal;
-                    cursor: pointer;
-                    width: 28px;
-                    height: 28px;
-
-                    img {
-                        margin-top: 0;
-                        margin-left: 0;
-                        width: 28px;
-                        height: 28px;
-                    }
-                }
             }
 
             .investment-widget {
@@ -423,10 +407,10 @@ app-dashboard {
                     cursor: not-allowed;
                 }
 
-                .invest-btn-img {
+                .invest-btn-img, .edit-btn-img {
                     height: 9.3px;
                     width: 9.3px;
-                    margin-left: 13px;
+                    margin-right: 13px;
                     display: flex;
 
                     img {
@@ -434,6 +418,11 @@ app-dashboard {
                         height: auto;
                         margin: 0;
                     }
+                }
+
+                .edit-btn-img {
+                    height: 12px;
+                    width: 12px;
                 }
 
                 &:hover {
@@ -564,36 +553,20 @@ app-dashboard {
                 align-items: self-start !important;
                 line-height: 1.25;
                 position: relative;
+                span.flex{
+                    max-width: calc(100% - 101px);
+                }
             }
 
-            div.reward-points+.widget-portfolio-title {
+            div.reward-points+.widget-portfolio-title .btn-with-icon {
                 @include allmobiles {
-                    width: 68%;
+                    margin-top: 40px;
+                    z-index: 1;
                 }
             }
 
-            div.reward-points~.invest-btn {
-                @include allmobiles {
-                    margin-top: -37px !important;
-                }
-
-                @include iPhone13ProMax {
-                    margin-top: -11px !important;
-                }
-
-                @include min450max475 {
-                    margin-top: -15px !important;
-                }
-
-                @include min475max568 {
-                    margin-top: -15px !important;
-                }
-            }
-
-            .reward-points~.investment-card {
-                @include desktop {
-                    margin-top: -50px !important;
-                }
+            .reward-points~ .widget-portfolio-title .btn-with-icon{
+                margin-top: 40px;
             }
 
             .widget-portfolio-body {
@@ -853,10 +826,6 @@ app-dashboard {
             vertical-align: top;
             padding-right: 9px;
         }
-    }
-
-    div.reward-points+div.view_all {
-        top: 40px !important;
     }
 
     .reward-points.grey {

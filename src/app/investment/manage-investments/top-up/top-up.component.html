@@ -52,11 +52,14 @@
                             Portfolio'}}
                           </button>
                           <div class="dropdown" ngbDropdownMenu aria-labelledby="courseDropdown">
-                            <button class="dropdown-item capital-letter"
-                              *ngFor="let portfolio of portfolioList; let i = index;"
-                              (click)="setDropDownValue('portfolio',portfolio)"
-                              id="topup_portfolio_option-{{i}}">{{portfolio.portfolioName}} -
-                              {{portfolio['refNo']}}</button>
+                            <div *ngFor="let portfolio of portfolioList; let i = index;">
+                              <button class="dropdown-item capital-letter"
+                              *ngIf="portfolio['investmentAccountStatus'] === investmentAccountStatus.ACCOUNT_CREATED || 
+                              portfolio['investmentAccountStatus'] === investmentAccountStatus.ACCOUNT_FUNDED || 
+                              portfolio['investmentAccountStatus'] === investmentAccountStatus.PORTFOLIO_PURCHASED" 
+                                (click)="setDropDownValue('portfolio',portfolio)" id="topup_portfolio_option-{{i}}">{{portfolio.portfolioName}} -
+                                {{portfolio['refNo']}}</button>
+                            </div>
                           </div>
                         </div>
                       </div>

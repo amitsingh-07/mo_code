@@ -75,22 +75,32 @@
         position: relative;
         .view-edit {
             position: absolute;
-            top: 10px;
+            top: 20px;
             right: 20px;
             color: $teal-color;
             z-index: 2;
         }
-        div.reward-points + div.view-edit {
-            @include desktop {
-                right: 90px !important;
+        .reward-points{
+            & + .form-group-with-bg{
+                .form-group-with-bg--header{
+                    .view-edit{
+                        top: 40px;
+                        .btn-with-icon{
+                            margin-top: 20px;
+                        }
+                    }
+                }
+                .form-group-with-bg--content{
+                    margin-top: 35px;
+                    @include minMobilemaxPhablet{
+                        margin-top: 0px;
+                    }
+                    @include min768max768{
+                        margin-top: 0px;
+                    }
+                }
             }
-            @include minMobilemaxPhablet{
-                top: 35px !important;
-            }
-            @include tablet{
-                right: 100px;
-            }
-        }
+        }  
     }
     .comprehensive-plan-view{
         cursor: pointer;
@@ -117,6 +127,9 @@
         }
         @include tablet {
             width: 70%;
+        }
+        @include max360 {
+            width: 73%;
         }
     }
     &.container-fluid {
@@ -220,10 +233,7 @@
     }
     .form-group-with-bg--header {
         padding: 15px 20px 5px;
-        @include iphone6 {
-            width: 75%;
-        }
-        @include max360 {
+        @include minMobilemaxPhablet{
             width: 75%;
         }
     }

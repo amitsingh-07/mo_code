@@ -15,13 +15,16 @@
                     <div id="nextDependentBtn" class="autofill-logo">
                         <img src="assets/images/retrieve-singpass-logo.svg" (click)="proceedToMyInfo()" />
                     </div>
-                    <div class="separator"><span class="txt-or">{{'CORP_BIZ_SIGN_UP.OR_TXT' | translate}}</span></div>
-                    <div class="flex-col-12">
+                    <div class="flex-col-12 manual-container">
                         <div class="flex-col autofill-link" (click)="skipMyInfo()">
                             <div class="autofill-text">{{'CORP_BIZ_SIGN_UP.SIGN_UP_MANUAL_BTN_TXT' | translate}}</div>
                             <div class="autofill-estimation">{{'CORP_BIZ_SIGN_UP.MANUAL_ESTIMATED_TIME_TXT' |
                                 translate}}</div>
                         </div>
+                    </div>
+                    <div class="flex-col-12 login-container">
+                        <p class="login-info">{{'CORP_BIZ_SIGN_UP.LOGIN_INFO.MESSAGE1' | translate}} <a (click)="redirectToLogin()">{{'COMMON.LOGIN' | translate}}</a> 
+                            {{'CORP_BIZ_SIGN_UP.LOGIN_INFO.MESSAGE2' | translate}}</p>                            
                     </div>
                 </div>
             </div>

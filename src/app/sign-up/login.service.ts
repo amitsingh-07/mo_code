@@ -44,6 +44,7 @@ export class LoginService {
   progressModal: boolean;
   enqId = -1;
   journeyType = '';
+  isShowUpgradeScreen: boolean;
 
   constructor(
     private apiService: ApiService,
@@ -80,6 +81,7 @@ export class LoginService {
     if (this.checkInsuranceEnquiry(insuranceEnquiry)) {
       this.updateInsuranceEnquiry(insuranceEnquiry, data, true);
     } else {
+      this.isShowUpgradeScreen = (data.objectList[0] && data.objectList[0].showUpgradeScreen);
       this.goToNext();
     }
   }
@@ -103,6 +105,8 @@ export class LoginService {
       if (this.authService.isShowWelcomeFlow) {
         this.redirectAfterLogin = CORPBIZ_ROUTES_PATHS.GET_STARTED;
         this.navbarService.displayingWelcomeFlowContent$.next(true);
+      } else if(this.isShowUpgradeScreen) {
+        this.redirectAfterLogin = SIGN_UP_ROUTE_PATHS.CORP_BIZ_UPGRADE_SCREEN;
       } else {
         this.redirectAfterLogin = SIGN_UP_ROUTE_PATHS.DASHBOARD;
       }

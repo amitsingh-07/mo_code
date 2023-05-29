@@ -66,6 +66,7 @@ export class InvestmentOverviewComponent implements OnInit, OnDestroy {
   wiseIncomePortfolio: any[];
   showBannerInfo = false;
   wiseIncomeInfoMonth: any;
+  browserBackPressSubscription : Subscription;
   constructor(
     public readonly translate: TranslateService,
     public headerService: HeaderService,
@@ -117,9 +118,16 @@ export class InvestmentOverviewComponent implements OnInit, OnDestroy {
     this.toastMsg = this.manageInvestmentsService.getToastMessage();
 
     this.portfolioCategories = INVESTMENT_COMMON_CONSTANTS.PORTFOLIO_CATEGORY;
+    /** Redirects to Dashboard on click of Device Back*/
+    this.browserBackPressSubscription = this.navbarService.
+      subscribeBrowserBackPress$
+      .subscribe(() => {
+        this.router.navigate([SIGN_UP_ROUTE_PATHS.DASHBOARD]);
+      });  
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.browserBackPressSubscription.unsubscribe();
     this.navbarService.unsubscribeBackPress();
   }
 
