@@ -87,6 +87,7 @@ import { CurrencyEditorPipe } from './Pipes/currency-editor.pipe';
 import { MyinfoModalComponent } from './modal/myinfo-modal/myinfo-modal.component';
 import { CustomRadioControllerComponent } from './components/custom-radio-controller/custom-radio-controller.component';
 import { UploadDocumentOptionsComponent } from './components/upload-document-options/upload-document-options.component';
+import { RecaptchaModule } from 'ng-recaptcha';
 
 export function createTranslateLoader(http: HttpClient) {
   return new MultiTranslateHttpLoader(
@@ -110,7 +111,8 @@ export function createTranslateLoader(http: HttpClient) {
     }),
     FormsModule,
     ReactiveFormsModule,
-    SlickCarouselModule
+    SlickCarouselModule,
+    RecaptchaModule
   ],
   exports: [
     CurrencyInputDirective,
@@ -157,7 +159,8 @@ export function createTranslateLoader(http: HttpClient) {
     CurrencyEditorPipe,
     MyinfoModalComponent,
     CustomRadioControllerComponent,
-    UploadDocumentOptionsComponent
+    UploadDocumentOptionsComponent,
+    RecaptchaModule
   ],
   declarations: [
     CurrencyInputDirective,
