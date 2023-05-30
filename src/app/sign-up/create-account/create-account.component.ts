@@ -288,13 +288,28 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
       return `${this.formValue.dob.day}/${this.formValue.dob.month}/${this.formValue.dob.year}`;
     }
   }
+
+  validateRecaptcha(recaptchaRef) {
+    this.submitted = true;
+    this.validateReferralCode();
+    if (this.createAccountForm.valid) {
+      recaptchaRef.execute();
+    }
+  }
+
+  resolved(reCaptchaToken) {
+    this.apiService.reCaptchaVerify({HttpServletRequest: reCaptchaToken}).subscribe(res => {
+      if (res.responseMessage.responseCode === 6000) {
+        this.save(this.createAccountForm);
+      }
+    });
+  }
+
   /**
    * validate createAccountForm.
    * @param form - user account form detail.
    */
   save(form: any) {
-    this.submitted = true;
-    this.validateReferralCode();
     if (form.valid) {
       form.value.userType = (this.finlitEnabled ? appConstants.USERTYPE.FINLIT : (this.organisationEnabled ? appConstants.USERTYPE.CORPORATE : appConstants.USERTYPE.NORMAL));
       form.value.accountCreationType = (this.formValue && this.formValue.isMyInfoEnabled) ? appConstants.USERTYPE.SINGPASS : appConstants.USERTYPE.MANUAL;
