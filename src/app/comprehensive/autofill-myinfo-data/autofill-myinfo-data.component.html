@@ -49,6 +49,14 @@
                   </ng-template>
                   <ng-template ngbPanelContent>
                     <div class="myinfo-data-content">
+                      <div>
+                         <div>
+                          {{'CMP.GETTING_STARTED.CFP_AUTOFILL.MY_INFO_MODAL.MODAL_ATTR.FAMILY.MARITAL_TEXT'
+                          | translate}}
+                         </div>
+                         <div class="data_lbl">{{ cfpAutoFillMyinfoData.marital || '-'}}
+                         </div>
+                      </div>
                       <!-- Child Data -->
                       <ng-container *ngIf="childrenRecords && childrenRecords.length > 0; else childBlankRecord">
                         <div *ngFor="let child of childrenRecords; let i = index">
@@ -213,6 +221,13 @@
                                                 translate}}</div>
                       <div><i class='arrow'></i></div>
                     </div>
+                    <div class="myinfo-data-content">
+                      <div>{{'CMP.GETTING_STARTED.CFP_AUTOFILL.MY_INFO_MODAL.MODAL_ATTR.PROPERTY.OWNERSHIP_STATUS'
+                        | translate}}
+                      </div>
+                      <div class="data_lbl">{{ cfpAutoFillMyinfoData.ownershipStatus || '-'}}
+                      </div>
+                    </div>
                   </ng-template>
                   <ng-template ngbPanelContent>
                     <ng-container *ngIf="hdbProperty && hdbProperty.length > 0; else showHDBBlankGroup">
@@ -256,6 +271,13 @@
                                                         || '-'}}
                           </div>
                         </div>
+                      <div>
+                        <div>
+                          {{'CMP.GETTING_STARTED.CFP_AUTOFILL.MY_INFO_MODAL.MODAL_ATTR.PROPERTY.HDB_TEXT.MONTHLY_LEASE_TEXT'
+                          | translate}}</div>
+                        <div class="data_lbl">{{ house.leaseCommencementDate || '-'}}
+                        </div>
+                      </div>
                       </div>
                     </ng-container>
                     <ng-template ngbPanelContent #showHDBBlankGroup>
