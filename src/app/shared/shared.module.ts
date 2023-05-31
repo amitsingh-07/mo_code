@@ -87,7 +87,7 @@ import { CurrencyEditorPipe } from './Pipes/currency-editor.pipe';
 import { MyinfoModalComponent } from './modal/myinfo-modal/myinfo-modal.component';
 import { CustomRadioControllerComponent } from './components/custom-radio-controller/custom-radio-controller.component';
 import { UploadDocumentOptionsComponent } from './components/upload-document-options/upload-document-options.component';
-import { RecaptchaModule } from 'ng-recaptcha';
+import { RECAPTCHA_SETTINGS, RecaptchaModule, RecaptchaSettings } from 'ng-recaptcha';
 
 export function createTranslateLoader(http: HttpClient) {
   return new MultiTranslateHttpLoader(
@@ -231,7 +231,12 @@ export function createTranslateLoader(http: HttpClient) {
     CarouselModalComponent,
     ReviewBuyRequestModalComponent
   ],
-  providers: [ProgressTrackerService, RoundPipe, UpperCasePipe, LowerCasePipe, TitleCasePipe]
+  providers: [ProgressTrackerService, RoundPipe, UpperCasePipe, LowerCasePipe, TitleCasePipe,
+    {
+      provide: RECAPTCHA_SETTINGS,
+      useValue: { siteKey: "6LdXrh8mAAAAAE7OLrKaKIGETLeqfdv_9U5uFJ0J" } as RecaptchaSettings
+    }
+  ]
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders<SharedModule> {

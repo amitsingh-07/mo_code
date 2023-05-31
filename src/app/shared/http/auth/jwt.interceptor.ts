@@ -61,6 +61,15 @@ export class JwtInterceptor implements HttpInterceptor {
                     'sessionId': `${this.auth.getSessionId()}`
                 })
             });
+        } else if (request.url.indexOf('captchaVerify') > -1) { // for reCAPTCHA verification
+            request = request.clone({
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': `${this.auth.getAppSecretKey()}`,
+                    'sessionId': `${this.auth.getSessionId()}`,
+                    'g-recaptcha-response': request.body['g-recaptcha-response']
+                })
+            });
         } else {
             request = request.clone({
                 headers: new HttpHeaders({
