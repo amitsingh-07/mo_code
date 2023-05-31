@@ -65,7 +65,7 @@ export class JwtInterceptor implements HttpInterceptor {
             request = request.clone({
                 headers: new HttpHeaders({
                     'Content-Type': 'application/json',
-                    'Authorization': `${this.auth.getAppSecretKey()}`,
+                    'Authorization': `${this.auth.getToken()}`,
                     'sessionId': `${this.auth.getSessionId()}`,
                     'g-recaptcha-response': request.body['g-recaptcha-response']
                 })
