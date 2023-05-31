@@ -371,6 +371,8 @@ export const COMPREHENSIVE_CONST = {
     },
     UNACCESSED_ATTRIBUTES: ['name', 'sex', 'dob'],
     MY_INFO_ATTRIBUTES: [
+        'marital',
+        'ownerprivate',
         'residentialstatus',
         'cpfbalances',
         'cpfhousingwithdrawal',
@@ -380,6 +382,7 @@ export const COMPREHENSIVE_CONST = {
         'hdbownership.monthlyloaninstalment',
         'hdbownership.loangranted',
         'hdbownership.outstandingloanbalance',
+        'hdbownership.leasecommencementdate',
         'vehicles.coeexpirydate',
         'vehicles.openmarketvalue',
         'vehicles.firstregistrationdate',
