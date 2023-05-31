@@ -221,6 +221,8 @@
                                                 translate}}</div>
                       <div><i class='arrow'></i></div>
                     </div>
+                  </ng-template>
+                  <ng-template ngbPanelContent>
                     <div class="myinfo-data-content">
                       <div>{{'CMP.GETTING_STARTED.CFP_AUTOFILL.MY_INFO_MODAL.MODAL_ATTR.PROPERTY.OWNERSHIP_STATUS'
                         | translate}}
@@ -228,8 +230,6 @@
                       <div class="data_lbl">{{ cfpAutoFillMyinfoData.ownershipStatus || '-'}}
                       </div>
                     </div>
-                  </ng-template>
-                  <ng-template ngbPanelContent>
                     <ng-container *ngIf="hdbProperty && hdbProperty.length > 0; else showHDBBlankGroup">
                       <div class="myinfo-data-content" *ngFor="let house of hdbProperty; let i = index">
                         <div class="iterable-key-text mb10" [ngClass]="{'mt10': i > 0}" *ngIf="hdbProperty.length > 1">
@@ -273,7 +273,7 @@
                         </div>
                       <div>
                         <div>
-                          {{'CMP.GETTING_STARTED.CFP_AUTOFILL.MY_INFO_MODAL.MODAL_ATTR.PROPERTY.HDB_TEXT.MONTHLY_LEASE_TEXT'
+                          {{'CMP.GETTING_STARTED.CFP_AUTOFILL.MY_INFO_MODAL.MODAL_ATTR.PROPERTY.HDB_TEXT.LEASE_TEXT'
                           | translate}}</div>
                         <div class="data_lbl">{{ house.leaseCommencementDate || '-'}}
                         </div>
