@@ -5,8 +5,9 @@ import { ApiService } from '../shared/http/api.service';
 import { AuthenticationService } from '../shared/http/auth/authentication.service';
 import { environment } from '../../environments/environment';
 import { SIGN_UP_ROUTES } from '../sign-up/sign-up.routes.constants';
-import { CapacitorUtils } from '../shared/utils/capacitor.util';
 import { appConstants } from '../app.constants';
+import { CapacitorUtils } from '../shared/utils/capacitor.util';
+import { CapacitorPluginService } from '../shared/Services/capacitor-plugin.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class SingpassService {
 
   constructor(
     private apiService: ApiService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private capPluginService: CapacitorPluginService
   ) {
   }
 
@@ -48,7 +50,7 @@ export class SingpassService {
 
   // Open Singpass redirect link in window
   openSingpassUrl() {
-    const redirectUrl =   environment.singpassBaseUrl + appConstants.BASE_HREF + SIGN_UP_ROUTES.ACCOUNTS_LOGIN;
+    const redirectUrl = environment.singpassBaseUrl + appConstants.BASE_HREF + SIGN_UP_ROUTES.ACCOUNTS_LOGIN;
     let loginUrl = environment.singpassLoginUrl +
       '?client_id=' + environment.singpassClientId +
       '&redirect_uri=' + redirectUrl +
@@ -56,8 +58,12 @@ export class SingpassService {
       '&response_type=code' +
       '&state=' + this.stateNonce.state +
       '&nonce=' + this.stateNonce.nonce;
-  if (CapacitorUtils.isApp) {
-      InAppBrowser.openWebView({url: encodeURI(loginUrl), title: ""});
+    if (CapacitorUtils.isApp) {
+      this.capPluginService.checkCameraPhotoPermission('camera').then((status) => {
+        if (status.camera === 'granted') {
+          InAppBrowser.openWebView({ url: encodeURI(loginUrl), title: "" });
+        }
+      });
     } else {
       window.open(loginUrl, '_self');
     }
