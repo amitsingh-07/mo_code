@@ -61,13 +61,13 @@ export class JwtInterceptor implements HttpInterceptor {
                     'sessionId': `${this.auth.getSessionId()}`
                 })
             });
-        } else if (request.url.indexOf('captchaVerify') > -1) { // for reCAPTCHA verification
+        } else if (['captchaVerify', 'forgotPassword'].filter(ele => request.url.includes(ele)).length > 0) { // for reCAPTCHA verification
             request = request.clone({
                 headers: new HttpHeaders({
                     'Content-Type': 'application/json',
                     'Authorization': `${this.auth.getToken()}`,
                     'sessionId': `${this.auth.getSessionId()}`,
-                    'g-recaptcha-response': request.body['g-recaptcha-response']
+                    'g-recaptcha-response': this.auth.getReCaptchaResponse()
                 })
             });
         } else {
