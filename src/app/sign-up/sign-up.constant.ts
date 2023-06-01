@@ -194,6 +194,12 @@ export let SIGN_UP_CONFIG = {
     },
     NO: {
       VALUE: 'No'
+    },
+    TRUE: {
+      VALUE: 'True'
+    },
+    FALSE: {
+      VALUE: 'False'
     }
   },
   CORP_BIZ_MY_INFO_ATTRIBUTES: [
@@ -205,10 +211,13 @@ export let SIGN_UP_CONFIG = {
     'cpfhousingwithdrawal',
     'noa',
     'uinfin',
+    'marital',
+    'ownerprivate',
     'hdbownership.dateofpurchase',
     'hdbownership.monthlyloaninstalment',
     'hdbownership.loangranted',
     'hdbownership.outstandingloanbalance',
+    'hdbownership.leasecommencementdate',
     'vehicles.coeexpirydate',
     'vehicles.openmarketvalue',
     'vehicles.firstregistrationdate',

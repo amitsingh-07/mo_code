@@ -84,6 +84,12 @@
                                     </ng-template>
                                     <ng-template ngbPanelContent>
                                         <div class="myinfo-data-content">
+                                            <div>
+                                                <div>
+                                                {{'CORP_BIZ_SIGN_UP.MY_INFO_MODAL.MODAL_ATTR.FAMILY.MARITAL_TEXT'
+                                                | translate}}</div>
+                                                <div class="data_lbl">{{ corpBizMyInfoData.marital || '-'}}</div>
+                                            </div>
                                             <!-- Child Data -->
                                             <ng-container
                                                 *ngIf="childrenRecords && childrenRecords.length > 0; else childBlankRecord">
@@ -252,6 +258,12 @@
                                         </div>
                                     </ng-template>
                                     <ng-template ngbPanelContent>
+                                        <div class="myinfo-data-content">
+                                            <div>
+                                            {{'CORP_BIZ_SIGN_UP.MY_INFO_MODAL.MODAL_ATTR.PROPERTY.OWNERSHIP_STATUS'
+                                            | translate}}</div>
+                                            <div class="data_lbl">{{ corpBizMyInfoData.ownershipStatus || '-'}}</div>
+                                        </div>
                                         <ng-container
                                             *ngIf="hdbProperty && hdbProperty.length > 0; else showHDBBlankGroup">
                                             <div class="myinfo-data-content"
@@ -296,6 +308,14 @@
                                                         || '-'}}
                                                     </div>
                                                 </div>
+                                                <div>
+                                                    <div>
+                                                        {{'CORP_BIZ_SIGN_UP.MY_INFO_MODAL.MODAL_ATTR.PROPERTY.HDB_TEXT.LEASE_TEXT'
+                                                        |
+                                                        translate}}</div>
+                                                    <div class="data_lbl">{{ house.leaseCommencementDate  || '-'}}
+                                                    </div>
+                                                </div>
                                             </div>
                                         </ng-container>
                                         <ng-template ngbPanelContent #showHDBBlankGroup>
@@ -324,6 +344,13 @@
                                                 <div>
                                                     <div>
                                                         {{'CORP_BIZ_SIGN_UP.MY_INFO_MODAL.MODAL_ATTR.PROPERTY.HDB_TEXT.MONTHLY_LOAN_TEXT'
+                                                        |
+                                                        translate}}</div>
+                                                    <div class="data_lbl">-</div>
+                                                </div>
+                                                <div>
+                                                    <div>
+                                                        {{'CORP_BIZ_SIGN_UP.MY_INFO_MODAL.MODAL_ATTR.PROPERTY.HDB_TEXT.LEASE_TEXT'
                                                         |
                                                         translate}}</div>
                                                     <div class="data_lbl">-</div>
