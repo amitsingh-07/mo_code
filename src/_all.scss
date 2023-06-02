@@ -2580,6 +2580,7 @@ select:-webkit-autofill:focus {
   background-color: $strong-cyan-color;
   letter-spacing: -0.13px;
   padding: 20px;
+  border-radius: 6px;
   a{
     color: $white-color !important;
     text-decoration: underline;
