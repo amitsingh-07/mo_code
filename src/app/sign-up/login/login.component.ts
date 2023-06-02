@@ -1,5 +1,5 @@
 import {
-  AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit,
+  Component, ElementRef, HostListener, OnDestroy, OnInit,
   ViewChild, ViewEncapsulation
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
@@ -30,13 +30,14 @@ import { SIGN_UP_CONFIG } from './../sign-up.constant';
 import { TermsModalComponent } from './../../shared/modal/terms-modal/terms-modal.component';
 import { LoginService } from './../login.service';
 import { SingpassService } from '../../singpass/singpass.service';
+import { RecaptchaComponent } from 'ng-recaptcha';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
+export class LoginComponent implements OnInit, OnDestroy {
   private distribution: any;
   private loginFormError: any = new LoginFormError();
   loginForm: FormGroup;
@@ -44,8 +45,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   defaultCountryCode;
   countryCodeOptions;
   heighlightMobileNumber;
-  captchaSrc: any = '';
-  showCaptcha: boolean;
   hideForgotPassword = false;
   duplicateError: any;
   progressModal = false;
@@ -60,13 +59,14 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   isCorpBiz: boolean = false;
 
   @ViewChild('welcomeTitle') welcomeTitle: ElementRef;
-
+  
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     if (/Android|Windows/.test(navigator.userAgent)) {
       this.welcomeTitle.nativeElement.scrollIntoView(true);
     }
   }
+  @ViewChild('reCaptchaRef') reCaptchaRef: RecaptchaComponent;
 
   constructor(
     // tslint:disable-next-line
@@ -82,7 +82,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private translate: TranslateService,
     private selectedPlansService: SelectedPlansService,
-    private changeDetectorRef: ChangeDetectorRef,
     private loaderService: LoaderService,
     private helper: HelperService,
     private loginService: LoginService,
@@ -161,17 +160,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     this.navbarService.welcomeJourneyCompleted = false;
   }
 
-  ngAfterViewInit() {
-    if (this.signUpService.getCaptchaShown()) {
-      this.setCaptchaValidator();
-    }
-  }
-
   setCaptchaValidator() {
-    this.showCaptcha = true;
-    const captchaControl = this.loginForm.controls['captchaValue'];
-    captchaControl.setValidators([Validators.required]);
-    this.refreshCaptcha();
+    this.reCaptchaRef.execute();
   }
 
   /**
@@ -196,8 +186,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
         this.loginForm = this.formBuilder.group({
           loginUsername: [this.formValues.loginUsername, [Validators.required, Validators.pattern(this.distribution.login.phoneRegex)]],
           loginPassword: [this.formValues.loginPassword, [Validators.required]],
-          organisationCode: [null, this.organisationEnabled ? [Validators.required] : []],
-          captchaValue: ['']
+          organisationCode: [null, this.organisationEnabled ? [Validators.required] : []]
         });
         return false;
       }
@@ -211,8 +200,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loginForm = this.formBuilder.group({
       loginUsername: [this.formValues.loginUsername, emailValidators],
       loginPassword: [this.formValues.loginPassword, [Validators.required]],
-      organisationCode: [null, this.organisationEnabled ? [Validators.required] : []],
-      captchaValue: ['']
+      organisationCode: [null, this.organisationEnabled ? [Validators.required] : []]
     });
     if (this.finlitEnabled) {
       this.loginForm.addControl('accessCode', new FormControl(this.formValues.accessCode, [Validators.required]));
@@ -249,12 +237,11 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     return (!control.pristine && !control.valid);
   }
 
-  /**
-   * login submit.
+    /**
+   *  will trigger reCAPTCHA if user provided invalid username/password from 3rd login attempt.
    * @param form - login form.
    */
-  // tslint:disable-next-line:cognitive-complexity
-  doLogin(form: any) {
+  validateRecaptcha(form) {
     if (!this.authService.isAuthenticated()) {
       this.authService.authenticate().subscribe((token) => {
       });
@@ -262,8 +249,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     this.signUpService.setEmail(form.value.loginUsername);
     const userType = (this.finlitEnabled ? appConstants.USERTYPE.FINLIT : (this.organisationEnabled ? appConstants.USERTYPE.CORPORATE : appConstants.USERTYPE.NORMAL));
     this.signUpService.setUserType(userType);
-    const accessCode = (this.finlitEnabled) ? this.loginForm.value.accessCode : '';
-    const organisationCode = this.organisationEnabled && this.loginForm.get('organisationCode').value || null;
     if (!form.valid || ValidatePassword(form.controls['loginPassword'])) {
       const ref = this.modal.open(ErrorModalComponent, { centered: true, windowClass: 'no-title' });
       let error;
@@ -275,19 +260,35 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
         this.loginForm.controls['loginPassword'].reset();
         error = { errorMessage: 'User ID and/or password does not match.' };
         this.signUpService.setCaptchaCount();
-        if (this.signUpService.getCaptchaShown() || this.signUpService.getCaptchaCount() >= 2) {
-          this.signUpService.setCaptchaShown();
-          this.loginForm.controls['captchaValue'].reset();
-          this.setCaptchaValidator();
-        }
       }
       ref.componentInstance.errorMessage = error.errorMessage;
       return false;
-    } else if (this.authService.isAuthenticated()) {
+    } else {
+      if (this.signUpService.getCaptchaShown() || this.signUpService.getCaptchaCount() >= 2) {
+        this.signUpService.setCaptchaShown();
+        this.reCaptchaRef.execute();
+      } else {
+        this.doLogin(form, false)
+      }
+    }
+  }
+
+  /**
+   * login submit.
+   * @param form - login form.
+   */
+  // tslint:disable-next-line:cognitive-complexity
+  doLogin(form: any, reCaptchaToken = null) {
+    if (reCaptchaToken) {
+      this.authService.setReCaptchaResponse(reCaptchaToken);
+    }
+    const accessCode = (this.finlitEnabled) ? this.loginForm.value.accessCode : '';
+    const organisationCode = this.organisationEnabled && this.loginForm.get('organisationCode').value || null;
+      if (this.authService.isAuthenticated()) {
       this.progressModal = true;
       const loginType = (SIGN_UP_CONFIG.AUTH_2FA_ENABLED) ? SIGN_UP_CONFIG.LOGIN_TYPE_2FA : '';
       this.signUpApiService.verifyLogin(this.loginForm.value.loginUsername, this.loginForm.value.loginPassword,
-        this.loginForm.value.captchaValue, this.finlitEnabled, accessCode, loginType, organisationCode).subscribe((data) => {
+        null, this.finlitEnabled, accessCode, loginType, organisationCode).subscribe((data) => {
           this.isCorpBiz = this.authService.isCorpBiz;
           if (SIGN_UP_CONFIG.AUTH_2FA_ENABLED) {
             if (data.responseMessage && data.responseMessage.responseCode >= 6000) {
@@ -324,11 +325,10 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handleError(data) {
+    this.signUpService.setCaptchaCount();
     if (data.responseMessage.responseCode === 5011 || data.responseMessage.responseCode === 5016) {
-      this.loginForm.controls['captchaValue'].reset();
       this.loginForm.controls['loginPassword'].reset();
       this.openErrorModal(data.responseMessage.responseDescription);
-      this.refreshCaptcha();
     } else if (data.responseMessage.responseCode === 5012 || data.responseMessage.responseCode === 5014) {
       if (data.responseMessage.responseCode === 5014) {
         this.signUpService.setUserMobileNo(data.objectList[0].mobileNumber);
@@ -351,7 +351,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     } else {
-      this.loginForm.controls['captchaValue'].reset();
       this.loginForm.controls['loginPassword'].reset();
       if (this.finlitEnabled) {
         this.loginForm.controls['accessCode'].reset();
@@ -386,9 +385,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   showErrorModal(title: string, message: string, buttonLabel: string, redirect: string, emailResend: boolean, unverifiedAccount = false) {
-    this.loginForm.controls['captchaValue'].reset();
     this.loginForm.controls['loginPassword'].reset();
-    this.refreshCaptcha();
     const windowClassOnCondition = this.appService.isUserFromCorpBizLink && unverifiedAccount ? 'corpbiz-verification-modal': '';
     const ref = this.modal.open(ErrorModalComponent, { centered: true, windowClass: windowClassOnCondition });
     if (title) {
@@ -469,11 +466,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
 
   goBack() {
     this.navbarService.goBack();
-  }
-
-  refreshCaptcha() {
-    this.captchaSrc = this.authService.getCaptchaUrl();
-    this.changeDetectorRef.detectChanges();
   }
 
   onFocus() {
