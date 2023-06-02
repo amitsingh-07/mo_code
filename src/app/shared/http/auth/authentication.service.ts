@@ -37,6 +37,7 @@ export class AuthenticationService {
   displayCorporateLogo$ = new BehaviorSubject<boolean>(false);
   isShowWelcomeFlow: boolean = false;
   isCorpBiz: boolean = false;
+  private _reCaptchaResponse: string = '';
 
   constructor(
     private httpClient: HttpClient, public jwtHelper: JwtHelperService,
@@ -489,4 +490,13 @@ export class AuthenticationService {
     }
     return welcomeFlowFlag;
   }
+
+  setReCaptchaResponse(reCaptchaResponse: string) {
+    this._reCaptchaResponse = reCaptchaResponse;
+  }
+
+  getReCaptchaResponse() {
+    return this._reCaptchaResponse;
+  }
+
 }

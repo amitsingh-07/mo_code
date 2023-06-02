@@ -246,9 +246,9 @@ export class SignUpService {
    * set user account details.
    * @param data - user account details.
    */
-  setForgotPasswordInfo(email, captcha, profileType) {
+  setForgotPasswordInfo(email, profileType) {
     // API Call here
-    const data = this.constructForgotPasswordInfo(email, captcha, profileType);
+    const data = this.constructForgotPasswordInfo(email, profileType);
     return this.apiService.requestForgotPasswordLink(data);
   }
 
@@ -256,11 +256,10 @@ export class SignUpService {
    * construct the json for forgot password.
    * @param data - email and redirect uri.
    */
-  constructForgotPasswordInfo(data, captchaValue, profileType) {
+  constructForgotPasswordInfo(data, profileType) {
     let resetUrl = (profileType == appConstants.USERTYPE.CORPORATE) ? this.resetPasswordCorpUrl : this.resetPasswordUrl;
     return {
       email: data,
-      captcha: captchaValue,
       sessionId: this.authService.getSessionId(),
       profileType: profileType,
       redirectUrl: environment.apiBaseUrl + resetUrl + '?token='

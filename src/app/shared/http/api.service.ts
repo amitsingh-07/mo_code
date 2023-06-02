@@ -223,8 +223,8 @@ export class ApiService {
     return this.httpClient.get(url);
   }
 
-  reCaptchaVerify(reCaptchaToken) {
-    return this.http.post(apiConstants.endpoint.captchaVerify, { 'g-recaptcha-response': reCaptchaToken})
+  reCaptchaVerify() {
+    return this.http.post(apiConstants.endpoint.captchaVerify, null)
     .pipe(
       catchError((error: HttpErrorResponse) => this.handleError(error))
     );
