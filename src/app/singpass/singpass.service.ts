@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Browser } from '@capacitor/browser';
 
 import { ApiService } from '../shared/http/api.service';
 import { AuthenticationService } from '../shared/http/auth/authentication.service';
