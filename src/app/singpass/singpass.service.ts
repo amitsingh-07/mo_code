@@ -5,9 +5,9 @@ import { ApiService } from '../shared/http/api.service';
 import { AuthenticationService } from '../shared/http/auth/authentication.service';
 import { environment } from '../../environments/environment';
 import { SIGN_UP_ROUTES } from '../sign-up/sign-up.routes.constants';
-import { CapacitorUtils } from '../shared/utils/capacitor.util';
 import { appConstants } from '../app.constants';
-import { Util } from '../shared/utils/util';
+import { CapacitorUtils } from '../shared/utils/capacitor.util';
+import { CapacitorPluginService } from '../shared/Services/capacitor-plugin.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,8 @@ export class SingpassService {
 
   constructor(
     private apiService: ApiService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private capPluginService: CapacitorPluginService
   ) {
   }
 
@@ -62,7 +63,11 @@ export class SingpassService {
       if (!CapacitorUtils.isAndroidDevice) {
         loginUrl = loginUrl + '&app_launch_url=' + redirectUrl;
       }
-      Browser.open({ url: encodeURI(loginUrl) });
+      this.capPluginService.checkCameraPhotoPermission('camera').then((status) => {
+        if (status) {
+          Browser.open({ url: encodeURI(loginUrl) });
+        }
+      });
     } else {
       window.open(loginUrl, '_self');
     }

@@ -118,6 +118,7 @@ import { WillWritingEnableGuard } from './will-writing/will-writing-enable-guard
 import { SessionsService } from './shared/Services/sessions/sessions.service';
 import { NotSupportedComponent } from './not-supported/not-supported.component';
 import { RefereeComponent } from './shared/modal/referee/referee.component';
+import { CapacitorPluginService } from './shared/Services/capacitor-plugin.service';
 
 // tslint:disable-next-line:max-line-length
 export function createTranslateLoader(http: HttpClient) {
@@ -207,7 +208,7 @@ window.FileReader = FileReaderReplace;
     },
     NgbActiveModal,
     AuthenticationService, CustomErrorHandlerService, RequestCache,
-    AppService, TitleCasePipe, PendingChangesGuard, DefaultErrors,
+    AppService, TitleCasePipe, PendingChangesGuard, DefaultErrors, CapacitorPluginService,
     { provide: LoggerService, useClass: ConsoleLoggerService },
     { provide: LocationStrategy, useClass: PathLocationStrategy },
     {

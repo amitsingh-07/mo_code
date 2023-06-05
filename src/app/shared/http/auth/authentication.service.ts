@@ -66,6 +66,7 @@ export class AuthenticationService {
     if (enqId && !finlitEnabled) { authenticateBody['enquiryId'] = enqId; }
     if (journeyType && !finlitEnabled) { authenticateBody['journeyType'] = journeyType; }
     if (finlitEnabled) { authenticateBody['accessCode'] = accessCode; }
+    if (this.getReCaptchaResponse()) { authenticateBody['gCaptchaResponse'] = this.getReCaptchaResponse(); }
     if (loginType && loginType !== '') { authenticateBody['loginType'] = loginType; }
     const handleError = '?handleError=true';
     return this.doAuthenticate(authenticateBody, handleError, finlitEnabled);
@@ -92,7 +93,7 @@ export class AuthenticationService {
       handleError = '';
     }
     const authenticateUrl = (finlitEnabled ? apiConstants.endpoint.authenticateWorkshop : (organisationEnabled ? apiConstants.endpoint.authenticateCorporate : apiConstants.endpoint.authenticate));
-    return this.httpClient.post<IServerResponse>(`${this.apiBaseUrl}/${authenticateUrl}${handleError}`, authenticateBody)
+    return this.httpClient.post<IServerResponse>(`${this.apiBaseUrl}/${authenticateUrl}${handleError}`, authenticateBody) 
       .pipe(map((response) => {
         // login successful if there's a jwt token in the response
         if (response && response.objectList[0] && response.objectList[0].securityToken) {

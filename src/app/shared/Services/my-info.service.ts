@@ -12,7 +12,7 @@ import { ErrorModalComponent } from '../modal/error-modal/error-modal.component'
 import { ModelWithButtonComponent } from '../modal/model-with-button/model-with-button.component';
 import { SIGN_UP_ROUTES, SIGN_UP_ROUTE_PATHS } from './../../sign-up/sign-up.routes.constants';
 import { CapacitorUtils } from '../utils/capacitor.util';
-import { InvestmentAccountService } from '../../investment/investment-account/investment-account-service';
+import { CapacitorPluginService } from './capacitor-plugin.service';
 
 const MYINFO_ATTRIBUTE_KEY = 'myinfo_person_attributes';
 declare var window: Window;
@@ -44,7 +44,7 @@ export class MyInfoService implements OnDestroy {
 
   constructor(
     private modal: NgbModal, private apiService: ApiService, private router: Router, private zone: NgZone,
-    private investmentAccountService: InvestmentAccountService
+    private capPluginService: CapacitorPluginService
   ) { }
 
   ngOnDestroy() {
@@ -111,13 +111,20 @@ export class MyInfoService implements OnDestroy {
     }
     this.isMyInfoEnabled = true;
 
-    this.windowRef = window.open(authoriseUrl);
-    const timer = setInterval(() => {
-      if (this.windowRef.closed) {
-        clearInterval(timer);
-        this.setFailedStatus();
-      }
-    }, 500);
+    if (CapacitorUtils.isApp) {
+      this.capPluginService.checkCameraPhotoPermission('camera').then((status) => {
+        if (status) {
+          InAppBrowser.openWebView({ url: encodeURI(authoriseUrl), title: "" });
+        }
+      });
+    } else {
+      this.windowRef = window.open(authoriseUrl);
+      const timer = setInterval(() => {
+        if (this.windowRef.closed) {
+          clearInterval(timer);
+          this.setFailedStatus();
+        }
+      }, 500);
 
     window.failed = (value) => {
       clearInterval(timer);
