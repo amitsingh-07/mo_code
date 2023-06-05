@@ -47,7 +47,7 @@ export class SignUpApiService {
   /**
    * form create user account request.
    */
-  createAccountBodyRequest(captcha: string, pwd: string): ISignUp {
+  createAccountBodyRequest(pwd: string): ISignUp {
     const getAccountInfo = this.signUpService.getAccountInfo();
     const insuranceEnquiry = this.selectedPlansService.getSelectedPlan();
     let journeyType = this.appService.getJourneyType();
@@ -83,7 +83,6 @@ export class SignUpApiService {
           acceptMarketingNotifications: getAccountInfo.marketingAcceptance
         },
         sessionId: this.authService.getSessionId(),
-        captcha,
         journeyType,
         enquiryId,
         referralCode: getAccountInfo.referralCode,
@@ -107,7 +106,6 @@ export class SignUpApiService {
           acceptMarketingNotifications: getAccountInfo.marketingAcceptance
         },
         sessionId: this.authService.getSessionId(),
-        captcha,
         journeyType,
         enquiryId,
         referralCode: getAccountInfo.referralCode,
@@ -186,8 +184,8 @@ export class SignUpApiService {
    * create user account.
    * @param code - verification code.
    */
-  createAccount(captcha: string, pwd: string) {
-    const payload = this.createAccountBodyRequest(captcha, pwd);
+  createAccount(pwd: string) {
+    const payload = this.createAccountBodyRequest(pwd);
     return this.apiService.createAccount(payload);
   }
 

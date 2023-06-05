@@ -1,11 +1,12 @@
 import { flatMap } from 'rxjs/operators';
 import {
-  AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewEncapsulation
+  AfterViewInit, Component, OnInit, ViewChild, ViewEncapsulation
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 import { ApiService } from '../../../app/shared/http/api.service';
 import { appConstants } from '../../app.constants';
@@ -44,7 +45,6 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
   createAccountForm: FormGroup;
   defaultCountryCode;
   countryCodeOptions;
-  captchaSrc: any = '';
   isPasswordValid = true;
 
   confirmEmailFocus = false;
@@ -70,6 +70,7 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
   corpBizData: ICorpBizData;
   isCorpBizMyInfoEnabled: boolean;
   isCorpBizUser: boolean;
+  @ViewChild('reCaptchaRef') reCaptchaRef: RecaptchaComponent;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -87,7 +88,6 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     private appService: AppService,
     private apiService: ApiService,
     private selectedPlansService: SelectedPlansService,
-    private changeDetectorRef: ChangeDetectorRef,
     private investmentAccountService: InvestmentAccountService
   ) {
     const today: Date = new Date();
@@ -160,11 +160,9 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
         if (this.organisationEnabled && this.route.snapshot.queryParams.orgID) {
           this.getOrganisationCode();
         }
-        this.refreshCaptcha();
         this.loaderService.hideLoader();
       });
     } else {
-      this.refreshCaptcha();
       this.loaderService.hideLoader();
       if (this.organisationEnabled && this.route.snapshot.queryParams.orgID) {
         this.getOrganisationCode();
@@ -185,7 +183,6 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
 
   refreshToken() {
     this.authService.authenticate().subscribe((token) => {
-      this.refreshCaptcha();
     });
   }
 
@@ -210,7 +207,6 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
         confirmPassword: [''],
         termsOfConditions: [true],
         marketingAcceptance: [false],
-        captcha: ['', [Validators.required]],
         referralCode: [''],
         organisationCode: [null, this.organisationEnabled ? Validators.required : []],
         gender: [{
@@ -239,7 +235,6 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
       confirmPassword: [''],
       termsOfConditions: [true],
       marketingAcceptance: [false],
-      captcha: ['', [Validators.required]],
       referralCode: [''],
       organisationCode: [null, this.organisationEnabled ? Validators.required : []],
       gender: [{
@@ -289,11 +284,11 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     }
   }
 
-  validateRecaptcha(recaptchaRef) {
+  validateRecaptcha() {
     this.submitted = true;
     this.validateReferralCode();
     if (this.createAccountForm.valid) {
-      recaptchaRef.execute();
+      this.reCaptchaRef.execute();
     }
   }
 
@@ -374,7 +369,7 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     if (!this.createAccBtnDisabled) {
       this.createAccBtnDisabled = true;
       this.signUpService.setEmail(this.createAccountForm.get('email').value);
-      this.signUpApiService.createAccount(this.createAccountForm.value.captcha, this.createAccountForm.value.password)
+      this.signUpApiService.createAccount(this.createAccountForm.value.password)
         .subscribe((data: any) => {
           this.createAccBtnDisabled = false;
           const responseCode = [6000, 6008, 5006];
@@ -411,8 +406,6 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
               this.callErrorModal(data);
             }
           } else if (data.responseMessage.responseCode === 5016) {
-            this.refreshCaptcha();
-            this.createAccountForm.controls['captcha'].setErrors({ match: true });
             this.createAccountForm.controls['password'].reset();
             this.createAccountForm.controls['confirmPassword'].reset();
           } else if (data.responseMessage.responseCode === 5024) {
@@ -516,7 +509,6 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
           }
         });
     }
-    this.refreshCaptcha();
     this.createAccountForm.controls['password'].reset();
     this.createAccountForm.controls['confirmPassword'].reset();
   }
@@ -575,16 +567,6 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
         this.createAccount();
       }
     });
-  }
-
-  refreshCaptcha() {
-    if (!this.authService.isAuthenticated()) {
-      this.refreshToken();
-    } else {
-      this.createAccountForm.controls['captcha'].reset();
-      this.captchaSrc = this.authService.getCaptchaUrl();
-      this.changeDetectorRef.detectChanges();
-    }
   }
 
   /**
