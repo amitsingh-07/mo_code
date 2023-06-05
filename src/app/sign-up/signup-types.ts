@@ -1,7 +1,7 @@
 export interface ISignUp {
     customer: ICustomer;
     sessionId: any;
-    captcha: string;
+    captcha?: string;
     journeyType: string;
     enquiryId: number;
     referralCode: string;
