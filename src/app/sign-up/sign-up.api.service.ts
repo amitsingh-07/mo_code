@@ -253,7 +253,7 @@ export class SignUpApiService {
    * @param username - email / mobile no.
    * @param password - password.
    */
-  verifyLogin(userEmail, userPassword, captcha, finlitEnabled, accessCode, loginType, organisationCode) {
+  verifyLogin(userEmail, userPassword, finlitEnabled, accessCode, loginType, organisationCode) {
     let enqId = -1;
     let journeyType = this.appService.getJourneyType();
     const sessionId = this.authService.getSessionId();
@@ -279,7 +279,7 @@ export class SignUpApiService {
 
     journeyType = journeyType.toLowerCase();
 
-    return this.authService.login(userEmail, this.cryptoService.encrypt(userPassword), captcha, sessionId, enqId, journeyType, finlitEnabled, accessCode, loginType, organisationCode);
+    return this.authService.login(userEmail, this.cryptoService.encrypt(userPassword), sessionId, enqId, journeyType, finlitEnabled, accessCode, loginType, organisationCode);
   }
 
   logout() {
