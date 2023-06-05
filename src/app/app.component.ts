@@ -5,7 +5,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
-import { App, URLOpenListenerEvent } from '@capacitor/app';
+import { App} from '@capacitor/app';
 import { Browser } from '@capacitor/browser';
 
 import { IComponentCanDeactivate } from './changes.guard';
