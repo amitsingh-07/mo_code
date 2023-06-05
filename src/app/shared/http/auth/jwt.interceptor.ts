@@ -79,6 +79,9 @@ export class JwtInterceptor implements HttpInterceptor {
                 })
             });
         }
+        if (this.auth.getReCaptchaResponse()) {
+            this.auth.setReCaptchaResponse(null);
+        }
         return next.handle(request).pipe(tap((event: HttpEvent<IServerResponse>) => {
             if (event instanceof HttpResponse) {
                 // do stuff with response if you want

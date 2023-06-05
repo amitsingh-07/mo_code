@@ -13,6 +13,7 @@
 <div class="container-fluid max-width--1024 plr20 full-height">
   <div class="back-btn hidden-lg" (click)="goBack()"></div>
   <!-- NEW LOGIN PAGE WITH SINGPASS -->
+  <re-captcha #reCaptchaRef (resolved)="doLogin(loginForm, $event)" size="invisible"></re-captcha>
   <div *ngIf="singpassEnabled; else normalLogin" class="content">
     <div class="sp-pw-container">
       <div class="pw-login-container">
@@ -29,7 +30,7 @@
           <app-singpass [showSingpassLogin]="showSingpassLogin"></app-singpass>
           <div class="h-separator-container"><img class="separator-icon"
               src="assets/images/singpass/asset-seperator-h.svg"></div>
-          <form id="loginForm" name="loginForm" [formGroup]="loginForm" (keyup.enter)="doLogin(loginForm)">
+          <form id="loginForm" name="loginForm" [formGroup]="loginForm" (keyup.enter)="validateRecaptcha(loginForm)">
             <div class="flex-row mb10">
               <div class="flex-col-12 stretch">
                 <div class="form-group-floating-label"
@@ -63,22 +64,7 @@
                 </div>
               </div>
             </div>
-            <div class="flex-row mb30" *ngIf="showCaptcha">
-              <span class="mb10">{{ 'COMMON.CAPTCHA_TITLE' | translate}}</span>
-              <img [src]="(captchaSrc | secure | async) || ''" class="captcha-img" />
-              <div class="flex-col-6 stretch">
-                <div class="form-group-floating-label">
-                  <input type="text" id="crtAccInpt6" class="form-control" #captchaValue formControlName="captchaValue"
-                    required>
-                  <label class="form-control-placeholder" for="lastName">{{ 'COMMON.CAPTCHA' | translate}}</label>
-                </div>
-                <div>
-                  <span (click)="refreshCaptcha()" class="link-white">{{ 'COMMON.TRY_ANOTHER_TEXT' | translate}} <i
-                      class="fa fa-refresh ml10"></i></span>
-                </div>
-              </div>
-            </div>
-            <button id="login_submit_btn" (click)="doLogin(loginForm)" type="button" class="btn btn-primary width100">{{
+            <button id="login_submit_btn" (click)="validateRecaptcha(loginForm)" type="button" class="btn btn-primary width100">{{
               'COMMON.LOGIN' | translate }}</button>
             <!-- FORGOT -->
             <div class="forgot-link mt30" *ngIf="!hideForgotPassword">
@@ -110,7 +96,7 @@
           </div>
         </div>
         <div class="col-lg-5 col-md-6">
-          <form id="loginForm" name="loginForm" [formGroup]="loginForm" (keyup.enter)="doLogin(loginForm)">
+          <form id="loginForm" name="loginForm" [formGroup]="loginForm" (keyup.enter)="validateRecaptcha(loginForm)">
             <div class="flex-row mb15">
               <div class="flex-col-12 stretch">
                 <div class="form-group-floating-label"
@@ -168,25 +154,6 @@
                 </div>
               </div>
             </div>
-            <div class="flex-row mb10" *ngIf="showCaptcha">
-              <span class="mb10">{{ 'COMMON.CAPTCHA_TITLE' | translate}}</span>
-              <div class="flex-col-6 stretch">
-                <div class="form-group-captcha-wrapper">
-                  <img [src]="(captchaSrc | secure | async) || ''" class="captcha-img" />
-                </div>
-              </div>
-              <div class="flex-col-6 stretch">
-                <div class="form-group-floating-label">
-                  <input type="text" id="crtAccInpt6" class="form-control" #captchaValue formControlName="captchaValue"
-                    required>
-                  <label class="form-control-placeholder" for="lastName">{{ 'COMMON.CAPTCHA' | translate}}</label>
-                </div>
-                <div>
-                  <span (click)="refreshCaptcha()" class="link-white">{{ 'COMMON.TRY_ANOTHER_TEXT' | translate}} <i
-                      class="fa fa-refresh" style="color: white; margin-left: 10px;"></i></span>
-                </div>
-              </div>
-            </div>
             <!-- FORGOT -->
             <div class="forgot-link" *ngIf="!hideForgotPassword">
               <a *ngIf="!appService.isUserFromCorpBizLink" id="login_forgotpwd_link" (click)="navigateForgotPassword()">{{
@@ -197,7 +164,7 @@
             </div>
             <div class="start-link"><a id="login_signup_link" (click)="navigateSignUp()">{{
                 'LOGIN.DON_T_HAVE_AN_ACCOUNT' | translate}}</a></div>
-            <button id="login_submit_btn" (click)="doLogin(loginForm)" type="button"
+            <button id="login_submit_btn" (click)="validateRecaptcha(loginForm)" type="button"
               class="btn btn__footer--fixed btn-primary width100 ">{{
               'COMMON.LOGIN' | translate }}</button>
           </form>
