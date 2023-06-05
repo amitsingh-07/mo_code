@@ -384,13 +384,6 @@ app-login {
     .show-element {
       display: block !important;
     }
-    .recaptcha-info{
-      background-color: transparent;
-      padding: 0;
-      @include allmobiles{
-        max-width: 100%;
-      }
-    }
   }
   
   .client-assist {
@@ -399,14 +392,13 @@ app-login {
     letter-spacing: -0.13px;
     max-width: 390px;
     margin: auto;
-    padding: 20px 19.9px 20px 20.1px;
     border-radius: 6px;
-    background-color: $strong-cyan-color;
+    text-align: center;
     @include allmobiles {
       max-width: 354px;
     }
     & + .recaptcha-info{
-      max-width: 354px;
+      max-width: 390px;
       margin: auto;
     }
   }
