@@ -15,17 +15,17 @@ export class CapacitorPluginService {
   ) {
   }
 
-  async checkCameraPhotoPermission(permission: CameraPermissionType): Promise<PermissionStatus> {
+  async checkCameraPhotoPermission(permissionType: CameraPermissionType): Promise<boolean> {
     let permissions: PermissionStatus = await Camera.checkPermissions();
     if (permissions.camera === "granted") {
-      return permissions;
+      return true;
     } else {
-      permissions = await Camera.requestPermissions({ permissions: [permission] });
+      permissions = await Camera.requestPermissions({ permissions: [permissionType] });
       if (permissions.camera === "granted") {
-        return permissions;
+        return true;
       } else {
         this.displayCameraPermissionModal();
-        return permissions;
+        return false;
       }
     }
   }

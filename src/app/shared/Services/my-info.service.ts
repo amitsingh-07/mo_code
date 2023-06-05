@@ -104,7 +104,7 @@ export class MyInfoService implements OnDestroy {
 
     if (CapacitorUtils.isApp) {
       this.capPluginService.checkCameraPhotoPermission('camera').then((status) => {
-        if (status.camera === 'granted') {
+        if (status) {
           InAppBrowser.openWebView({ url: encodeURI(authoriseUrl), title: "" });
         }
       });

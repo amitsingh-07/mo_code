@@ -60,7 +60,7 @@ export class SingpassService {
       '&nonce=' + this.stateNonce.nonce;
     if (CapacitorUtils.isApp) {
       this.capPluginService.checkCameraPhotoPermission('camera').then((status) => {
-        if (status.camera === 'granted') {
+        if (status) {
           InAppBrowser.openWebView({ url: encodeURI(loginUrl), title: "" });
         }
       });
