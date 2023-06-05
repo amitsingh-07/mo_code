@@ -6,7 +6,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
 import { App} from '@capacitor/app';
-import { Browser } from '@capacitor/browser';
 
 import { IComponentCanDeactivate } from './changes.guard';
 import { ConfigService, IConfig } from './config/config.service';
