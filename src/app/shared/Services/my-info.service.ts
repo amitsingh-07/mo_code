@@ -79,7 +79,7 @@ export class MyInfoService implements OnDestroy {
   }
 
   goToMyInfo(linkAccount?) {
-    this.redirectUrl = CapacitorUtils.isApp ? "moneyowl:/" + appConstants.BASE_HREF + appConstants.MY_INFO_CALLBACK_URL : this.redirectUrl;
+    this.redirectUrl = CapacitorUtils.isApp ? appConstants.MOBILE_APP_SCHEME + appConstants.BASE_HREF + appConstants.MY_INFO_CALLBACK_URL : this.redirectUrl;
     let currentUrl = window.location.toString();
     let endPoint = currentUrl.split(currentUrl.split('/')[2])[currentUrl.split(currentUrl.split('/')[2]).length - 1].substring(1);
     window.sessionStorage.setItem('currentUrl', endPoint);

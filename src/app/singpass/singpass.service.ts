@@ -50,7 +50,7 @@ export class SingpassService {
 
   // Open Singpass redirect link in window
   openSingpassUrl() {
-    const redirectUrl = (CapacitorUtils.isApp ? "moneyowl:/" : environment.singpassBaseUrl) + appConstants.BASE_HREF + SIGN_UP_ROUTES.ACCOUNTS_LOGIN;
+    const redirectUrl = (CapacitorUtils.isApp ? appConstants.MOBILE_APP_SCHEME : environment.singpassBaseUrl) + appConstants.BASE_HREF + SIGN_UP_ROUTES.ACCOUNTS_LOGIN;
     let loginUrl = environment.singpassLoginUrl +
       '?client_id=' + environment.singpassClientId +
       '&redirect_uri=' + redirectUrl +

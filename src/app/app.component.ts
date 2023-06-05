@@ -113,18 +113,24 @@ export class AppComponent implements IComponentCanDeactivate, OnInit, AfterViewI
     // Capacitor Browser listerner
     App.addListener('appUrlOpen', (event: any) => {
       let listenurl = new URL(event.url);
-      if (event.url.startsWith("moneyowl:/") && event.url.includes("error")) {
+      if (event.url.startsWith(appConstants.MOBILE_APP_SCHEME) && event.url.includes("error")) {
+        if (!CapacitorUtils.isAndroidDevice){
         Browser.close();
-      } else if (event.url.startsWith("moneyowl:/") && event.url.includes("code") && event.url.includes("state") && event.url.includes("login")) {
-        Browser.close();
-        const slug = event.url.replace("moneyowl:/"+ appConstants.BASE_HREF, "/");
+        }
+      } else if (event.url.startsWith(appConstants.MOBILE_APP_SCHEME) && event.url.includes("code") && event.url.includes("state") && event.url.includes("login")) {
+        if (!CapacitorUtils.isAndroidDevice){
+          Browser.close();
+        }
+        const slug = event.url.replace(appConstants.MOBILE_APP_SCHEME+ appConstants.BASE_HREF, "/");
         this.zone.run(()=>{
           if (slug) {
             this.route.navigateByUrl(slug);
           }
         });
-      } else if (event.url.startsWith("moneyowl:/") && event.url.includes("code") && event.url.includes("state") && event.url.includes("myinfo")) {
-        Browser.close();
+      } else if (event.url.startsWith(appConstants.MOBILE_APP_SCHEME) && event.url.includes("code") && event.url.includes("state") && event.url.includes("myinfo")) {
+        if (!CapacitorUtils.isAndroidDevice){
+          Browser.close();
+        }
         const url = new URL(event.url);
         const params = new URLSearchParams(url.search);
         this.myInfoService.mobileMyInfoCheck(params.get("code"));
