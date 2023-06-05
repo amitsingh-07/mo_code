@@ -114,13 +114,9 @@ export class AppComponent implements IComponentCanDeactivate, OnInit, AfterViewI
     App.addListener('appUrlOpen', (event: any) => {
       let listenurl = new URL(event.url);
       if (event.url.startsWith(appConstants.MOBILE_APP_SCHEME) && event.url.includes("error")) {
-        if (!CapacitorUtils.isAndroidDevice){
-        Browser.close();
-        }
+        Util.closeBrowser();
       } else if (event.url.startsWith(appConstants.MOBILE_APP_SCHEME) && event.url.includes("code") && event.url.includes("state") && event.url.includes("login")) {
-        if (!CapacitorUtils.isAndroidDevice){
-          Browser.close();
-        }
+        Util.closeBrowser();
         const slug = event.url.replace(appConstants.MOBILE_APP_SCHEME+ appConstants.BASE_HREF, "/");
         this.zone.run(()=>{
           if (slug) {
@@ -128,9 +124,7 @@ export class AppComponent implements IComponentCanDeactivate, OnInit, AfterViewI
           }
         });
       } else if (event.url.startsWith(appConstants.MOBILE_APP_SCHEME) && event.url.includes("code") && event.url.includes("state") && event.url.includes("myinfo")) {
-        if (!CapacitorUtils.isAndroidDevice){
-          Browser.close();
-        }
+        Util.closeBrowser();
         const url = new URL(event.url);
         const params = new URLSearchParams(url.search);
         this.myInfoService.mobileMyInfoCheck(params.get("code"));

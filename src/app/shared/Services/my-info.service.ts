@@ -3,7 +3,6 @@ import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
-import { Browser } from '@capacitor/browser';
 
 import { appConstants } from '../../app.constants';
 import { environment } from '../../../environments/environment';
@@ -110,11 +109,10 @@ export class MyInfoService implements OnDestroy {
 
   newWindow(authoriseUrl, linkAccount?): void {
     const self = this;
-    if (!CapacitorUtils.isApp) {
-      setTimeout(() => {
-        this.openFetchPopup(linkAccount);
-      }, 500);
-    }
+    setTimeout(() => {
+      this.openFetchPopup(linkAccount);
+    }, 500);
+
     this.isMyInfoEnabled = true;
 
     this.windowRef = window.open(authoriseUrl);
