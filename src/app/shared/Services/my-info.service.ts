@@ -13,6 +13,7 @@ import { ModelWithButtonComponent } from '../modal/model-with-button/model-with-
 import { SIGN_UP_ROUTES, SIGN_UP_ROUTE_PATHS } from './../../sign-up/sign-up.routes.constants';
 import { CapacitorUtils } from '../utils/capacitor.util';
 import { CapacitorPluginService } from './capacitor-plugin.service';
+import { Util } from '../utils/util';
 
 const MYINFO_ATTRIBUTE_KEY = 'myinfo_person_attributes';
 declare var window: Window;
@@ -90,8 +91,13 @@ export class MyInfoService implements OnDestroy {
       '&state=' + this.state +
       '&redirect_uri=' + this.redirectUrl;
     if (CapacitorUtils.isApp) {
-      Browser.open({ url: encodeURI(authoriseUrl) });
-    } else {
+      this.capPluginService.checkCameraPhotoPermission('camera').then((status) => {
+        if (status) {
+          Util.openExternalUrl(encodeURI(authoriseUrl));
+        }
+      });
+    }
+    else {
       this.newWindow(authoriseUrl, linkAccount);
     }
   }
@@ -111,20 +117,13 @@ export class MyInfoService implements OnDestroy {
     }
     this.isMyInfoEnabled = true;
 
-    if (CapacitorUtils.isApp) {
-      this.capPluginService.checkCameraPhotoPermission('camera').then((status) => {
-        if (status) {
-          InAppBrowser.openWebView({ url: encodeURI(authoriseUrl), title: "" });
-        }
-      });
-    } else {
-      this.windowRef = window.open(authoriseUrl);
-      const timer = setInterval(() => {
-        if (this.windowRef.closed) {
-          clearInterval(timer);
-          this.setFailedStatus();
-        }
-      }, 500);
+    this.windowRef = window.open(authoriseUrl);
+    const timer = setInterval(() => {
+      if (this.windowRef.closed) {
+        clearInterval(timer);
+        this.setFailedStatus();
+      }
+    }, 500);
 
     window.failed = (value) => {
       clearInterval(timer);

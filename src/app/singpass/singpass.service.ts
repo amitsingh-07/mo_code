@@ -8,6 +8,7 @@ import { SIGN_UP_ROUTES } from '../sign-up/sign-up.routes.constants';
 import { appConstants } from '../app.constants';
 import { CapacitorUtils } from '../shared/utils/capacitor.util';
 import { CapacitorPluginService } from '../shared/Services/capacitor-plugin.service';
+import { Util } from '../shared/utils/util';
 
 @Injectable({
   providedIn: 'root'
@@ -65,7 +66,7 @@ export class SingpassService {
       }
       this.capPluginService.checkCameraPhotoPermission('camera').then((status) => {
         if (status) {
-          Browser.open({ url: encodeURI(loginUrl) });
+          Util.openExternalUrl(encodeURI(loginUrl));
         }
       });
     } else {
