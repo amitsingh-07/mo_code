@@ -288,7 +288,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.progressModal = true;
       const loginType = (SIGN_UP_CONFIG.AUTH_2FA_ENABLED) ? SIGN_UP_CONFIG.LOGIN_TYPE_2FA : '';
       this.signUpApiService.verifyLogin(this.loginForm.value.loginUsername, this.loginForm.value.loginPassword,
-        null, this.finlitEnabled, accessCode, loginType, organisationCode).subscribe((data) => {
+        this.finlitEnabled, accessCode, loginType, organisationCode).subscribe((data) => {
           this.isCorpBiz = this.authService.isCorpBiz;
           if (SIGN_UP_CONFIG.AUTH_2FA_ENABLED) {
             if (data.responseMessage && data.responseMessage.responseCode >= 6000) {
