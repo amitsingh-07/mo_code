@@ -135,4 +135,10 @@ export class Util {
             window.open(redirectURL, target);
         }
     }
+
+    public static closeBrowser(){
+        if (!CapacitorUtils.isAndroidDevice){
+            Browser.close();
+        }
+    }
 }

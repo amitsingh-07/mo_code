@@ -4,9 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
-import { InAppBrowser, UrlEvent } from 'capgo-inappbrowser-intent-fix';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
-import { App } from '@capacitor/app';
+import { App} from '@capacitor/app';
 
 import { IComponentCanDeactivate } from './changes.guard';
 import { ConfigService, IConfig } from './config/config.service';
@@ -25,6 +24,7 @@ import { environment } from '../environments/environment';
 import { CapacitorUtils } from './shared/utils/capacitor.util';
 import { MyInfoService } from './shared/Services/my-info.service';
 import { Platform } from '@ionic/angular';
+import { Capacitor, Plugins } from '@capacitor/core';
 
 declare global {
   interface Window {
@@ -109,28 +109,25 @@ export class AppComponent implements IComponentCanDeactivate, OnInit, AfterViewI
         console.log('[ERROR] SSL Pinning Fails!');
       });
     });
-    // Capgo Inappbrowser close listener for singpass/myinfo
-    InAppBrowser.addListener('closeEvent', () => {
-      this.myInfoService.closeFetchPopup();
-    });
-    // Capgo Inappbrowser urlchange listener for singpass/myinfo
-    InAppBrowser.addListener('urlChangeEvent', (urlEvt: UrlEvent) => {
-      if (urlEvt.url.startsWith(environment.singpassBaseUrl) && urlEvt.url.includes("error")) {
-        InAppBrowser.close();
-      } else if (urlEvt.url.startsWith(environment.singpassBaseUrl) && urlEvt.url.includes("code") && urlEvt.url.includes("state") && urlEvt.url.includes("login")) {
-        InAppBrowser.close();
-        const slug = urlEvt.url.replace(environment.singpassBaseUrl + appConstants.BASE_HREF, "");
+    // Capacitor Browser listerner
+    App.addListener('appUrlOpen', (event: any) => {
+      let listenurl = new URL(event.url);
+      if (event.url.startsWith(appConstants.MOBILE_APP_SCHEME) && event.url.includes("error")) {
+        Util.closeBrowser();
+      } else if (event.url.startsWith(appConstants.MOBILE_APP_SCHEME) && event.url.includes("code") && event.url.includes("state") && event.url.includes("login")) {
+        Util.closeBrowser();
+        const slug = event.url.replace(appConstants.MOBILE_APP_SCHEME+ appConstants.BASE_HREF, "/");
         this.zone.run(()=>{
-          this.route.navigateByUrl(slug);
+          if (slug) {
+            this.route.navigateByUrl(slug);
+          }
         });
-      } else if (urlEvt.url.startsWith(environment.singpassBaseUrl) && urlEvt.url.includes("code") && urlEvt.url.includes("state") && urlEvt.url.includes("myinfo")) {
-        InAppBrowser.close();
-        const url = new URL(urlEvt.url);
+      } else if (event.url.startsWith(appConstants.MOBILE_APP_SCHEME) && event.url.includes("code") && event.url.includes("state") && event.url.includes("myinfo")) {
+        Util.closeBrowser();
+        const url = new URL(event.url);
         const params = new URLSearchParams(url.search);
         this.myInfoService.mobileMyInfoCheck(params.get("code"));
-      } else if (urlEvt.url.startsWith(environment.singpassBaseUrl)) {
-        InAppBrowser.close();
-      }
+      } 
     });
 
     //Android device back navigation restriction
