@@ -27,7 +27,7 @@
 			<string>com.moneyowl.app</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.moneyowl.app</string>
+				<string>moneyowl</string>
 			</array>
 		</dict>
 	</array>

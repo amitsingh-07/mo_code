@@ -16,7 +16,6 @@ dependencies {
     implementation project(':capacitor-filesystem')
     implementation project(':capacitor-splash-screen')
     implementation project(':capacitor-toast')
-    implementation project(':capgo-inappbrowser-intent-fix')
     implementation "androidx.webkit:webkit:1.4.0"
 }
 

@@ -61,6 +61,23 @@
                 <data android:scheme="https" />
                 <data android:host="www.moneyowl.com.sg" />
             </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "example://gizmos” -->
+                <data android:scheme="moneyowl"
+                      android:host="app"
+                      android:pathPrefix="/accounts/login"/>
+            </intent-filter>
+          <intent-filter android:autoVerify="true">
+            <action android:name="android.intent.action.VIEW"/>
+            <category android:name="android.intent.category.DEFAULT"/>
+            <category android:name="android.intent.category.BROWSABLE"/>
+            <data android:scheme="moneyowl"
+              android:host="app"
+              android:path="/myinfo"/>
+          </intent-filter>
         </activity>
 
         <provider

@@ -3,7 +3,7 @@ import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
-import { InAppBrowser } from 'capgo-inappbrowser-intent-fix';
+import { Browser } from '@capacitor/browser';
 
 import { appConstants } from '../../app.constants';
 import { environment } from '../../../environments/environment';
@@ -74,7 +74,12 @@ export class MyInfoService implements OnDestroy {
     return window.sessionStorage.getItem('myinfo_app_id');
   }
 
+  getIsMobileApp() {
+    return CapacitorUtils.isApp;
+  }
+
   goToMyInfo(linkAccount?) {
+    this.redirectUrl = CapacitorUtils.isApp ? "moneyowl:/" + appConstants.BASE_HREF + appConstants.MY_INFO_CALLBACK_URL : this.redirectUrl;
     let currentUrl = window.location.toString();
     let endPoint = currentUrl.split(currentUrl.split('/')[2])[currentUrl.split(currentUrl.split('/')[2]).length - 1].substring(1);
     window.sessionStorage.setItem('currentUrl', endPoint);
@@ -84,7 +89,11 @@ export class MyInfoService implements OnDestroy {
       '&purpose=' + this.purpose +
       '&state=' + this.state +
       '&redirect_uri=' + this.redirectUrl;
-    this.newWindow(authoriseUrl, linkAccount);
+    if (CapacitorUtils.isApp) {
+      Browser.open({ url: encodeURI(authoriseUrl) });
+    } else {
+      this.newWindow(authoriseUrl, linkAccount);
+    }
   }
 
   goToUAT1MyInfo() {
@@ -102,53 +111,50 @@ export class MyInfoService implements OnDestroy {
     }
     this.isMyInfoEnabled = true;
 
-    if (CapacitorUtils.isApp) {
-      InAppBrowser.openWebView({ url: encodeURI(authoriseUrl), title: "" });
-    } else {
-      this.windowRef = window.open(authoriseUrl);
-      const timer = setInterval(() => {
-        if (this.windowRef.closed) {
-          clearInterval(timer);
-          this.setFailedStatus();
-        }
-      }, 500);
-
-      window.failed = (value) => {
+    this.windowRef = window.open(authoriseUrl);
+    const timer = setInterval(() => {
+      if (this.windowRef.closed) {
         clearInterval(timer);
-        window.failed = () => null;
-        this.windowRef.close();
-        if (value === 'FAILED') {
-          this.setFailedStatus();
-        } else {
-          this.changeListener.next(this.getMyinfoReturnMessage(CANCELLED));
-          this.isMyInfoEnabled = false;
-        }
-        return 'MY_INFO';
-      };
+        this.setFailedStatus();
+      }
+    }, 500);
 
-      window.success = (values) => {
-        clearInterval(timer);
-        window.success = () => null;
-        this.windowRef.close();
-        const params = new HttpParams({ fromString: values });
-        if (window.sessionStorage.currentUrl && params && params.get('code')) {
-          const myInfoAuthCode = params.get('code');
-          this.setMyInfoValue(myInfoAuthCode);
-          this.setSuccessStatus(myInfoAuthCode);
-        } else {
-          this.setFailedStatus();
-        }
-        return 'MY_INFO';
-      };
+    window.failed = (value) => {
+      clearInterval(timer);
+      window.failed = () => null;
+      this.windowRef.close();
+      if (value === 'FAILED') {
+        this.setFailedStatus();
+      } else {
+        this.changeListener.next(this.getMyinfoReturnMessage(CANCELLED));
+        this.isMyInfoEnabled = false;
+      }
+      return 'MY_INFO';
+    };
 
-      // Robo2 - MyInfo changes
-      window.addEventListener('message', function (event) {
-        clearInterval(timer);
-        window.success = () => null;
-        self.robo2SetMyInfo(event.data);
-        return 'MY_INFO';
-      });
-    }
+    window.success = (values) => {
+      clearInterval(timer);
+      window.success = () => null;
+      this.windowRef.close();
+      const params = new HttpParams({ fromString: values });
+      if (window.sessionStorage.currentUrl && params && params.get('code')) {
+        const myInfoAuthCode = params.get('code');
+        this.setMyInfoValue(myInfoAuthCode);
+        this.setSuccessStatus(myInfoAuthCode);
+      } else {
+        this.setFailedStatus();
+      }
+      return 'MY_INFO';
+    };
+
+    // Robo2 - MyInfo changes
+    window.addEventListener('message', function (event) {
+      clearInterval(timer);
+      window.success = () => null;
+      self.robo2SetMyInfo(event.data);
+      return 'MY_INFO';
+    });
+    //  }
   }
 
   setFailedStatus() {
@@ -248,7 +254,8 @@ export class MyInfoService implements OnDestroy {
     const code = {
       appId: this.getMyInfoAppId(),
       authorizationCode: this.myInfoValue,
-      personAttributes: this.getMyInfoAttributes()
+      personAttributes: this.getMyInfoAttributes(),
+      isMobileApp: this.getIsMobileApp()
     };
     return this.apiService.getMyInfoData(code);
   }

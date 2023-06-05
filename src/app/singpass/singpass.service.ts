@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { InAppBrowser } from 'capgo-inappbrowser-intent-fix';
+import { Browser } from '@capacitor/browser';
 
 import { ApiService } from '../shared/http/api.service';
 import { AuthenticationService } from '../shared/http/auth/authentication.service';
@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 import { SIGN_UP_ROUTES } from '../sign-up/sign-up.routes.constants';
 import { CapacitorUtils } from '../shared/utils/capacitor.util';
 import { appConstants } from '../app.constants';
+import { Util } from '../shared/utils/util';
 
 @Injectable({
   providedIn: 'root'
@@ -35,20 +36,21 @@ export class SingpassService {
   }
 
   // Singpass redirecting back to MO
-  loginSingpass(code, state, enquiryId, journeyType, enrolmentId) {
+  loginSingpass(code, state, enquiryId, journeyType, enrolmentId, isMobileApp) {
     const payload = {
       enquiryId: enquiryId,
       journeyType: journeyType,
       code: code,
       state: state,
-      enrolmentId: enrolmentId
+      enrolmentId: enrolmentId,
+      isMobileApp: isMobileApp
     };
     return this.apiService.loginSingpass(payload);
   }
 
   // Open Singpass redirect link in window
   openSingpassUrl() {
-    const redirectUrl =   environment.singpassBaseUrl + appConstants.BASE_HREF + SIGN_UP_ROUTES.ACCOUNTS_LOGIN;
+    const redirectUrl = (CapacitorUtils.isApp ? "moneyowl:/" : environment.singpassBaseUrl) + appConstants.BASE_HREF + SIGN_UP_ROUTES.ACCOUNTS_LOGIN;
     let loginUrl = environment.singpassLoginUrl +
       '?client_id=' + environment.singpassClientId +
       '&redirect_uri=' + redirectUrl +
@@ -56,8 +58,11 @@ export class SingpassService {
       '&response_type=code' +
       '&state=' + this.stateNonce.state +
       '&nonce=' + this.stateNonce.nonce;
-  if (CapacitorUtils.isApp) {
-      InAppBrowser.openWebView({url: encodeURI(loginUrl), title: ""});
+    if (CapacitorUtils.isApp) {
+      if (!CapacitorUtils.isAndroidDevice) {
+        loginUrl = loginUrl + '&app_launch_url=' + redirectUrl;
+      }
+      Browser.open({ url: encodeURI(loginUrl) });
     } else {
       window.open(loginUrl, '_self');
     }
