@@ -37,14 +37,14 @@ export class SingpassService {
   }
 
   // Singpass redirecting back to MO
-  loginSingpass(code, state, enquiryId, journeyType, enrolmentId, isMobileApp) {
+  loginSingpass(code, state, enquiryId, journeyType, enrolmentId) {
     const payload = {
       enquiryId: enquiryId,
       journeyType: journeyType,
       code: code,
       state: state,
       enrolmentId: enrolmentId,
-      isMobileApp: isMobileApp
+      isMobileApp: CapacitorUtils.isApp
     };
     return this.apiService.loginSingpass(payload);
   }
