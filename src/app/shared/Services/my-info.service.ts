@@ -74,10 +74,6 @@ export class MyInfoService implements OnDestroy {
     return window.sessionStorage.getItem('myinfo_app_id');
   }
 
-  getIsMobileApp() {
-    return CapacitorUtils.isApp;
-  }
-
   goToMyInfo(linkAccount?) {
     this.redirectUrl = CapacitorUtils.isApp ? appConstants.MOBILE_APP_SCHEME + appConstants.BASE_HREF + appConstants.MY_INFO_CALLBACK_URL : this.redirectUrl;
     let currentUrl = window.location.toString();
@@ -259,7 +255,7 @@ export class MyInfoService implements OnDestroy {
       appId: this.getMyInfoAppId(),
       authorizationCode: this.myInfoValue,
       personAttributes: this.getMyInfoAttributes(),
-      isMobileApp: this.getIsMobileApp()
+      isMobileApp: CapacitorUtils.isApp
     };
     return this.apiService.getMyInfoData(code);
   }
@@ -270,7 +266,7 @@ export class MyInfoService implements OnDestroy {
       appId: this.getMyInfoAppId(),
       authorizationCode: this.myInfoValue,
       personAttributes: this.getMyInfoAttributes(),
-      isMobileApp: this.getIsMobileApp()
+      isMobileApp: CapacitorUtils.isApp
     };
     return this.apiService.getSingpassAccountData(code);
   }
@@ -281,7 +277,7 @@ export class MyInfoService implements OnDestroy {
       appId: this.getMyInfoAppId(),
       authorizationCode: this.myInfoValue,
       personAttributes: this.getMyInfoAttributes(),
-      isMobileApp: this.getIsMobileApp()
+      isMobileApp: CapacitorUtils.isApp
     };
     return this.apiService.getCreateAccountMyInfoData(code);
   }
@@ -297,7 +293,7 @@ export class MyInfoService implements OnDestroy {
       email: email,
       mobileNumber: mobile,
       profileType: isOrganisationEnabled ? appConstants.USERTYPE.CORPORATE : appConstants.USERTYPE.PUBLIC,
-      isMobileApp: this.getIsMobileApp()
+      isMobileApp: CapacitorUtils.isApp
     };
     return this.apiService.getCreateAccountMyInfoData(payload);
   }
