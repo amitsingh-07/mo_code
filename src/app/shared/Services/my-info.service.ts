@@ -269,7 +269,8 @@ export class MyInfoService implements OnDestroy {
     const code = {
       appId: this.getMyInfoAppId(),
       authorizationCode: this.myInfoValue,
-      personAttributes: this.getMyInfoAttributes()
+      personAttributes: this.getMyInfoAttributes(),
+      isMobileApp: this.getIsMobileApp()
     };
     return this.apiService.getSingpassAccountData(code);
   }
@@ -279,7 +280,8 @@ export class MyInfoService implements OnDestroy {
     const code = {
       appId: this.getMyInfoAppId(),
       authorizationCode: this.myInfoValue,
-      personAttributes: this.getMyInfoAttributes()
+      personAttributes: this.getMyInfoAttributes(),
+      isMobileApp: this.getIsMobileApp()
     };
     return this.apiService.getCreateAccountMyInfoData(code);
   }
@@ -294,7 +296,8 @@ export class MyInfoService implements OnDestroy {
       organisationCode: isOrganisationEnabled ? appConstants.USERTYPE.FACEBOOK : null,
       email: email,
       mobileNumber: mobile,
-      profileType: isOrganisationEnabled ? appConstants.USERTYPE.CORPORATE : appConstants.USERTYPE.PUBLIC
+      profileType: isOrganisationEnabled ? appConstants.USERTYPE.CORPORATE : appConstants.USERTYPE.PUBLIC,
+      isMobileApp: this.getIsMobileApp()
     };
     return this.apiService.getCreateAccountMyInfoData(payload);
   }
