@@ -61,6 +61,15 @@ export class JwtInterceptor implements HttpInterceptor {
                     'sessionId': `${this.auth.getSessionId()}`
                 })
             });
+        } else if (['captchaVerify', 'forgotPassword'].filter(ele => request.url.includes(ele)).length > 0) { // for reCAPTCHA verification
+            request = request.clone({
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': `${this.auth.getToken()}`,
+                    'sessionId': `${this.auth.getSessionId()}`,
+                    'g-recaptcha-response': this.auth.getReCaptchaResponse()
+                })
+            });
         } else {
             request = request.clone({
                 headers: new HttpHeaders({
@@ -69,6 +78,9 @@ export class JwtInterceptor implements HttpInterceptor {
                     'sessionId': `${this.auth.getSessionId()}`
                 })
             });
+        }
+        if (this.auth.getReCaptchaResponse()) {
+            this.auth.setReCaptchaResponse(null);
         }
         return next.handle(request).pipe(tap((event: HttpEvent<IServerResponse>) => {
             if (event instanceof HttpResponse) {

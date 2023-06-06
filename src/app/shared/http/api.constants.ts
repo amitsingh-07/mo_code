@@ -155,6 +155,7 @@ export let apiConstants = {
             getDashboardCards: INSURANCE_RECOMMEND_API_BASE_URL + '/customer/recommended/card?pageNo=$PAGE_NO$&pageSize=$SIZE$',
             dismissCard: INSURANCE_RECOMMEND_API_BASE_URL + '/customer/recommended/card/$CARD_ID$/dismiss',
             getCardById: INSURANCE_RECOMMEND_API_BASE_URL + '/customer/recommended/card/'
-        }
+        },
+        captchaVerify: ACCOUNT_API_BASE_URL + '/captchaVerify'
     }
 };

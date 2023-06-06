@@ -223,6 +223,13 @@ export class ApiService {
     return this.httpClient.get(url);
   }
 
+  reCaptchaVerify() {
+    return this.http.post(apiConstants.endpoint.captchaVerify, null)
+    .pipe(
+      catchError((error: HttpErrorResponse) => this.handleError(error))
+    );
+  }
+
   createAccount(payload: ISignUp) {
     return this.http.post(apiConstants.endpoint.signUp + this.handleErrorFlag, payload)
       .pipe(

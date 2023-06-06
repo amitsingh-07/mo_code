@@ -37,6 +37,7 @@ export class AuthenticationService {
   displayCorporateLogo$ = new BehaviorSubject<boolean>(false);
   isShowWelcomeFlow: boolean = false;
   isCorpBiz: boolean = false;
+  private _reCaptchaResponse: string = '';
 
   constructor(
     private httpClient: HttpClient, public jwtHelper: JwtHelperService,
@@ -52,7 +53,7 @@ export class AuthenticationService {
   }
 
   // tslint:disable-next-line: max-line-length
-  login(userEmail: string, userPassword: string, captchaValue?: string, sessionId?: string, enqId?: number, journeyType?: string, finlitEnabled?: boolean, accessCode?: string, loginType?: string, organisationCode?: string) {
+  login(userEmail: string, userPassword: string, sessionId?: string, enqId?: number, journeyType?: string, finlitEnabled?: boolean, accessCode?: string, loginType?: string, organisationCode?: string) {
     const authenticateBody = {
       email: (userEmail && this.isUserNameEmail(userEmail)) ? userEmail : '',
       mobile: (userEmail && !this.isUserNameEmail(userEmail)) ? userEmail : '',
@@ -61,10 +62,10 @@ export class AuthenticationService {
       //secretKey: this.getAppSecretKey()
     };
     if (sessionId) { authenticateBody['sessionId'] = sessionId; }
-    if (captchaValue) { authenticateBody['captchaValue'] = captchaValue; }
     if (enqId && !finlitEnabled) { authenticateBody['enquiryId'] = enqId; }
     if (journeyType && !finlitEnabled) { authenticateBody['journeyType'] = journeyType; }
     if (finlitEnabled) { authenticateBody['accessCode'] = accessCode; }
+    if (this.getReCaptchaResponse()) { authenticateBody['gCaptchaResponse'] = this.getReCaptchaResponse(); }
     if (loginType && loginType !== '') { authenticateBody['loginType'] = loginType; }
     const handleError = '?handleError=true';
     return this.doAuthenticate(authenticateBody, handleError, finlitEnabled);
@@ -91,7 +92,7 @@ export class AuthenticationService {
       handleError = '';
     }
     const authenticateUrl = (finlitEnabled ? apiConstants.endpoint.authenticateWorkshop : (organisationEnabled ? apiConstants.endpoint.authenticateCorporate : apiConstants.endpoint.authenticate));
-    return this.httpClient.post<IServerResponse>(`${this.apiBaseUrl}/${authenticateUrl}${handleError}`, authenticateBody)
+    return this.httpClient.post<IServerResponse>(`${this.apiBaseUrl}/${authenticateUrl}${handleError}`, authenticateBody) 
       .pipe(map((response) => {
         // login successful if there's a jwt token in the response
         if (response && response.objectList[0] && response.objectList[0].securityToken) {
@@ -489,4 +490,13 @@ export class AuthenticationService {
     }
     return welcomeFlowFlag;
   }
+
+  setReCaptchaResponse(reCaptchaResponse: string) {
+    this._reCaptchaResponse = reCaptchaResponse;
+  }
+
+  getReCaptchaResponse() {
+    return this._reCaptchaResponse;
+  }
+
 }

@@ -385,17 +385,21 @@ app-login {
       display: block !important;
     }
   }
+  
   .client-assist {
     font-size: 14px;
     line-height: 21px;
     letter-spacing: -0.13px;
     max-width: 390px;
     margin: auto;
-    padding: 20px 19.9px 20px 20.1px;
     border-radius: 6px;
-    background-color: $strong-cyan-color;
+    text-align: center;
     @include allmobiles {
       max-width: 354px;
+    }
+    & + .recaptcha-info{
+      max-width: 390px;
+      margin: auto;
     }
   }
 
@@ -410,4 +414,6 @@ app-login {
     height: 72px;
     margin-right: 16px;
   }
+
+  
 

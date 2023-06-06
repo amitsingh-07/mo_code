@@ -3,7 +3,6 @@ import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
-import { InAppBrowser } from 'capgo-inappbrowser-intent-fix';
 
 import { appConstants } from '../../app.constants';
 import { environment } from '../../../environments/environment';
@@ -12,7 +11,8 @@ import { ErrorModalComponent } from '../modal/error-modal/error-modal.component'
 import { ModelWithButtonComponent } from '../modal/model-with-button/model-with-button.component';
 import { SIGN_UP_ROUTES, SIGN_UP_ROUTE_PATHS } from './../../sign-up/sign-up.routes.constants';
 import { CapacitorUtils } from '../utils/capacitor.util';
-import { InvestmentAccountService } from '../../investment/investment-account/investment-account-service';
+import { CapacitorPluginService } from './capacitor-plugin.service';
+import { Util } from '../utils/util';
 
 const MYINFO_ATTRIBUTE_KEY = 'myinfo_person_attributes';
 declare var window: Window;
@@ -44,7 +44,7 @@ export class MyInfoService implements OnDestroy {
 
   constructor(
     private modal: NgbModal, private apiService: ApiService, private router: Router, private zone: NgZone,
-    private investmentAccountService: InvestmentAccountService
+    private capPluginService: CapacitorPluginService
   ) { }
 
   ngOnDestroy() {
@@ -74,7 +74,12 @@ export class MyInfoService implements OnDestroy {
     return window.sessionStorage.getItem('myinfo_app_id');
   }
 
+  getIsMobileApp() {
+    return CapacitorUtils.isApp;
+  }
+
   goToMyInfo(linkAccount?) {
+    this.redirectUrl = CapacitorUtils.isApp ? appConstants.MOBILE_APP_SCHEME + appConstants.BASE_HREF + appConstants.MY_INFO_CALLBACK_URL : this.redirectUrl;
     let currentUrl = window.location.toString();
     let endPoint = currentUrl.split(currentUrl.split('/')[2])[currentUrl.split(currentUrl.split('/')[2]).length - 1].substring(1);
     window.sessionStorage.setItem('currentUrl', endPoint);
@@ -84,7 +89,16 @@ export class MyInfoService implements OnDestroy {
       '&purpose=' + this.purpose +
       '&state=' + this.state +
       '&redirect_uri=' + this.redirectUrl;
-    this.newWindow(authoriseUrl, linkAccount);
+    if (CapacitorUtils.isApp) {
+      this.capPluginService.checkCameraPhotoPermission('camera').then((status) => {
+        if (status) {
+          Util.openExternalUrl(encodeURI(authoriseUrl));
+        }
+      });
+    }
+    else {
+      this.newWindow(authoriseUrl, linkAccount);
+    }
   }
 
   goToUAT1MyInfo() {
@@ -95,60 +109,56 @@ export class MyInfoService implements OnDestroy {
 
   newWindow(authoriseUrl, linkAccount?): void {
     const self = this;
-    if (!CapacitorUtils.isApp) {
-      setTimeout(() => {
-        this.openFetchPopup(linkAccount);
-      }, 500);
-    }
+    setTimeout(() => {
+      this.openFetchPopup(linkAccount);
+    }, 500);
+
     this.isMyInfoEnabled = true;
 
-    if (CapacitorUtils.isApp) {
-      InAppBrowser.openWebView({ url: encodeURI(authoriseUrl), title: "" });
-    } else {
-      this.windowRef = window.open(authoriseUrl);
-      const timer = setInterval(() => {
-        if (this.windowRef.closed) {
-          clearInterval(timer);
-          this.setFailedStatus();
-        }
-      }, 500);
-
-      window.failed = (value) => {
+    this.windowRef = window.open(authoriseUrl);
+    const timer = setInterval(() => {
+      if (this.windowRef.closed) {
         clearInterval(timer);
-        window.failed = () => null;
-        this.windowRef.close();
-        if (value === 'FAILED') {
-          this.setFailedStatus();
-        } else {
-          this.changeListener.next(this.getMyinfoReturnMessage(CANCELLED));
-          this.isMyInfoEnabled = false;
-        }
-        return 'MY_INFO';
-      };
+        this.setFailedStatus();
+      }
+    }, 500);
 
-      window.success = (values) => {
-        clearInterval(timer);
-        window.success = () => null;
-        this.windowRef.close();
-        const params = new HttpParams({ fromString: values });
-        if (window.sessionStorage.currentUrl && params && params.get('code')) {
-          const myInfoAuthCode = params.get('code');
-          this.setMyInfoValue(myInfoAuthCode);
-          this.setSuccessStatus(myInfoAuthCode);
-        } else {
-          this.setFailedStatus();
-        }
-        return 'MY_INFO';
-      };
+    window.failed = (value) => {
+      clearInterval(timer);
+      window.failed = () => null;
+      this.windowRef.close();
+      if (value === 'FAILED') {
+        this.setFailedStatus();
+      } else {
+        this.changeListener.next(this.getMyinfoReturnMessage(CANCELLED));
+        this.isMyInfoEnabled = false;
+      }
+      return 'MY_INFO';
+    };
 
-      // Robo2 - MyInfo changes
-      window.addEventListener('message', function (event) {
-        clearInterval(timer);
-        window.success = () => null;
-        self.robo2SetMyInfo(event.data);
-        return 'MY_INFO';
-      });
-    }
+    window.success = (values) => {
+      clearInterval(timer);
+      window.success = () => null;
+      this.windowRef.close();
+      const params = new HttpParams({ fromString: values });
+      if (window.sessionStorage.currentUrl && params && params.get('code')) {
+        const myInfoAuthCode = params.get('code');
+        this.setMyInfoValue(myInfoAuthCode);
+        this.setSuccessStatus(myInfoAuthCode);
+      } else {
+        this.setFailedStatus();
+      }
+      return 'MY_INFO';
+    };
+
+    // Robo2 - MyInfo changes
+    window.addEventListener('message', function (event) {
+      clearInterval(timer);
+      window.success = () => null;
+      self.robo2SetMyInfo(event.data);
+      return 'MY_INFO';
+    });
+    //  }
   }
 
   setFailedStatus() {
@@ -248,7 +258,8 @@ export class MyInfoService implements OnDestroy {
     const code = {
       appId: this.getMyInfoAppId(),
       authorizationCode: this.myInfoValue,
-      personAttributes: this.getMyInfoAttributes()
+      personAttributes: this.getMyInfoAttributes(),
+      isMobileApp: this.getIsMobileApp()
     };
     return this.apiService.getMyInfoData(code);
   }

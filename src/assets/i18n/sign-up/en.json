@@ -20,7 +20,8 @@
       "SAVE_AND_CONTINUE": "Save and Continue"
     },
     "DUPLICATE_ERROR": "Oops! A will has already been drafted for this identification number. If you wish to edit or download your will, please log in to your account.",
-    "CAPS_LOCK_IS_ON": "Caps Lock is on"
+    "CAPS_LOCK_IS_ON": "Caps Lock is on",
+    "RECAPTCHA_INFO": "This site is protected by reCAPTCHA and the google <a href='https://policies.google.com/privacy' target='_blank'>privacy policy</a> and <a href='https://policies.google.com/terms' target='_blank'>terms of service</a> apply."
   },
   "SIGNUP_ERRORS": {
     "TITLE": "You have an account with us!",

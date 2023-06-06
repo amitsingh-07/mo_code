@@ -748,5 +748,10 @@
         "TITLE": "Choose an action",
         "CAMERA_LABEL": "Camera",
         "FILES_LABEL": "Files"
+      },
+      "CAMERA_PERMISSION": {
+        "TITLE": "Camera Access Required!",
+        "DEVICE_SETTINGS_TXT": "To allow MoneyOwl to use your device's camera, please enable camera access under your device’s settings.",
+        "MODAL_BTN": "Open Settings"
       }
 }

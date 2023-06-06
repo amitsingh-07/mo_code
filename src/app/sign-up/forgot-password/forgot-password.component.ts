@@ -1,10 +1,11 @@
 import {
-  AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewEncapsulation
+  ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 import { RegexConstants } from '../../shared/utils/api.regex.constants';
 import { ConfigService, IConfig } from '../../config/config.service';
@@ -24,22 +25,21 @@ import { appConstants } from './../../app.constants';
   styleUrls: ['./forgot-password.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ForgotPasswordComponent implements OnInit, AfterViewInit {
+export class ForgotPasswordComponent implements OnInit {
 
   private distribution: any;
   emailNotFoundTitle: any;
   emailNotFoundDesc: any;
   forgotPasswordForm: FormGroup;
   formValues: any;
-  defaultCountryCode;
   countryCodeOptions;
   heighlightMobileNumber;
   buttonTitle;
-  captchaSrc = '';
   emailResend: string;
   finlitEnabled = false;
   organisationEnabled = false;
   isCorpBiz: boolean = false;
+  @ViewChild('reCaptchaRef') reCaptchaRef: RecaptchaComponent;
 
   constructor(
     // tslint:disable-next-line
@@ -68,9 +68,6 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
     });
     if (!this.authService.isAuthenticated()) {
       this.authService.authenticate().subscribe((token) => {
-        if (this.isCorpBiz) {
-          this.refreshCaptcha();
-        }
       });
     }
     this.configService.getConfig().subscribe((config: IConfig) => {
@@ -89,32 +86,85 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
     this.buildForgotPasswordForm();
   }
 
-  ngAfterViewInit() {
-    if (!this.isCorpBiz) {
-      this.refreshCaptcha();
-    }
-  }
-
   buildForgotPasswordForm() {
     this.formValues = this.signUpService.getForgotPasswordInfo();
     if (this.distribution) {
       if (this.distribution.login) {
         this.forgotPasswordForm = this.formBuilder.group({
-          email: [this.formValues.email, [Validators.required, Validators.pattern(this.distribution.login.regex)]],
-          captcha: ['', [Validators.required]]
+          email: [this.formValues.email, [Validators.required, Validators.pattern(this.distribution.login.regex)]]
         });
         return false;
       }
     }
     this.forgotPasswordForm = this.formBuilder.group({
       email: [this.formValues.email, [Validators.required, Validators.email, Validators.pattern(RegexConstants.Email)]],
-      captcha: ['', [Validators.required]],
       profileType: [this.organisationEnabled ? appConstants.USERTYPE.CORPORATE : appConstants.USERTYPE.PUBLIC]
     });
     return true;
   }
 
-  save(form: any) {
+  save(reCaptchaToken, form: any) {
+    this.authService.setReCaptchaResponse(reCaptchaToken);
+    this.signUpService.setForgotPasswordInfo(form.value.email, form.value.profileType).subscribe((data) => {
+      // tslint:disable-next-line:triple-equals
+      if (data.responseMessage.responseCode == 6004) {
+        const ref = this.modal.open(ModelWithButtonComponent, { centered: true });
+        ref.componentInstance.errorTitle = this.emailNotFoundTitle;
+        ref.componentInstance.errorMessage = this.emailNotFoundDesc;
+        ref.componentInstance.primaryActionLabel = this.buttonTitle;
+        // tslint:disable-next-line:triple-equals
+      } else if (data.responseMessage.responseCode == 6000) {
+        if (this.authService.isSignedUser()) {
+          this.navbarService.logoutUser();
+        }
+        if(this.organisationEnabled) {            
+          this.router.navigate([SIGN_UP_ROUTE_PATHS.CORP_FORGOT_PASSWORD_RESULT]);
+        } else {
+          this.router.navigate([SIGN_UP_ROUTE_PATHS.FORGOT_PASSWORD_RESULT]);
+        }
+      } else if (data.responseMessage.responseCode === 5012) {
+        this.signUpApiService.resendEmailVerification(form.value.email, true).subscribe((data) => {
+          if (data.responseMessage.responseCode === 6007) {
+            const ref = this.modal.open(ErrorModalComponent, { centered: true });
+            ref.componentInstance.errorMessage = this.emailResend;
+          }
+        });
+      } else if (data.responseMessage.responseCode === 5014) {
+        this.signUpService.setCustomerRef(data.objectList[0].customerRef);
+        this.signUpService.setUserMobileNo(data.objectList[0].mobileNumber);
+        // setting from_login_page flag as true to enable verify mobile OTP flow
+        // While navigating from forgot password page
+        this.signUpService.setFromLoginPage();
+        this.showErrorModal(this.translate.instant('SIGNUP_ERRORS.TITLE'),
+          this.translate.instant('SIGNUP_ERRORS.VERIFY_MOBILE_OTP'),
+          this.translate.instant('COMMON.VERIFY_NOW'),
+          (this.finlitEnabled && SIGN_UP_ROUTE_PATHS.FINLIT_VERIFY_MOBILE) || 
+          (this.organisationEnabled && SIGN_UP_ROUTE_PATHS.CORPORATE_VERIFY_MOBILE) ||
+          SIGN_UP_ROUTE_PATHS.VERIFY_MOBILE,
+          false);
+      } else {
+        const ref = this.modal.open(ErrorModalComponent, { centered: true });
+        ref.componentInstance.errorMessage = data.responseMessage.responseDescription;
+      }
+    });
+  }
+  goBack() {
+    this.navbarService.goBack();
+  }
+
+  showErrorModal(title: string, message: string, buttonLabel: string, redirect: string, emailResend: boolean) {
+    const ref = this.modal.open(ErrorModalComponent, { centered: true });
+    ref.componentInstance.errorMessage = message;
+    ref.componentInstance.errorTitle = title;
+    ref.componentInstance.buttonLabel = buttonLabel;
+    ref.result.then((data) => {
+      if (!data && redirect) {
+        this.router.navigate([redirect]);
+      }
+    });
+  }
+
+  validateRecaptcha(form) {
     if (!form.valid) {
       Object.keys(form.controls).forEach((key) => {
         form.get(key).markAsDirty();
@@ -125,72 +175,7 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
       ref.componentInstance.errorMessage = error.errorMessage;
       return false;
     } else {
-      this.signUpService.setForgotPasswordInfo(form.value.email, form.value.captcha, form.value.profileType).subscribe((data) => {
-        // tslint:disable-next-line:triple-equals
-        if (data.responseMessage.responseCode == 6004) {
-          const ref = this.modal.open(ModelWithButtonComponent, { centered: true });
-          ref.componentInstance.errorTitle = this.emailNotFoundTitle;
-          ref.componentInstance.errorMessage = this.emailNotFoundDesc;
-          ref.componentInstance.primaryActionLabel = this.buttonTitle;
-          // tslint:disable-next-line:triple-equals
-        } else if (data.responseMessage.responseCode == 6000) {
-          if (this.authService.isSignedUser()) {
-            this.navbarService.logoutUser();
-          }
-          if(this.organisationEnabled) {            
-            this.router.navigate([SIGN_UP_ROUTE_PATHS.CORP_FORGOT_PASSWORD_RESULT]);
-          } else {
-            this.router.navigate([SIGN_UP_ROUTE_PATHS.FORGOT_PASSWORD_RESULT]);
-          }
-        } else if (data.responseMessage.responseCode === 5012) {
-          this.signUpApiService.resendEmailVerification(form.value.email, true).subscribe((data) => {
-            if (data.responseMessage.responseCode === 6007) {
-              const ref = this.modal.open(ErrorModalComponent, { centered: true });
-              ref.componentInstance.errorMessage = this.emailResend;
-              this.refreshCaptcha();
-            }
-          });
-        } else if (data.responseMessage.responseCode === 5014) {
-          this.signUpService.setCustomerRef(data.objectList[0].customerRef);
-          this.signUpService.setUserMobileNo(data.objectList[0].mobileNumber);
-          // setting from_login_page flag as true to enable verify mobile OTP flow
-          // While navigating from forgot password page
-          this.signUpService.setFromLoginPage();
-          this.showErrorModal(this.translate.instant('SIGNUP_ERRORS.TITLE'),
-            this.translate.instant('SIGNUP_ERRORS.VERIFY_MOBILE_OTP'),
-            this.translate.instant('COMMON.VERIFY_NOW'),
-            (this.finlitEnabled && SIGN_UP_ROUTE_PATHS.FINLIT_VERIFY_MOBILE) || 
-            (this.organisationEnabled && SIGN_UP_ROUTE_PATHS.CORPORATE_VERIFY_MOBILE) ||
-            SIGN_UP_ROUTE_PATHS.VERIFY_MOBILE,
-            false);
-        } else {
-          const ref = this.modal.open(ErrorModalComponent, { centered: true });
-          ref.componentInstance.errorMessage = data.responseMessage.responseDescription;
-          this.refreshCaptcha();
-        }
-      });
+    this.reCaptchaRef.execute();
     }
-  }
-  goBack() {
-    this.navbarService.goBack();
-  }
-
-  refreshCaptcha() {
-    this.forgotPasswordForm.controls['captcha'].reset();
-    this.captchaSrc = this.authService.getCaptchaUrl();
-    this.changeDetectorRef.detectChanges();
-  }
-
-  showErrorModal(title: string, message: string, buttonLabel: string, redirect: string, emailResend: boolean) {
-    this.refreshCaptcha();
-    const ref = this.modal.open(ErrorModalComponent, { centered: true });
-    ref.componentInstance.errorMessage = message;
-    ref.componentInstance.errorTitle = title;
-    ref.componentInstance.buttonLabel = buttonLabel;
-    ref.result.then((data) => {
-      if (!data && redirect) {
-        this.router.navigate([redirect]);
-      }
-    });
   }
 }

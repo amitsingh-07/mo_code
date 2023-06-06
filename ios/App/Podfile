@@ -18,7 +18,7 @@ def capacitor_pods
   pod 'CapacitorFilesystem', :path => '../../node_modules/@capacitor/filesystem'
   pod 'CapacitorSplashScreen', :path => '../../node_modules/@capacitor/splash-screen'
   pod 'CapacitorToast', :path => '../../node_modules/@capacitor/toast'
-  pod 'CapgoInappbrowserIntentFix', :path => '../../node_modules/capgo-inappbrowser-intent-fix'
+  pod 'CapacitorNativeSettings', :path => '../../node_modules/capacitor-native-settings'
   pod 'CordovaPlugins', :path => '../capacitor-cordova-ios-plugins'
 end
 

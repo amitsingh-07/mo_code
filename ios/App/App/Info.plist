@@ -27,7 +27,7 @@
 			<string>com.moneyowl.app</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.moneyowl.app</string>
+				<string>moneyowl</string>
 			</array>
 		</dict>
 	</array>
@@ -50,7 +50,7 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Take photo of documents</string>
+	<string>To take pictures and detect your face</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Upload documents</string>
 	<key>NSPhotoLibraryUsageDescription</key>

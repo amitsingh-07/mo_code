@@ -2573,3 +2573,21 @@ select:-webkit-autofill:focus {
       }
   }
 }
+
+.recaptcha-info{
+  font-family: $muli-regular;
+  font-size: 14px;
+  background-color: $strong-cyan-color;
+  letter-spacing: -0.13px;
+  padding: 20px;
+  border-radius: 6px;
+  a{
+    color: $white-color !important;
+    text-decoration: underline;
+  }
+}
+
+// hiding google reCAPTCHA badge
+.grecaptcha-badge { 
+  visibility: hidden; 
+}

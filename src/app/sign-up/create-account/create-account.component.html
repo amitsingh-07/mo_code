@@ -406,34 +406,6 @@
               </div>
             </div>
           </div>
-          <div class="flex-row mb10">
-            <span class="captcha-title mb15">{{ 'COMMON.CAPTCHA_TITLE' | translate}}</span>
-            <div class="flex-col-6 stretch">
-              <div class="form-group-captcha-wrapper">
-                <img [src]="(captchaSrc | secure | async) || ''" class="captcha-img" />
-              </div>
-            </div>
-            <div class="flex-col-6 stretch">
-              <div class="form-group-floating-label"
-                [ngClass]="{'inline-error': (submitted && account.captcha.errors?.required) || (account.captcha.errors?.match)}">
-                <input type="text" id="crtAccInpt8" class="form-control" #captcha formControlName="captcha" required>
-                <label class="form-control-placeholder" for="lastName">{{ 'COMMON.CAPTCHA' | translate}}</label>
-              </div>
-              <div (click)="refreshCaptcha()" class="link-white text-right">{{ 'COMMON.TRY_ANOTHER_TEXT' | translate}}
-                <i class="fa fa-refresh" style="color: white; margin-left: 10px;"></i>
-              </div>
-            </div>
-            <div class="alert-msg" *ngIf="account.captcha.errors">
-              <div *ngIf="submitted && account.captcha.errors?.required">
-                <span class="alert-icon"><img src="assets/images/alert.svg" /></span>
-                <span class="err-msg">{{ 'CREATE_ACCOUNT.FORM.CAPTCHA.ERROR.REQUIRED' | translate}}</span>
-              </div>
-              <div *ngIf="account.captcha.errors?.match">
-                <span class="alert-icon"><img src="assets/images/alert.svg" /></span>
-                <span class="err-msg">{{ 'CREATE_ACCOUNT.FORM.CAPTCHA.ERROR.MATCH' | translate}}</span>
-              </div>
-            </div>
-          </div>
           <div class="divider mt30 mb30"></div>
           <div class="checkbox-button one-label mb10" style="display:none">
             <input id="termsOfConditions" name="termsOfConditions" formControlName="termsOfConditions" type="checkbox"
@@ -450,9 +422,11 @@
               <div class="title">{{ 'CREATE_ACCOUNT.FORM.MARKETING_ACCEPTANCE' | translate }}</div>
             </label>
           </div>
-          <button id="nextDependentBtn" [disabled]="createAccBtnDisabled" (click)="save(createAccountForm)"
+          <div class="recaptcha-info  mt20" innerHTML="{{'COMMON.RECAPTCHA_INFO' | translate}}"></div>
+          <button id="nextDependentBtn" (click)="validateRecaptcha()"
             type="button" class="btn btn__footer--fixed btn-primary width100 mt20">{{
             'COMMON.CREATE_ACCOUNT' | translate }}</button>
+          <re-captcha #reCaptchaRef (resolved)="resolved($event)" size="invisible"></re-captcha>
         </form>
       </div>
     </div>

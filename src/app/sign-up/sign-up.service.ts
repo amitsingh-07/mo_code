@@ -246,9 +246,9 @@ export class SignUpService {
    * set user account details.
    * @param data - user account details.
    */
-  setForgotPasswordInfo(email, captcha, profileType) {
+  setForgotPasswordInfo(email, profileType) {
     // API Call here
-    const data = this.constructForgotPasswordInfo(email, captcha, profileType);
+    const data = this.constructForgotPasswordInfo(email, profileType);
     return this.apiService.requestForgotPasswordLink(data);
   }
 
@@ -256,11 +256,10 @@ export class SignUpService {
    * construct the json for forgot password.
    * @param data - email and redirect uri.
    */
-  constructForgotPasswordInfo(data, captchaValue, profileType) {
+  constructForgotPasswordInfo(data, profileType) {
     let resetUrl = (profileType == appConstants.USERTYPE.CORPORATE) ? this.resetPasswordCorpUrl : this.resetPasswordUrl;
     return {
       email: data,
-      captcha: captchaValue,
       sessionId: this.authService.getSessionId(),
       profileType: profileType,
       redirectUrl: environment.apiBaseUrl + resetUrl + '?token='
@@ -848,7 +847,7 @@ export class SignUpService {
 
   setOwnershipStatus(data) {
     if (data && !Util.isEmptyOrNull(data.value)) {
-      this.corpBizUserMyInfoData.ownershipStatus = data.value == 'true' ? SIGN_UP_CONFIG.OWNERSHIP_STATUS.YES.VALUE : SIGN_UP_CONFIG.OWNERSHIP_STATUS.NO.VALUE;
+     this.corpBizUserMyInfoData.ownershipStatus = data.value == 'true' ? SIGN_UP_CONFIG.OWNERSHIP_STATUS.TRUE.VALUE : SIGN_UP_CONFIG.OWNERSHIP_STATUS.FALSE.VALUE;
     }
   }
 
@@ -970,13 +969,13 @@ export class SignUpService {
     if (data && data.length > 0) {
       data.forEach(house => {
         const purchaseDate = house.dateOfPurchase ? this.investmentAccountService.corpBizDateFormat(house.dateOfPurchase) : null;
-        const leaseDate = house.leasecommencementdate ? this.investmentAccountService.corpBizDateFormat(house.leasecommencementdate) : null;
+        const leaseDate = house.leaseCommencementDate ? this.investmentAccountService.corpBizDateFormat(house.leaseCommencementDate) : null;
         hdbOwnerships.push({
           dateOfPurchase: purchaseDate ? `${purchaseDate.day}/${purchaseDate.month}/${purchaseDate.year}` : null,
           monthlyLoanInstalment: house.monthlyLoanInstalment,
           outstandingLoanBalance: house.outstandingLoanBalance,
           loanGranted: house.loanGranted,
-          leaseCommenceDate: leaseDate ? `${leaseDate.day}/${leaseDate.month}/${leaseDate.year}` : null
+          leaseCommencementDate: leaseDate ? `${leaseDate.day}/${leaseDate.month}/${leaseDate.year}` : null
         })
       });
     }
