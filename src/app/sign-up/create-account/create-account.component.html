@@ -378,7 +378,7 @@
             <div class="flex-col-12 stretch">
               <span class="ref-code-title">{{'CREATE_ACCOUNT.FORM.REFERRAL_CODE.TITLE' | translate}}</span>
               <div class="ref-code-input form-group-floating-label"
-                [ngClass]="{'inline-error': (submitted && account.referralCode.errors?.invalidRefCode) || (account.referralCode.errors?.invalidRefCode) || (account.referralCode.errors?.applyRefCode)}">
+                [ngClass]="(submitted && account.referralCode.errors?.invalidRefCode) || (account.referralCode.errors?.invalidRefCode) || (account.referralCode.errors?.applyRefCode) ? 'inline-error' : ''">
                 <input type="text" id="crtAccInpt9" formControlName="referralCode"
                   (keyup)="onKeyupEvent($event, 'referralCode')" autocomplete="off" class="form-control"
                   [readonly]="refCodeValidated || showSpinner" required>
