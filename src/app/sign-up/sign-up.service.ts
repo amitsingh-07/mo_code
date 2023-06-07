@@ -265,9 +265,9 @@ export class SignUpService {
       redirectUrl: environment.apiBaseUrl + resetUrl + '?token='
     };
   }
-  setRestEmailInfo(email, captcha, oldEmail) {
+  setRestEmailInfo(email, oldEmail) {
     // API Call here
-    const data = this.constructResetEmailInfo(email, captcha, oldEmail);
+    const data = this.constructResetEmailInfo(email, oldEmail);
     return this.apiService.resetEmail(data);
   }
 
@@ -275,15 +275,15 @@ export class SignUpService {
    * construct the json for forgot password.
    * @param data - email and redirect uri.
    */
-  constructResetEmailInfo(data, captchaValue, oldLoginEmail) {
+  constructResetEmailInfo(data, oldLoginEmail) {
     const verifyUrl = "/app/accounts/email-verification";
     return {
       oldEmail: (oldLoginEmail && this.authService.isUserNameEmail(oldLoginEmail)) ? oldLoginEmail : '',
       mobileNo: (oldLoginEmail && !this.authService.isUserNameEmail(oldLoginEmail)) ? oldLoginEmail : '',
       updatedEmail: data,
-      captcha: captchaValue,
       sessionId: this.authService.getSessionId(),
-      callbackUrl: environment.apiBaseUrl + verifyUrl
+      callbackUrl: environment.apiBaseUrl + verifyUrl,
+      gCaptchaResponse: this.authService.getReCaptchaResponse()
     };
   }
 

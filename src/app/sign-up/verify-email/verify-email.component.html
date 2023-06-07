@@ -17,7 +17,7 @@
       </div>
       <div class="col-lg-5 col-md-6">
         <form id="forgotPasswordForm" name="forgotPasswordForm" [formGroup]="forgotPasswordForm">
-          <div class="flex-row mb15">
+          <div class="flex-row mb20">
             <div class="flex-col-12 stretch" [formGroup]="forgotPasswordForm">
               <div class="form-group-floating-label">
                 <input type="text" appInputFocus id="forgotPasswordinputEmail" class="form-control" #email
@@ -27,23 +27,9 @@
               </div>
             </div>
           </div>
-          <div class="flex-row mb10">
-            <span class="mb20">{{ 'COMMON.CAPTCHA_TITLE' | translate}}</span>
-            <div class="flex-col-6 stretch">
-              <div class="form-group-captcha-wrapper">
-                <img *ngIf="captchaSrc" [src]="(captchaSrc | secure | async) || ''" class="captcha-img" />
-              </div>
-            </div>
-            <div class="flex-col-6 stretch">
-              <div class="form-group-floating-label">
-                <input type="text" id="crtAccInpt6" class="form-control" #captcha formControlName="captcha" required>
-                <label class="form-control-placeholder" for="lastName">{{ 'COMMON.CAPTCHA' | translate}}</label>
-              </div>
-              <div (click)="refreshCaptcha()" class="link-white text-right">{{ 'COMMON.TRY_ANOTHER_TEXT' | translate}}
-                <i class="fa fa-refresh" style="color: white; margin-left: 10px;"></i></div>
-            </div>
-          </div>
-          <button id="forgotPasswordButton" (click)="save(forgotPasswordForm)" type="button"
+          <re-captcha #reCaptchaRef (resolved)="save($event, forgotPasswordForm)" size="invisible"></re-captcha>
+          <div class="recaptcha-info mt20" innerHTML="{{'COMMON.RECAPTCHA_INFO' | translate}}"></div>
+          <button id="forgotPasswordButton" (click)="validateRecaptcha(forgotPasswordForm)" type="button"
             class="btn btn__footer--fixed btn-primary width100">{{ 'FORGOTPASSWORD.SUBMIT' | translate}}</button>
         </form>
       </div>
