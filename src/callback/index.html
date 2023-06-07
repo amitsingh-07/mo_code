@@ -3,6 +3,7 @@
     window.addEventListener('load', redirect, false);
 
     function redirect() {
+      console.log("index.html")
       var url = document.location.protocol + "//" + document.location.host + "/myinfo";
       document.location.href = url + document.location.search;
     }
