@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { AppService } from '../../app.service';
@@ -39,8 +39,7 @@ export class CorpBizSignupWithDataComponent implements OnInit {
     public readonly translate: TranslateService,
     private signUpService: SignUpService,
     private appService: AppService,
-    private myInfoService: MyInfoService,
-    private ngZone: NgZone
+    private myInfoService: MyInfoService
   ) {
     this.translate.use('en');
     this.translate.get('COMMON').subscribe((result: string) => {
@@ -67,9 +66,7 @@ export class CorpBizSignupWithDataComponent implements OnInit {
   }
 
   goToNext() {
-    this.ngZone.run(() => {
-      this.router.navigate([SIGN_UP_ROUTE_PATHS.CORP_BIZ_CREATE_ACC]);
-    });
+    this.router.navigate([SIGN_UP_ROUTE_PATHS.CORP_BIZ_CREATE_ACC]);
   }
 
   goBack() {
