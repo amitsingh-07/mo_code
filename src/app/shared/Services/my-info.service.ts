@@ -151,10 +151,11 @@ export class MyInfoService implements OnDestroy {
     window.addEventListener('message', function (event) {
       clearInterval(timer);
       window.success = () => null;
-      self.robo2SetMyInfo(event.data);
+      if (event.data !== "recaptcha-setup") {
+        self.robo2SetMyInfo(event.data);
+      }
       return 'MY_INFO';
     });
-    //  }
   }
 
   setFailedStatus() {
