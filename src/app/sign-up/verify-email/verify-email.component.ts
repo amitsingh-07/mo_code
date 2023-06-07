@@ -92,7 +92,6 @@ export class VerifyEmailComponent implements OnInit {
   }
 
   save(reCaptchaToken, form: any) {
-    console.log('recaptcha',reCaptchaToken);
     if(reCaptchaToken){
       this.authService.setReCaptchaResponse(reCaptchaToken);
     } else {
@@ -126,6 +125,7 @@ export class VerifyEmailComponent implements OnInit {
     });
 
   }
+
   goBack() {
     this.navbarService.goBack();
   }
@@ -144,4 +144,5 @@ export class VerifyEmailComponent implements OnInit {
     this.reCaptchaRef.execute();
     }
   }
+  
 }
