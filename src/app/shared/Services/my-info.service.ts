@@ -80,6 +80,7 @@ export class MyInfoService implements OnDestroy {
 
   goToMyInfo(linkAccount?) {
     this.redirectUrl = CapacitorUtils.isApp ? appConstants.MOBILE_APP_SCHEME + appConstants.BASE_HREF + appConstants.MY_INFO_CALLBACK_URL : this.redirectUrl;
+    console.log("redirectUrl" + this.redirectUrl);
     let currentUrl = window.location.toString();
     let endPoint = currentUrl.split(currentUrl.split('/')[2])[currentUrl.split(currentUrl.split('/')[2]).length - 1].substring(1);
     window.sessionStorage.setItem('currentUrl', endPoint);
@@ -124,6 +125,7 @@ export class MyInfoService implements OnDestroy {
     }, 500);
 
     window.failed = (value) => {
+      console.log("failed");
       clearInterval(timer);
       window.failed = () => null;
       this.windowRef.close();
@@ -137,6 +139,7 @@ export class MyInfoService implements OnDestroy {
     };
 
     window.success = (values) => {
+      console.log("success");
       clearInterval(timer);
       window.success = () => null;
       this.windowRef.close();
@@ -193,6 +196,7 @@ export class MyInfoService implements OnDestroy {
   }
 
   openFetchPopup(linkAccount?) {
+    console.log("fetch");
     const ngbModalOptions: NgbModalOptions = {
       backdrop: 'static',
       keyboard: false,
@@ -222,6 +226,7 @@ export class MyInfoService implements OnDestroy {
   }
 
   cancelMyInfo() {
+    console.log("cancel");
     if (!this.windowRef.closed) {
       this.windowRef.close();
     }
