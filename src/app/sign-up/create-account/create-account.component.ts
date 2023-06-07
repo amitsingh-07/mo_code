@@ -296,6 +296,7 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     this.authService.setReCaptchaResponse(reCaptchaToken);
     this.apiService.reCaptchaVerify().subscribe(res => {
       if (res.responseMessage.responseCode === 6000) {
+        this.reCaptchaRef.reset();
         this.save(this.createAccountForm);
       }
     });
