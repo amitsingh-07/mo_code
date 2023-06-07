@@ -1,8 +1,9 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 import { ConfigService, IConfig } from '../../config/config.service';
 import { FooterService } from '../../shared/footer/footer.service';
@@ -17,21 +18,21 @@ import { SignUpService } from '../sign-up.service';
 @Component({
   selector: 'app-verify-email',
   templateUrl: './verify-email.component.html',
-  styleUrls: ['./verify-email.component.scss']
+  styleUrls: ['./verify-email.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
-export class VerifyEmailComponent implements OnInit, AfterViewInit {
+export class VerifyEmailComponent implements OnInit {
 
   private distribution: any;
   emailNotFoundTitle: any;
   emailNotFoundDesc: any;
   forgotPasswordForm: FormGroup;
   formValues: any;
-  defaultCountryCode;
   countryCodeOptions;
   heighlightMobileNumber;
   buttonTitle;
-  captchaSrc = '';
   emailResend: string;
+  @ViewChild('reCaptchaRef') reCaptchaRef: RecaptchaComponent;
 
   constructor(
     // tslint:disable-next-line
@@ -74,29 +75,62 @@ export class VerifyEmailComponent implements OnInit, AfterViewInit {
     this.buildForgotPasswordForm();
   }
 
-  ngAfterViewInit() {
-    this.refreshCaptcha();
-  }
-
   buildForgotPasswordForm() {
     this.formValues = this.signUpService.getForgotPasswordInfo();
     if (this.distribution) {
       if (this.distribution.login) {
         this.forgotPasswordForm = this.formBuilder.group({
-          email: [this.formValues.email, [Validators.required, Validators.pattern(this.distribution.login.regex)]],
-          captcha: ['', [Validators.required]]
+          email: [this.formValues.email, [Validators.required, Validators.pattern(this.distribution.login.regex)]]
         });
         return false;
       }
     }
     this.forgotPasswordForm = this.formBuilder.group({
-      email: [this.formValues.email, [Validators.required, Validators.email, this.signUpService.emailDomainValidator(this.authService.isUserTypeCorporate)]],
-      captcha: ['', [Validators.required]]
+      email: [this.formValues.email, [Validators.required, Validators.email, this.signUpService.emailDomainValidator(this.authService.isUserTypeCorporate)]]
     });
     return true;
   }
 
-  save(form: any) {
+  save(reCaptchaToken, form: any) {
+    console.log('recaptcha',reCaptchaToken);
+    if(reCaptchaToken){
+      this.authService.setReCaptchaResponse(reCaptchaToken);
+    } else {
+      return false;
+    }
+    this.signUpService.setRestEmailInfo(form.value.email, this.signUpService.getEmail()).subscribe((data) => {
+      // tslint:disable-next-line:triple-equals
+      if (data.responseMessage.responseCode == 6004) {
+        const ref = this.modal.open(ModelWithButtonComponent, { centered: true });
+        ref.componentInstance.errorTitle = this.emailNotFoundTitle;
+        ref.componentInstance.errorMessage = this.emailNotFoundDesc;
+        ref.componentInstance.primaryActionLabel = this.buttonTitle;
+        // tslint:disable-next-line:triple-equals
+      } else if (data.responseMessage.responseCode == 6000) {
+        if (this.authService.isSignedUser()) {
+          this.navbarService.logoutUser();
+        }
+        this.router.navigate([SIGN_UP_ROUTE_PATHS.VERIFY_EMAIL_RESULT]);
+      } else if (data.responseMessage.responseCode === 5012) {
+        this.signUpApiService.resendEmailVerification(form.value.email, true).subscribe((data) => {
+          if (data.responseMessage.responseCode === 6007) {
+            const ref = this.modal.open(ErrorModalComponent, { centered: true });
+            ref.componentInstance.errorMessage = this.emailResend;
+          }
+        });
+      } else {
+        this.reCaptchaRef.reset();
+        const ref = this.modal.open(ErrorModalComponent, { centered: true });
+        ref.componentInstance.errorMessage = data.responseMessage.responseDescription;
+      }
+    });
+
+  }
+  goBack() {
+    this.navbarService.goBack();
+  }
+
+  validateRecaptcha(form) {
     if (!form.valid) {
       Object.keys(form.controls).forEach((key) => {
         form.get(key).markAsDirty();
@@ -107,42 +141,7 @@ export class VerifyEmailComponent implements OnInit, AfterViewInit {
       ref.componentInstance.errorMessage = error.errorMessage;
       return false;
     } else {
-      this.signUpService.setRestEmailInfo(form.value.email, form.value.captcha, this.signUpService.getEmail()).subscribe((data) => {
-        // tslint:disable-next-line:triple-equals
-        if (data.responseMessage.responseCode == 6004) {
-          const ref = this.modal.open(ModelWithButtonComponent, { centered: true });
-          ref.componentInstance.errorTitle = this.emailNotFoundTitle;
-          ref.componentInstance.errorMessage = this.emailNotFoundDesc;
-          ref.componentInstance.primaryActionLabel = this.buttonTitle;
-          // tslint:disable-next-line:triple-equals
-        } else if (data.responseMessage.responseCode == 6000) {
-          if (this.authService.isSignedUser()) {
-            this.navbarService.logoutUser();
-          }
-          this.router.navigate([SIGN_UP_ROUTE_PATHS.VERIFY_EMAIL_RESULT]);
-        } else if (data.responseMessage.responseCode === 5012) {
-          this.signUpApiService.resendEmailVerification(form.value.email, true).subscribe((data) => {
-            if (data.responseMessage.responseCode === 6007) {
-              const ref = this.modal.open(ErrorModalComponent, { centered: true });
-              ref.componentInstance.errorMessage = this.emailResend;
-              this.refreshCaptcha();
-            }
-          });
-        } else {
-          const ref = this.modal.open(ErrorModalComponent, { centered: true });
-          ref.componentInstance.errorMessage = data.responseMessage.responseDescription;
-          this.refreshCaptcha();
-        }
-      });
+    this.reCaptchaRef.execute();
     }
-  }
-  goBack() {
-    this.navbarService.goBack();
-  }
-
-  refreshCaptcha() {
-    this.forgotPasswordForm.controls['captcha'].reset();
-    this.captchaSrc = this.authService.getCaptchaUrl();
-    this.changeDetectorRef.detectChanges();
   }
 }
