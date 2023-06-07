@@ -378,7 +378,7 @@
             <div class="flex-col-12 stretch">
               <span class="ref-code-title">{{'CREATE_ACCOUNT.FORM.REFERRAL_CODE.TITLE' | translate}}</span>
               <div class="ref-code-input form-group-floating-label"
-                [ngClass]="{'inline-error': (submitted && account.referralCode.errors?.invalidRefCode) || (account.referralCode.errors?.invalidRefCode) || (account.referralCode.errors?.applyRefCode)}">
+                [ngClass]="(submitted && account.referralCode.errors?.invalidRefCode) || (account.referralCode.errors?.invalidRefCode) || (account.referralCode.errors?.applyRefCode) ? 'inline-error' : ''">
                 <input type="text" id="crtAccInpt9" formControlName="referralCode"
                   (keyup)="onKeyupEvent($event, 'referralCode')" autocomplete="off" class="form-control"
                   [readonly]="refCodeValidated || showSpinner" required>
@@ -423,7 +423,7 @@
             </label>
           </div>
           <div class="recaptcha-info  mt20" innerHTML="{{'COMMON.RECAPTCHA_INFO' | translate}}"></div>
-          <button id="nextDependentBtn" (click)="validateRecaptcha()"
+          <button id="nextDependentBtn" [disabled]="createAccBtnDisabled" (click)="validateRecaptcha()"
             type="button" class="btn btn__footer--fixed btn-primary width100 mt20">{{
             'COMMON.CREATE_ACCOUNT' | translate }}</button>
           <re-captcha #reCaptchaRef (resolved)="resolved($event)" size="invisible"></re-captcha>

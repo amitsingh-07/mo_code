@@ -143,6 +143,7 @@ export class ForgotPasswordComponent implements OnInit {
           SIGN_UP_ROUTE_PATHS.VERIFY_MOBILE,
           false);
       } else {
+        this.reCaptchaRef.reset();
         const ref = this.modal.open(ErrorModalComponent, { centered: true });
         ref.componentInstance.errorMessage = data.responseMessage.responseDescription;
       }
