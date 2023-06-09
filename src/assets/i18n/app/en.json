@@ -407,7 +407,19 @@
             "TITLE": "Unable to proceed with the NRIC/FIN",
             "DESCRIPTION": "We have detected that the NRIC/FIN is already in use by another account. <span class='bold-txt'>Please use your own account only.</span><br><br>Contact us at <a class='anchor-txt' href='mailto:enquiries@moneyowl.com.sg' target='_blank' rel='noopener noreferrer'>enquiries@moneyowl.com.sg</a> if you require any assistance.",
             "BTN-TEXT": "Okay, Got It!"
+        },
+        "LINK_ACCOUNT": {
+            "TITLE": "Linking Account…",
+            "DESCRIPTION": "Please be patient while we are linking up your MoneyOwl account." 
+        },
+        "LINK_MODAL_DATA": {
+            "TITLE": "Fetching Data...",
+            "DESCRIPTION": "Please be patient while we are linking up your MoneyOwl account." 
+        },
+        "CANCEL_MODAL":{
+            "BTN-TEXT": "Cancel"
         }
+
     },
     "COMPREHENSIVE": {
         "DASHBOARD": {
