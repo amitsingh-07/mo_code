@@ -122,7 +122,7 @@ export class AppComponent implements IComponentCanDeactivate, OnInit, AfterViewI
             this.route.navigateByUrl(slug);
           }
         });
-      } else if (event.url.startsWith(appConstants.MOBILE_APP_SCHEME) && event.url.includes("code") && event.url.includes("state") && event.url.includes("myinfo")) {
+      } else if (event.url.startsWith(appConstants.MOBILE_APP_SCHEME) && event.url.includes("code") && event.url.includes("state") && event.url.includes("sginfo")) {
         Util.closeBrowser();
         const url = new URL(event.url);
         const params = new URLSearchParams(url.search);

@@ -33,7 +33,7 @@ const routes: Routes = [
       { path: 'welcome-journey', loadChildren: () => import('./corpbiz-welcome-flow/corpbiz-welcome-flow.module').then(m => m.CorpBizWelcomeFlowModule) },
       { path: 'guideme', loadChildren: () => import('./guide-me/guide-me.module').then(m => m.GuideMeModule) },
       { path: 'accounts', loadChildren: () => import('./sign-up/sign-up.module').then(m => m.SignUpModule) },
-      { path: 'myinfo', component: CallBackComponent },
+      { path: 'sginfo', component: CallBackComponent },
       { path: 'investment-maintenance', component: InvestmentMaintenanceComponent },
       {
         path: APP_ROUTES.COMPREHENSIVE, loadChildren: () => import('./comprehensive/comprehensive.module').then(m => m.ComprehensiveModule),

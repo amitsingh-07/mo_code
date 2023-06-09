@@ -16,7 +16,7 @@ export const environment: IEnvironment = {
     linkSingpass: 'STG-201820691C-MONEYOWL-BFA',
     insurance: 'STG-201820691C-MONEYOWL-INSURANCEANALYSIS'
   },
-  myInfoCallbackBaseUrl: 'https://bfa-uat3.ntucbfa.com/app/myinfo',
+  myInfoCallbackBaseUrl: 'https://bfa-uat3.ntucbfa.com/app/sginfo',
   myInfoAuthorizeUrl: 'https://test.api.myinfo.gov.sg/com/v3/authorise',
   gAdPropertyId: 'AW-782920447',
   gtagPropertyId: 'GTM-TQGHCHD',
