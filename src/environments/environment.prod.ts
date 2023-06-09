@@ -12,7 +12,7 @@ export const environment: IEnvironment = {
     linkSingpass: 'PROD-201820691C-MONEYOWL-BFA',
     insurance: 'PROD-201820691C-MONEYOWL-INSURANCEANALYSIS'
   },
-  myInfoCallbackBaseUrl: 'https://www.moneyowl.com.sg/app/myinfo',
+  myInfoCallbackBaseUrl: 'https://www.moneyowl.com.sg/app/sginfo',
   myInfoAuthorizeUrl: 'https://api.myinfo.gov.sg/com/v3/authorise',
   gAdPropertyId: 'AW-782920447',
   gtagPropertyId: 'GTM-59QTMNZ',

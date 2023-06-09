@@ -12,7 +12,7 @@ export let appConstants = {
     loginPageUrl: GUIDE_ME_ROUTES.ROOT,
     homePageUrl: '',
     accessTokenServer: '',
-    MY_INFO_CALLBACK_URL: 'myinfo',
+    MY_INFO_CALLBACK_URL: 'sginfo',
     INVESTMENT_PROMO_CODE_TYPE: 'INVEST',
     COMPREHENSIVE_PROMO_CODE_TYPE: 'COMPRE',
     JOURNEY_TYPE_SIGNUP: 'SignUp',

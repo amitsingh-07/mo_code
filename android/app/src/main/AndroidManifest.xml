@@ -76,7 +76,7 @@
             <category android:name="android.intent.category.BROWSABLE"/>
             <data android:scheme="moneyowl"
               android:host="app"
-              android:pathPrefix="/myinfo"/>
+              android:pathPrefix="/sginfo"/>
           </intent-filter>
         </activity>
 

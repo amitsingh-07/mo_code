@@ -3,6 +3,7 @@ import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 import { appConstants } from '../../app.constants';
 import { environment } from '../../../environments/environment';
@@ -44,7 +45,8 @@ export class MyInfoService implements OnDestroy {
 
   constructor(
     private modal: NgbModal, private apiService: ApiService, private router: Router, private zone: NgZone,
-    private capPluginService: CapacitorPluginService
+    private capPluginService: CapacitorPluginService,
+    public translate: TranslateService
   ) { }
 
   ngOnDestroy() {
@@ -200,13 +202,13 @@ export class MyInfoService implements OnDestroy {
     this.loadingModalRef.componentInstance.spinner = true;
     this.loadingModalRef.componentInstance.closeBtn = false;
     if (linkAccount) {
-      this.loadingModalRef.componentInstance.errorTitle = 'Linking Account…';
-      this.loadingModalRef.componentInstance.errorMessage = 'Please be patient while we are linking up your MoneyOwl account.';
+      this.loadingModalRef.componentInstance.errorTitle = this.translate.instant("MYINFO.LINK_ACCOUNT.TITLE");
+      this.loadingModalRef.componentInstance.errorMessage = this.translate.instant("MYINFO.LINK_ACCOUNT.DESCRIPTION");
     } else {
-      this.loadingModalRef.componentInstance.errorTitle = 'Fetching Data...';
-      this.loadingModalRef.componentInstance.errorMessage = 'Please be patient while we fetch your required data from Myinfo.';
+      this.loadingModalRef.componentInstance.errorTitle = this.translate.instant("MYINFO.LINK_MODAL_DATA.TITLE");
+      this.loadingModalRef.componentInstance.errorMessage = this.translate.instant("MYINFO.LINK_MODAL_DATA.DESCRIPTION");
     }
-    this.loadingModalRef.componentInstance.primaryActionLabel = 'Cancel';
+    this.loadingModalRef.componentInstance.primaryActionLabel = this.translate.instant("MYINFO.CANCEL_MODAL.BTN-TEXT");
     this.closeBtnSubscription = this.loadingModalRef.componentInstance.closeAction.subscribe(() => {
       this.changeListener.next(this.getMyinfoReturnMessage(CANCELLED));
       this.cancelMyInfo();
@@ -236,8 +238,8 @@ export class MyInfoService implements OnDestroy {
     this.closeFetchPopup();
     if (error) {
       const ref = this.modal.open(ErrorModalComponent, { centered: true, windowClass: 'my-info' });
-      ref.componentInstance.errorTitle = 'Oops, Unable to Connect';
-      ref.componentInstance.errorMessage = 'We are unable to connect to Myinfo temporarily. You may choose to fill in your information manually or try again later.';
+      ref.componentInstance.errorTitle = this.translate.instant("MYINFO.ERROR_MODAL_DATA.TITLE");
+      ref.componentInstance.errorMessage = this.translate.instant("MYINFO.ERROR_MODAL_DATA.DESCRIPTION");
       ref.componentInstance.isMyinfoError = true;
       ref.componentInstance.closeBtn = false;
       ref.result.then(() => {
