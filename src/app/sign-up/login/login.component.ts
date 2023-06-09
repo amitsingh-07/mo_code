@@ -282,6 +282,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (reCaptchaToken) {
       this.authService.setReCaptchaResponse(reCaptchaToken);
       this.reCaptchaRef.reset();
+    } else if (!reCaptchaToken && (this.signUpService.getCaptchaShown() || this.signUpService.getCaptchaCount() >= 2)) {
+      return false;
     }
     const accessCode = (this.finlitEnabled) ? this.loginForm.value.accessCode : '';
     const organisationCode = this.organisationEnabled && this.loginForm.get('organisationCode').value || null;
