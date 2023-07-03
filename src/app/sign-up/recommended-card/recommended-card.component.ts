@@ -41,6 +41,8 @@ export class RecommendedCardComponent implements OnInit {
   isLoadComplete = false;
   isCardDsmissed = false;
   cardEvent: any;
+  email: string = '';
+  isEmailSent: boolean = false;
   constructor(
     public modal: NgbModal,
     private signUpApiService: SignUpApiService,
@@ -51,9 +53,16 @@ export class RecommendedCardComponent implements OnInit {
 
   ngOnInit(): void {
     this.getRecommendedCards();
+    this.getEmail();
   }
 
   // Setting the next slide index on beforeChange event fire
+  getEmail(){
+    if(window.sessionStorage){
+      this.email = sessionStorage.getItem('email');
+      console.log(this.email);
+    }
+  }
   beforeSlideChange(e) {
     this.currentSlide = e.nextSlide;
   }
@@ -67,7 +76,8 @@ export class RecommendedCardComponent implements OnInit {
         backdrop: 'static',
         keyboard: false
       });
-      ref.componentInstance.cardContent = resp.objectList; // Pass card content here      
+      ref.componentInstance.cardContent = resp.objectList; // Pass card content here
+      //??
       ref.componentInstance.closeAction.subscribe((value: any) => {
         this.isLoadComplete = false;
         if (value) {
@@ -80,6 +90,14 @@ export class RecommendedCardComponent implements OnInit {
           this.getRecommendedCards();
         }
       });
+
+      ref.componentInstance.resendEmail.subscribe((value: boolean) =>{
+        this.signUpApiService.resendEmailVerification(this.email, value).subscribe( (data) =>{
+          if(data.responseMessage.responseCode==6007){
+            ref.componentInstance.emailSent = true;
+          }
+        })
+      })
     }, err => {
 
     })
@@ -109,8 +127,11 @@ export class RecommendedCardComponent implements OnInit {
             });
           } else {
             setTimeout(() => {
+              //??
               const getSlides = (document.getElementsByClassName('slick-current') as any);
+              //??
               const getCurrentSlideIndex = getSlides && getSlides.length > 0 ? getSlides[0].getAttribute('data-slick-index') : '-1';
+              //??
               this.cardEvent.currentSlide = Number(getCurrentSlideIndex) > -1 ? parseInt(getCurrentSlideIndex) : this.cardEvent.currentSlide - 1;
               this.afterSlideChange(this.cardEvent);
               this.isCardDsmissed = false;

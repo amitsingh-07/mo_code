@@ -13,8 +13,11 @@ import { Util } from '../../shared/utils/util';
 export class RecommendedCardModalComponent implements OnInit {
 
   @Input() cardContent: any;
+  @Input() emailSent: boolean;
   @Output() closeAction = new EventEmitter<any>();
+  @Output() resendEmail: EventEmitter<any> = new EventEmitter();
   constructor(
+    //private readonly translate: TranslateService,
     private readonly translate: TranslateService,
     public activeModal: NgbActiveModal,
     private router: Router
@@ -23,6 +26,10 @@ export class RecommendedCardModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  resendEmailVerification(isEmail){
+    this.resendEmail.emit(isEmail);
   }
 
   dismissCard(isDismiss) {

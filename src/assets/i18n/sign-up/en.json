@@ -169,8 +169,10 @@
       "DESCRIPTION": "<strong>Great job!</strong> We’ll continue to help you navigate your finances."
     },
     "MODAL": {
-      "DONT_SHOW_BTN": "Don’t show this again"
+      "DONT_SHOW_BTN": "Don’t show this again",
+      "EMAIL_VERIFY": "Didn’t receive? Resend email verification"
     }
+
   },
   "CORP_BIZ_ERROR_MODAL": {
     "TITLE": "You are already enrolled with us!",
@@ -1002,7 +1004,7 @@
   "UPGRADE_SCREEN": {
     "TITLE": "Your MoneyOwl Account has been upgraded!",
     "MESSAGE": "You can now get free life time access to your Comprehensive Financial Planning report, make unlimited changes and generate the report as many times as you might want.",
-    "BTN_TEXT": "Let’s Go" 
+    "BTN_TEXT": "Let’s Go"
   },
   "MAINTENANCE_PAGE": {
     "TITLE": "Upgrading In Progress",
@@ -1013,6 +1015,6 @@
   "FORCED_UPDATE": {
     "TITLE": "New Update Available!",
     "MESSAGE": "We have made some changes to provide you with a better experience. Update now to continue using the MoneyOwl app.",
-    "BTN_TEXT": "Update Now" 
+    "BTN_TEXT": "Update Now"
   }
 }

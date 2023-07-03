@@ -215,6 +215,7 @@ export class DashboardComponent implements OnInit {
       }
     });
     this.getInvestmentsSummary();
+    this.getEmail();
     this.investmentAccountService.deactivateReassess();
     const toastMessage = this.comprehensiveService.getToastMessage();
     if (toastMessage) {
@@ -228,6 +229,15 @@ export class DashboardComponent implements OnInit {
       this.getReferralInfo = data.objectList;
       this.cardCategory = this.getRefereeInfo(this.getReferralInfo);
     });
+  }
+
+  getEmail(){
+    let email: string = '';
+    if(window.sessionStorage){
+      email = sessionStorage.getItem('email');
+      console.log("Inside the condition block "+ email);
+    }
+    console.log("Outside the condition block "+email);
   }
 
   getRefereeInfo(refereeInfo) {
@@ -442,7 +452,7 @@ export class DashboardComponent implements OnInit {
   }
 
   async enableInvestment() {
-    // Check if iFast is in maintenance    
+    // Check if iFast is in maintenance
     if (await this.configService.checkIFastUnderMaintenance()) {
       this.iFastMaintenance = true;
     } else {
@@ -498,7 +508,7 @@ export class DashboardComponent implements OnInit {
       return false;
     }
   }
-  
+
   existingPortfolio() {
     this.manageInvestmentsService.setSelectedCustomerPortfolioId(null);
     this.manageInvestmentsService.setSelectedCustomerPortfolio(null);
@@ -523,7 +533,7 @@ export class DashboardComponent implements OnInit {
       this.router.navigate([INVESTMENT_ENGAGEMENT_JOURNEY_ROUTE_PATHS.SELECT_PORTFOLIO]);
     }
   }
-  
+
   showCashAccountPopUp() {
     const ref = this.modal.open(ErrorModalComponent, { centered: true });
     ref.componentInstance.errorTitle = this.translate.instant(

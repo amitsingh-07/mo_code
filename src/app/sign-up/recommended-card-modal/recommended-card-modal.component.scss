@@ -38,7 +38,10 @@ app-recommended-card-modal {
         color: $black-color;
         margin: -6px 0 40px 0;
       }
-
+      .img-container{
+        display: flex;
+        justify-content: center;
+      }
       .top-image-container {
         max-width: 375px;
         display: flex;
@@ -53,6 +56,7 @@ app-recommended-card-modal {
       }
 
       .card-desc {
+        padding-top: 20px;
         p {
           margin: 0;
           padding-bottom: 20px;
@@ -81,7 +85,29 @@ app-recommended-card-modal {
         }
       }
     }
+    .btn-green{
+      font-family: $muli-bold;
+      font-size: 18px;
+      color: $white-color;
+      width: 335px;
+      background-color: $very-dark-cyan !important;
+      box-shadow: none !important;
+      border-radius: 6px;
+      padding: 14px 0;
+      border: none;
+      cursor: pointer;
 
+      @include allmobiles {
+        width: 100%;
+        max-width: 335px;
+        margin: 0;
+      }
+
+      &:hover,
+      &:active {
+        background-color: $dark-cyan-color !important;
+      }
+    }
     .btn-orange {
       font-family: $muli-bold;
       font-size: 18px;
@@ -105,10 +131,28 @@ app-recommended-card-modal {
         background-color: $atomic-tangerine-color !important;
       }
     }
+    .email-verify{
+      font-family: $muli-bold;
+      font-size: 16px;
+      line-height: 20px;
+      letter-spacing: -0.16px;
+      text-align: center;
+      margin: 40px auto 20px;
+      cursor: pointer;
 
+    }
+    .email-sent{
+      color: $black-color;
+      font-size: 16px;
+      font-family: $muli-regular;
+      text-align: center;
+      line-height: 20px;
+      letter-spacing: -0.142px;
+    }
     .remove-modal {
       font-family: $muli-regular;
       font-size: 18px;
+      color: #00a7a7;
       line-height: 23px;
       text-align: center;
       letter-spacing: -0.165px;

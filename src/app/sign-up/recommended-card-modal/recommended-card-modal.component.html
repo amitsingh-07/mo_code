@@ -1,6 +1,6 @@
 <div class="modal-header">
 </div>
-<div class="modal-body white-bg">
+<div class="modal-body white-bg" >
   <div class="modal-body-title">
     <div id="errorModeltitle">{{cardContent?.startDate}}</div>
   </div>
@@ -11,6 +11,9 @@
     <div class="card-details">
       <div class="card-title">{{cardContent?.headLine}}</div>
       <div class="card-subtitle">{{cardContent?.subTitle}}</div>
+      <div class="img-container">
+        <img src="assets/images/recommended-card/Group 2494.svg" alt="" />
+      </div>
       <div class="top-image-container" *ngIf="cardContent.topImageLink">
         <img src="{{cardContent?.topImageLink}}" alt="" />
       </div>
@@ -18,14 +21,28 @@
       </div>
     </div>
     <div class="row">
-      <div class="flex-col-12 text-center mt20" *ngIf="cardContent.interactionButtonName">
+      <!-- <div class="flex-col-12 text-center mt20" *ngIf="cardContent.interactionButtonName">
         <button type="button" class="btn-orange" id="errorModeButton" (click)="nextStep()">
           {{cardContent?.interactionButtonName}}
         </button>
+      </div> -->
+      <div class="flex-col-12 text-center mt20" *ngIf="cardContent.interactionButtonName">
+        <button type="button" class="btn-green" (click)="dismissCard(false)">
+          {{cardContent?.interactionButtonName}}
+        </button>
       </div>
-      <div class="remove-modal" (click)="dismissCard(true)">
-        {{'RECOMMENDED_CARD.MODAL.DONT_SHOW_BTN' | translate}}
+
+      <div class="email-verify" *ngIf="cardContent.cardType=='Dynamic' else showbtn" (click)="resendEmailVerification(true)">
+        {{'RECOMMENDED_CARD.MODAL.EMAIL_VERIFY' | translate}}
       </div>
+      <div *ngIf="emailSent" class="email-sent">
+        Email Sent!
+      </div>
+      <ng-template #showbtn>
+        <div class="remove-modal" (click)="dismissCard(true)">
+          {{'RECOMMENDED_CARD.MODAL.DONT_SHOW_BTN' | translate}}
+        </div>
+      </ng-template>
     </div>
   </div>
 </div>
