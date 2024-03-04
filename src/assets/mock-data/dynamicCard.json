@@ -1,0 +1,20 @@
+{
+  "responseMessage":{
+    "responseCode": 6000,
+    "responseDescription": "Successful Response"
+  },
+
+  "objectList":{
+    "cardId" : 238,
+    "cardType": "Dynamic",
+    "content" : "Maximise your financial planning journey on the MoneyOwl App by verifying your email! To gain full access to all investing features, simply click on the verification email sent to you and complete the verification process. <br><br> If you require any assistance, please contact us at <b> clientsupport@moneyowl.com.sg </b> or <b>6329 9188</b>. Our operating hours are Monday - Friday, 9am - 6pm.",
+    "coverImageKey" : "list-icon-11.svg",
+    "featuredTopic" : false,
+    "headLine" : "Email Verification",
+    "interactionButtonLink" : "https://newmouat1.ntucbfa.com/app/accounts/dashboard",
+    "interactionButtonName" : "Okay, Got it!",
+    "startDate" : "20 June 2023",
+    "subTitle": "Complete the verification process in 30 days. To access all features of the app!",
+    "topImageLink": ""
+  }
+}

@@ -361,7 +361,7 @@
                 </span>
                 <span class="btn-with-icon" *ngIf="wills.completedWill" (click)="redirectTo('edit')">
                   <span class="edit-btn-img"><img src="assets/images/editIcon.svg"></span>
-                  <span>{{'DASHBOARD.INVESTMENT.EDIT' | translate}}</span>  
+                  <span>{{'DASHBOARD.INVESTMENT.EDIT' | translate}}</span>
                 </span>
               </div>
               <div class="widget-body">
@@ -406,6 +406,7 @@
                 </div>
               </div>
             </div>
+            <!-- Insursance Begins -->
             <div class="widget insurance" *ngIf="showInsuranceSection">
               <div class="reward-points" [ngClass]="{'grey': !cardCategory.insurance[0].isEnabled}"
                 *ngIf="getReferralInfo && getReferralInfo.isWelcomeRewardsValid && getReferralInfo.refereeExists"><span

@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ErrorModalComponent } from '../../shared/modal/error-modal/error-modal.component';
 import { WillWritingService } from '../will-writing.service';
 import { NavbarService } from '../../shared/navbar/navbar.service';
+
 @Component({
   selector: 'app-page-title',
   templateUrl: './page-title.component.html',
@@ -18,6 +19,7 @@ export class PageTitleComponent implements OnInit {
   @Input() step: any;
   @Input() tooltip: any;
   @Input() unsaved: boolean;
+  @Output() yesTgr: EventEmitter<any> = new EventEmitter();
   unsavedMsg: string;
 
   constructor(
@@ -43,17 +45,26 @@ export class PageTitleComponent implements OnInit {
       ref.componentInstance.unSaved = true;
       ref.result.then((data) => {
         if (data === 'yes') {
+          this.willWritingService.yesTrigger('yes');
+          this.yesTrigger('yes');
           if (url) {
+            console.log(url);
             this.router.navigate([url]);
           } else {
+            console.log('On Navigation');
             this.navbarService.goBack();
           }
         }
       });
     } else {
+      console.log("on Navigation 2");
       this.navbarService.goBack();
     }
     return false;
+  }
+
+  yesTrigger(yes: String){
+    this.yesTgr.emit('yes');
   }
 
   openToolTipModal() {

@@ -1,0 +1,59 @@
+{
+  "responseMessage":{
+    "responseCode":6000,
+    "responseDescription":"Successful Response"
+  },
+  "objectList":
+    {
+      "pageList":[
+        {
+          "cardId":238,
+          "cardRead": true,
+          "cardType": "Dynamic",
+          "coverImageKey": "list-icon-11.svg",
+          "headLine":"Email Verification",
+          "startDate": "20-jun-2023",
+          "subTitle": "Complete the verification process in 30 days. To access all features of the app!"
+        },
+        {
+          "cardId":220,
+          "cardRead": true,
+          "cardType": "static",
+          "coverImageKey": "list-icon-2.svg",
+          "headLine":"UATNEW",
+          "startDate": "20-May-2023",
+          "subTitle": "Current Release 12.2"
+        },
+        {
+          "cardId":153,
+          "cardRead": true,
+          "cardType": "static",
+          "coverImageKey": "list-icon-3.svg",
+          "headLine":"UATNEW",
+          "startDate": "20-apr-2023",
+          "subTitle": "Current Release 12.1"
+        },
+        {
+          "cardId":136,
+          "cardRead": true,
+          "cardType": "static",
+          "coverImageKey": "list-icon-4.svg",
+          "headLine":"UATNEW",
+          "startDate": "20-jun-2023",
+          "subTitle": "Current Release 12.2"
+        },
+        {
+          "cardId":141,
+          "cardRead": true,
+          "cardType": "static",
+          "coverImageKey": "list-icon-4.svg",
+          "headLine":"UATNEW",
+          "startDate": "20-jun-2023",
+          "subTitle": "Current Release 12.2"
+        }
+      ],
+      "pageNo": 0,
+      "pageSize": 5,
+      "totalCount": 6
+    }
+}

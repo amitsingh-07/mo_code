@@ -8,6 +8,7 @@ import { WillWritingFormData } from './will-writing-form-data';
 import { WillWritingFormError } from './will-writing-form-error';
 import { IAboutMe, IBeneficiary, IChild, IEligibility, IExecTrustee, IGuardian, IPromoCode, ISpouse } from './will-writing-types';
 import { WILL_WRITING_CONFIG } from './will-writing.constants';
+import { Subject } from 'rxjs';
 
 const SESSION_STORAGE_KEY = 'app_will_writing_session';
 const FROM_CONFIRMATION_PAGE = 'from_confirmation_page';
@@ -54,6 +55,10 @@ export class WillWritingService {
     this.getWillWritingFormData();
     this.getFromConfirmPage();
     this.getIsWillCreated();
+  }
+  sub = new Subject();
+  yesTrigger(val: String){
+    this.sub.next(val);
   }
 
   /**

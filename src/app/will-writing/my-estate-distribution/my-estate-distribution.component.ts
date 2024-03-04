@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
@@ -44,7 +44,8 @@ export class MyEstateDistributionComponent implements OnInit, OnDestroy {
     private modal: NgbModal,
     public footerService: FooterService,
     public navbarService: NavbarService,
-    private router: Router) {
+    private router: Router,
+    private cdr: ChangeDetectorRef) {
     this.translate.use('en');
     this.translate.get('COMMON').subscribe((result: string) => {
       this.step = this.translate.instant('WILL_WRITING.COMMON.STEP_2');
@@ -60,14 +61,22 @@ export class MyEstateDistributionComponent implements OnInit, OnDestroy {
     if (this.willWritingService.getBeneficiaryInfo().length > 0) {
       this.beneficiaryList = this.willWritingService.getBeneficiaryInfo();
     }
+
     this.buildBeneficiaryForm();
     this.calculateRemPercentage();
     this.headerSubscription();
     this.footerService.setFooterVisibility(false);
+    this.buildBeneficiaryFormArray();
+    this.refreshView();
   }
 
   setPageTitle(title: string) {
     this.navbarService.setPageTitle(title);
+  }
+
+  refreshView(){
+    this.cdr.detectChanges();
+
   }
 
   headerSubscription() {
@@ -85,9 +94,26 @@ export class MyEstateDistributionComponent implements OnInit, OnDestroy {
 
   buildBeneficiaryForm() {
     this.distributionForm = this.formBuilder.group({
-      percent: ['', [Validators.required]]
+      percent: this.formBuilder.array([])
     });
   }
+
+  buildBeneficiaryFormArray(){
+    for(const value of this.beneficiaryList){
+      console.log(value.distPercentage);
+      const control = new FormControl(value.distPercentage, [Validators.required]);
+      (<FormArray>this.distributionForm.get('percent')).push(control);
+    }
+  }
+
+  // buildBeneficiaryForm() {
+  //   for(const value of this.beneficiaryList){
+  //     this.distributionForm = this.formBuilder.group({
+  //       percent: [value.distPercentage, [Validators.required]]
+  //     });
+  //   }
+
+  // }
 
   calculateRemPercentage() {
     for (const percent of this.beneficiaryList) {
@@ -122,9 +148,40 @@ export class MyEstateDistributionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.willWritingService.sub.subscribe((val)=>{
+      if(val=='yes'){
+        //const arrayField = this.distributionForm.get('percent') as FormArray;
+        //arrayField.clear();
+        this.clearInputFields();
+      }
+    })
     this.subscription.unsubscribe();
     this.navbarService.unsubscribeBackPress();
+    //this.clearInputFields();
+    //this.triggerMethod();
+
+    // const ref = this.modal.open(PageTitleComponent, { centered: true });
+    // ref.componentInstance.yesTrigger.subscribe((value: String)=>{
+    //   if(value=='yes'){
+    //     console.log(value);
+    //     this.distributionForm.reset();
+    //   }
+    // })
   }
+  triggerMethod(){
+    console.log(this.distributionForm);
+  }
+
+  clearInputFields(){
+    // for(let i=0; i<this.beneficiaryList.length; i++){
+    //   const arrayField = this.distributionForm.get('percent') as FormArray;
+    //   console.log(arrayField);
+    //   arrayField.controls[i].reset();
+    // }
+    const arrayField = this.distributionForm.get('percent') as FormArray;
+    arrayField.clear();
+  }
+
 
   openConfirmationModal(title: string, message: string, url: string, hasImpact: boolean) {
     const ref = this.modal.open(ErrorModalComponent, { centered: true });
@@ -132,6 +189,7 @@ export class MyEstateDistributionComponent implements OnInit, OnDestroy {
     ref.componentInstance.unSaved = true;
     ref.result.then((data) => {
       if (data === 'yes') {
+        console.log("In the error modal");
         this.save(url);
       }
     });
@@ -141,6 +199,10 @@ export class MyEstateDistributionComponent implements OnInit, OnDestroy {
   validateBeneficiaryForm() {
     const estateDistList = this.beneficiaryList.filter((checked) => checked.selected === true);
     const filteredArr = estateDistList.filter((greater) => greater.distPercentage < 1);
+    //const ref = this.pageTitleComponent.yesTgr;
+
+    //console.log(ref);
+
     if (this.remainingPercentage < 0) {
       this.willWritingService.openToolTipModal(this.errorMsg.MAX_PERCENTAGE, '');
       return false;
@@ -164,7 +226,8 @@ export class MyEstateDistributionComponent implements OnInit, OnDestroy {
       const url = this.fromConfirmationPage ? WILL_WRITING_ROUTE_PATHS.CONFIRMATION : WILL_WRITING_ROUTE_PATHS.APPOINT_EXECUTOR_TRUSTEE;
       if (this.fromConfirmationPage && this.isFormAltered) {
         this.openConfirmationModal(this.confirmModal['title'], this.confirmModal['message'], url,
-          this.willWritingService.getIsWillCreated());
+        this.willWritingService.getIsWillCreated());
+        console.log("moving to error modal");
       } else if (this.fromConfirmationPage) {
         this.save(url);
       } else {

@@ -9,12 +9,12 @@
         <h2 id="intro-title" class ="hidden-sm-md">{{ 'WILL_WRITING.MY_ESTATE_DISTRIBUTION.TITLE' | translate}}</h2>
         <h6 class="sub-title" id="sub-title">{{ 'WILL_WRITING.MY_ESTATE_DISTRIBUTION.SUB_TITLE' | translate}}</h6>
         <div class="banner-image hidden-sm-md">
-            <img src="assets/images/will-writing/my-estate-distribution.svg" id="intro-img"/>  
+            <img src="assets/images/will-writing/my-estate-distribution.svg" id="intro-img"/>
         </div>
         <div class="autofill-logo mobile-logo hidden-lg"><img class="img-fluid" src="assets/images/will-writing/owl-mobile.svg" /></div>
         </div>
       </div>
-      
+
       <div class="col-lg-5 col-md-5  col-sm-12 distribution-container">
           <div class="estate-distribution col-12">
               <div class="distribution-img mb20"><img src="assets/images/will-writing/estate-distribution-bg.png"/></div>
@@ -23,10 +23,10 @@
                 <span class="percentage" [ngClass]= "{'error-text': this.remainingPercentage < 0}">{{this.remainingPercentage}}%</span>
                 <span class="sub-title">{{ 'WILL_WRITING.MY_ESTATE_DISTRIBUTION.LEFT_TO_DISTRIBUTE' | translate}}</span>
               </div>
-            
+
             </div>
-        <div class="estateDistributionForm">
-              <div *ngIf="true" class="estate-distribution-form">
+        <div class="estateDistributionForm" formArrayName="percent">
+              <div *ngIf="true"  class="estate-distribution-form">
                 <div class="form-title mb10">{{ 'WILL_WRITING.MY_ESTATE_DISTRIBUTION.ESTATE_DISTRIBUTION' | translate}}</div>
                   <div *ngFor="let currentDist of beneficiaryList; let i = index" class="form-group-single-column">
                       <div class="col-6 header-label mb15" *ngIf="currentDist.selected === true">
@@ -37,9 +37,9 @@
                         </label>
                       </div>
                       <div class="col-5 mb15"  *ngIf="currentDist.selected === true">
-                          <div class="form-control">   
-                          <input id="beneficiary_{{i+1}}" (blur)="updateDistPercentage(i, $event)" appDistributePercent name="beneficiary_{{i+1}}" type="number" class="input-control"
-                            value="{{currentDist.distPercentage}}" formControlName="percent" >
+                        <div class="form-control">
+                          <input id="beneficiary_{{i+1}}" (blur)="updateDistPercentage(i, $event)" appDistributePercent name="beneficiary_{{i+1}}"
+                          type="number" class="input-control" [formControlName]="i" >
                           <i>%</i>
                         </div>
                       </div>
@@ -54,6 +54,10 @@
       </div>
       <div>
         <button type="button" [disabled]="" (click)="goToNext()" class="btn btn-primary btn__footer--fixed width100" id="prtNeedBtn1">
+          <span *ngIf="!fromConfirmationPage">{{'LABEL.CONTINUE' | translate}}</span>
+          <span *ngIf="fromConfirmationPage">{{'WILL_WRITING.COMMON.APPLY_CHANGES' | translate}}</span>
+        </button>
+        <button type="button" [disabled]="" (click)="clearInputFields()" class="btn btn-primary btn__footer--fixed width100" id="prtNeedBtn1">
           <span *ngIf="!fromConfirmationPage">{{'LABEL.CONTINUE' | translate}}</span>
           <span *ngIf="fromConfirmationPage">{{'WILL_WRITING.COMMON.APPLY_CHANGES' | translate}}</span>
         </button>

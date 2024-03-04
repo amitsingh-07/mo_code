@@ -743,14 +743,19 @@ export class ApiService {
   }
 
   // Recommended Card API Calls
-  getCardsByPageSizeAndNo(pageNo, size) {
-    const URL = apiConstants.endpoint.recommendedCards.getDashboardCards.replace('$PAGE_NO$', pageNo).replace('$SIZE$', size);
-    return this.http.get(URL)
-      .pipe(
-        catchError((error: HttpErrorResponse) => this.handleError(error))
-      );
+  // getCardsByPageSizeAndNo(pageNo, size) {
+  //   const URL = apiConstants.endpoint.recommendedCards.getDashboardCards.replace('$PAGE_NO$', pageNo).replace('$SIZE$', size);
+  //   const URL1 = 'app/assets/mock-data/card.json';
+  //   const URL2 = apiConstants.endpoint.recommendedCards.getDashboardCards1;
+  //   return this.http.get(URL1)
+  //     .pipe(
+  //       catchError((error: HttpErrorResponse) => this.handleError(error))
+  //     );
+  // }
+  getCardsByPageSizeAndNo(pageNo, size){
+    return this.httpClient.get("assets/mock-data/card.json");
   }
-  
+
   dismissCard(cardId) {
     const api = apiConstants.endpoint.recommendedCards.dismissCard.replace('$CARD_ID$', cardId);
     return this.http.put(api, null).pipe(
@@ -758,10 +763,13 @@ export class ApiService {
     );
   }
 
+  // getCardById(cardId) {
+  //   return this.http.get(`${apiConstants.endpoint.recommendedCards.getCardById}${cardId}`)
+  //     .pipe(
+  //       catchError((error: HttpErrorResponse) => this.handleError(error))
+  //     );
+  // }
   getCardById(cardId) {
-    return this.http.get(`${apiConstants.endpoint.recommendedCards.getCardById}${cardId}`)
-      .pipe(
-        catchError((error: HttpErrorResponse) => this.handleError(error))
-      );
+    return this.httpClient.get("assets/mock-data/dynamicCard.json");
   }
 }
